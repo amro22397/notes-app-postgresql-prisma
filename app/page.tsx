@@ -12,6 +12,7 @@ const page = () => {
     <div>
       {/* <GlobalProvier> */}
         <App />
+        <></>
       {/* </GlobalProvier> */}
     </div>
   )
