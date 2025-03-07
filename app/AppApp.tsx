@@ -10,7 +10,7 @@ import SearchBar from './Components/SearchBar'
 
 const App = () => {
   return (
-    <div className="relative w-[700px] h-[787.5px] bg-white rounded-md shadow-md p-7 flex flex-col gap-6">
+    <div className="relative w-[700px] h-[700px] bg-white rounded-md shadow-md p-7 flex flex-col gap-6">
       <Title />
       <SearchBar />
       {/* <Categories /> */}
