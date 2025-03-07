@@ -22,10 +22,10 @@ const SearchBar = () => {
 
     const url = new URLSearchParams(searchParams.toString());
 
-    // if (searchTerm.trim() === "") {
-    //   router.push(`/`, { scroll: false })
-    //   return;
-    // }
+    if (searchTerm.trim() === "") {
+      router.push(`/`, { scroll: false })
+      return;
+    }
 
     url.set("searchTerm", searchTerm);
 
