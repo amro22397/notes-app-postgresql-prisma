@@ -5,6 +5,8 @@ import React, { useContext, useState } from "react";
 import SingleNote from "./SingleNote";
 import NoteWindow from "./NoteWindow";
 import { SingleNoteType } from "@/types/singleNote";
+import { ScrollArea } from "@/components/ui/scroll-area"
+
 // import SingeNote from './SingeNote';
 // import { useGlobalProvider } from '../ContextApi';
 
@@ -19,9 +21,11 @@ const NotesArea = () => {
   console.log(allNotes);
 
   return (
-    <div className="flex flex-col overflow-y-auto gap-14">
+    // <div className="flex flex-col overflow-hidden hover:overflow-y-auto gap-14 my-2">
+    <>
+      <ScrollArea className="h-[90vh] overflow-hidden w-full flex flex-col my-2">
       {pinnedNotes.length > 0 && (
-        <div className="flex flex-col items-center justify-center gap-y-2">
+        <div className="flex flex-col items-center justify-center gap-y-2 mb-14">
           {/* <span className="text-[20px] font-semibold">Pinned</span> */}
           <div
             className="grid grid-cols-3 gap-x-3 gap-y-5
@@ -57,8 +61,11 @@ const NotesArea = () => {
           );
         })}
       </div>
+      </ScrollArea>
       <NoteWindow singleNote={openedNote} />
-    </div>
+      </>
+
+    // {/* </div> */}
   );
 };
 

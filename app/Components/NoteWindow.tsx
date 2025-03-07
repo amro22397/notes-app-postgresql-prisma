@@ -277,7 +277,7 @@ const NoteWindow = ({ singleNote }: { singleNote: any }) => {
 
   return (
     <div
-      className={`poppins px-8 py-[19px] w-[700px] h-[787.5px] bg-white absolute left-0 top-0  rounded-md transition-all ${
+      className={`poppins px-8 py-[19px] w-[700px] h-[787.5px] bg-white absolute left-0 top-0 z-50  rounded-md transition-all ${
         openWindowNote ? "visible opacity-100" : "invisible opacity-0"
       }`}
     >

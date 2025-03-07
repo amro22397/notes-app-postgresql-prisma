@@ -6,11 +6,30 @@ import { faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 // import { useGlobalProvider } from '../ContextApi';
-import React, { useContext, useEffect, useRef } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 
-import { Pin, PinOff } from "lucide-react";
+import { Lock, Pin, PinOff, Unlock } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { Button } from "@/components/ui/button"
+
+
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSeparator,
+  InputOTPSlot,
+} from "@/components/ui/input-otp";
 
 const DropDwon = () => {
   const pathname = usePathname();
@@ -38,6 +57,11 @@ const DropDwon = () => {
   const { setNoteSelected, noteSelected } = noteSelectedObject;
   const { allNotes, setAllNotes } = notesObject;
   const { initialAllNotes, setInitialAllNotes } = initialNotesObject;
+
+  const [isLockPasswordCard, setIsLockPasswordCard] = useState(false);
+  const [lockPasswordOTPvalue, setLockPasswordOTPvalue] = useState("");
+
+  console.log(lockPasswordOTPvalue)
 
   const dropDownRef = useRef<any>(null);
 
@@ -80,7 +104,7 @@ const DropDwon = () => {
         }
 
         getNotesFromMongoDB();
-    getPinnedNotesFromMongoDB()
+        getPinnedNotesFromMongoDB();
 
         toast.success("The note has been deleted successfully");
         setNoteSelected(null);
@@ -117,8 +141,8 @@ const DropDwon = () => {
       console.log(res.data);
 
       getNotesFromMongoDB();
-    getPinnedNotesFromMongoDB()
-    
+      getPinnedNotesFromMongoDB();
+
       if (res.data.success) {
         toast.success(res.data.message);
       }
@@ -131,6 +155,81 @@ const DropDwon = () => {
       console.log(error.message);
     }
   };
+
+  const LockNoteFx = async () => {
+
+    try {
+      const res = await axios.put(
+        `/api/notes/lock-note?id=${noteSelected._id}`
+      );
+
+      console.log(res.data);
+
+      getNotesFromMongoDB();
+      getPinnedNotesFromMongoDB();
+
+      if (res.data.success) {
+        toast.success(res.data.message);
+      }
+
+      if (!res.data.success) {
+        toast.error(res.data.message);
+      }
+    } catch (error: any) {
+      toast.error(error.message);
+      console.log(error.message);
+    }
+  };
+
+
+  const handleChangleLockPassword = async () => {
+    
+    try {
+
+      console.log(lockPasswordOTPvalue)
+      
+      if (!noteSelected?.lockedPassword) {
+        const res = await axios.put(`/api/notes/lock-note?id=${noteSelected._id}`, {
+          lockedPassword: lockPasswordOTPvalue
+        })
+
+        getNotesFromMongoDB();
+      getPinnedNotesFromMongoDB();
+
+        if (res.data.success) {
+          toast.success(res.data.message)
+        }
+  
+        if (!res.data.success) {
+          toast.error(res.data.message)
+        }
+
+      } else {
+
+        const res = await axios.post(`/api/notes/lock-note?id=${noteSelected._id}`, {
+          lockedPassword: lockPasswordOTPvalue
+        })
+
+        getNotesFromMongoDB();
+      getPinnedNotesFromMongoDB();
+
+        if (res.data.success) {
+          toast.success(res.data.message)
+        }
+  
+        if (!res.data.success) {
+          toast.error(res.data.message)
+        }
+
+      }
+
+      
+
+    } catch (error: any) {
+      toast.error(`ClientError: ${error.message}`)
+    }
+
+  }
 
   function handleDeleteClicked() {
     setOpenDropDown(false);
@@ -211,7 +310,7 @@ const DropDwon = () => {
               : {}
           }
           className={`py-2 px-2 shadow-md flex rounded-lg flex-col gap-3 bg-white 
-poppins poppins-light text-[10px] ${!openWindowNote && "fixed"}
+poppins poppins-light text-[10px] ${!openWindowNote && "fixed z-40"}
 ${
   // openDropDown ? 'visible opacity-100' : 'invisible'
   openWindowNote && "absolute right-8 top-12 z-50"
@@ -252,7 +351,6 @@ ${/* index === menuItems.length - 1 && "border-none" */ ""}
             <div
               className={`flex gap-2 items-center
 select-none cursor-pointer hover:text-gray-900 text-[15px] border-b border-gray-400/95 pb-[6px]
-border-none
 `}
               onClick={() => {
                 setOpenDropDown(false);
@@ -264,8 +362,108 @@ border-none
               <div className=" ">Unpin Note</div>
             </div>
           )}
+
+          {!noteSelected?.isLocked && (
+            <div
+              className={`flex gap-2 items-center
+select-none cursor-pointer hover:text-gray-900 text-[15px] border-b border-gray-400/95 pb-[6px]
+border-none
+${/* index === menuItems.length - 1 && "border-none" */ ""}
+`}
+              onClick={() => {
+                setOpenDropDown(false);
+
+                if (!noteSelected?.lockedPassword) {
+                  setIsLockPasswordCard(true);
+            
+                  return;
+                }
+
+                if (noteSelected?.lockedPassword) {
+                  LockNoteFx();
+                }
+              }}
+            >
+              <Lock size={19} />
+              <div className=" ">Lock Note</div>
+            </div>
+          )}
+
+          {noteSelected?.isLocked && (
+            <div
+              className={`flex gap-2 items-center
+select-none cursor-pointer hover:text-gray-900 text-[15px] border-b border-gray-400/95 pb-[6px]
+border-none
+`}
+              onClick={() => {
+                setOpenDropDown(false);
+
+                if (noteSelected?.lockedPassword) {
+                  setIsLockPasswordCard(true);
+            
+                  return;
+                }
+
+              }}
+            >
+              <Unlock size={19} />
+              <div className=" ">Unlock Note</div>
+            </div>
+          )}
         </div>
       )}
+
+      {/* setIsLockPassword */}
+      <Dialog open={isLockPasswordCard} onOpenChange={() => setIsLockPasswordCard(!isLockPasswordCard)}>
+        {/* <DialogTrigger>Open</DialogTrigger> */}
+        <DialogContent>
+          <DialogHeader className="flex flex-col gap-5">
+            <DialogTitle>
+              {!noteSelected?.lockedPassword ? 'Set Lock OTP' : 'Enter Lock OTP'}
+            </DialogTitle>
+            <DialogDescription>
+
+
+              <InputOTP maxLength={6} onChange={(e) => {
+                setLockPasswordOTPvalue(e);
+                console.log(lockPasswordOTPvalue)
+              }}>
+                <InputOTPGroup className="bg-gray-300/95 rounded-md">
+                  <InputOTPSlot index={0} />
+                  <InputOTPSlot index={1} />
+                  <InputOTPSlot index={2} />
+                </InputOTPGroup>
+                <InputOTPSeparator />
+                <InputOTPGroup className="bg-gray-300/95 rounded-md">
+                  <InputOTPSlot index={3} />
+                  <InputOTPSlot index={4} />
+                  <InputOTPSlot index={5}
+                  // onval={() => {
+                  //   setIsLockPasswordCard(false);
+                  //   handleChangleLockPassword();
+                  // }} 
+                  />
+                </InputOTPGroup>
+              </InputOTP>
+
+
+              <DialogFooter >
+                <Button 
+                onClick={() => {
+                  setIsLockPasswordCard(false);
+                  handleChangleLockPassword();
+
+                  // LockNoteFx();
+                }}
+                >
+                  Save
+                </Button>
+              </DialogFooter>
+
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
     </>
   );
 };

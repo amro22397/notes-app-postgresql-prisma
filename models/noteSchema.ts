@@ -20,6 +20,15 @@ const noteSchema = new mongoose.Schema({
         default: false,
       },
 
+      isLocked: {
+        type: Boolean,
+        default: false,
+      },
+
+      lockedPassword: {
+        type: String,
+      },
+
       categories: {
         type: [String],
       },

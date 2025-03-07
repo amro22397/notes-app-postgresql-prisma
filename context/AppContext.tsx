@@ -5,6 +5,7 @@ import notesData from "../app/NotesData";
 
 import axios from "axios";
 import { SingleNoteType } from "@/types/singleNote";
+import { useSearchParams } from "next/navigation";
 
 // should declare here the type of the things that i pass as props
 
@@ -64,14 +65,26 @@ const AppContextProvider = (props: Props) => {
   const [uniqueCategories, setUniqueCategoies] = useState<any[]>([]);
   const [clickedCategory, setClickedCategory] = useState<any>(null);
 
+  
+  const searchParams = useSearchParams();
+      const searchTerm = searchParams.get("searchTerm");
+
   useEffect(() => {
     getNotesFromMongoDB();
     getPinnedNotesFromMongoDB();
-  }, []);
+  }, [searchTerm]);
+
+      console.log(searchTerm);
+
+      if (!searchTerm) {
+        
+      }
 
   const getNotesFromMongoDB = async () => {
     try {
-      const res = await axios.get("/api/notes");
+      const res = await axios.get(`/api/notes${searchTerm ? `?searchTerm=${searchTerm}`: ''}`);
+
+      console.log(searchTerm)
 
       setAllNotes(res.data.allNotes);
       setInitialAllNotes(res.data.allNotes);
@@ -82,7 +95,7 @@ const AppContextProvider = (props: Props) => {
 
   const getPinnedNotesFromMongoDB = async () => {
     try {
-      const res = await axios.get("/api/notes?isPinned=true");
+      const res = await axios.get(`/api/notes?isPinned=true&${searchTerm ? `searchTerm=${searchTerm}`: ''}`);
 
       setPinnedNotes(res.data.pinnedNotes);
     } catch (error) {

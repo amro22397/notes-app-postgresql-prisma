@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 import { NextResponse } from "next/server";
 
 
-export async function POST(req: Request) {
+export async function POST(req: any) {
 
     await connenctToMongoDB();
 
@@ -40,17 +40,39 @@ export async function GET(req: any) {
 
         await connenctToMongoDB();
 
+        const searchTerm = req.nextUrl.searchParams.get('searchTerm');
+
+        // const { searchParams } = new URL(req.url);
+        // const searchTerm = searchParams.get('searchTerm');
+
+        console.log(searchTerm)
+
+        let searchString = searchTerm;
+
+        if (searchTerm === null || searchTerm === undefined || searchTerm.trim === '') {
+            searchString = ''
+        }
+
+        console.log(searchString)
+
         const pinnedNotes = req.nextUrl.searchParams.get('isPinned')
+        
 
         if (pinnedNotes) {
-            const pinnedNotes = await Note.find({ isPinned: true }).sort({
+            const pinnedNotes = await Note.find({ 
+                isPinned: true,
+                noteContent: { $regex: searchString, $options: 'i'},
+             }).sort({
                 updatedAt: -1,
                 createdAt: -1,
             });
             return NextResponse.json({ pinnedNotes }, { status: 200 });
         }
 
-        const allNotes = await Note.find({ isPinned: { $ne: true }}).sort({ createdAt: -1 });
+        const allNotes = await Note.find({
+            isPinned: { $ne: true },
+            noteContent: { $regex: searchString, $options: 'i'},
+        }).sort({ createdAt: -1 });
 
 
 

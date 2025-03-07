@@ -31,7 +31,7 @@ const Title = () => {
         /> */}
 
         <div className="text-[25px] flex gap-[7px]">
-          <span className="font-bold text-red-500 tracking-wide">Quick</span>
+          <span className="font-bold text-amber-700/90 tracking-wide">Quick</span>
           <span className='text-black font-bold tracking-wide'>Notes</span>
         </div>
       </div>
@@ -47,7 +47,7 @@ const Title = () => {
           setNoteSelected(null);
           console.log(noteSelected)
         }}
-        className=" px-3 py-1 rounded border border-red-500 text-[22.5px] text-red-500 hover:bg-red-500
+        className=" px-3 py-1 rounded border border-amber-700/90 text-[22.5px] text-amber-700/90 hover:bg-amber-700/90
         cursor-pointer hover:text-white"
       >
         Add a note

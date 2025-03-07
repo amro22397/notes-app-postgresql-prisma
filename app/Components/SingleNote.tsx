@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import { AppContext, AppContextType } from "@/context/AppContext";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Pin } from "lucide-react";
+import { Lock, Pin } from "lucide-react";
 // import { useGlobalProvider } from '../ContextApi';
 
 function formatDate(date: Date) {
@@ -74,19 +74,51 @@ const SingleNote = ({ singleNote, openedNote, setOpenedNote }: {
 
   // console.log(keyA)
   return (
-    <div
+    <div className="relative">
+      {/* {singleNote.isLocked && (
+    <div className="flex justify-center items-center absolute w-full h-full z-40 blur-none">
+      
+        <div className="blur-none">
+        <Lock size={25} />
+        </div>
+      
+      </div>
+      )} */}
+
+      {/* {singleNote.isLocked && (
+        <div
+        onClick={(event) => {
+          openDropDownFx(event, singleNote);
+        }}
+        className="w-3 h-3"
+      >
+        <FontAwesomeIcon
+          className=" text-gray-500 select-none cursor-pointer
+          absolute top-[24.25px] right-[13.75px] z-40 text-xl"
+          icon={faEllipsis}
+        />
+      </div>
+      )} */}
+
+      <div
       key={singleNote._id}
-      className="rounded-lg flex flex-col w-45 gap-2 border h-[170px] text-[19px] border-gray-200 bg-white p-4
-       shadow-sm hover:shadow-2xl active:bg-gray-300/50 mx-auto"
+      className={`rounded-lg flex flex-col w-45 gap-2 border h-[170px] text-[19px] border-gray-200 bg-white p-4
+       shadow-sm hover:shadow-2xl active:bg-gray-300/50 mx-auto
+       ${
+        singleNote?.isLocked && 'hover:shadow-none'
+        // singleNote?.isLocked && 'blur-[12px]'
+      }`}
        onClick={() => {
-        setOpenedNote(singleNote);
+        if (!singleNote?.isLocked) {
+          setOpenedNote(singleNote);
         setOpenWindowNote(true);
         setOpenDropDown(false);
-        console.log(openedNote)
+        }
         // addIdtoQueryString(singleNote._id);
         console.log(noteSelected)
        }}
     >
+
       <div className="flex justify-between items-center relative">
         {/* Header's note */}
         {/* <div className="text-[10px] text-gray-500 mt-1 ">
@@ -100,7 +132,7 @@ const SingleNote = ({ singleNote, openedNote, setOpenedNote }: {
         >
           <FontAwesomeIcon
             className=" text-gray-500 select-none cursor-pointer
-            absolute top-0 right-0"
+            absolute top-0 right-0 z-50"
             icon={faEllipsis}
           />
         </div>
@@ -116,8 +148,14 @@ const SingleNote = ({ singleNote, openedNote, setOpenedNote }: {
         {/* Title's note */}
         <h3 className="mt-0.5 font-bold text-[18px] text-gray-900 text-center
         w-[77.5%] break-words cursor-default">
-          {stringTruncation(singleNote.noteContent, 34)}
+          {stringTruncation(singleNote.noteContent, 12)}
         </h3>
+
+        {singleNote.isLocked && (
+          <div className="blur-none">
+          <Lock size={22} />
+          </div>
+        )}
 
         {/* the note itself */}
         {/* <p className="mt-2 text-gray-500 text-[11px] h-14 whitespace-pre-wrap">
@@ -141,6 +179,8 @@ const SingleNote = ({ singleNote, openedNote, setOpenedNote }: {
         </div>
       </div>
     </div>
+    </div>
+    
   );
 };
 
