@@ -36,6 +36,7 @@ export default function RootLayout({
       <Suspense fallback={<p>Loading...</p>}>
         <AppContextProvider>{children}</AppContextProvider>
         </Suspense>
+        <></>
       </body>
     </html>
   );
