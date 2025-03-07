@@ -82,7 +82,7 @@ const AppContextProvider = (props: Props) => {
 
   const getNotesFromMongoDB = async () => {
     try {
-      const res = await axios.get(`/api/notes${searchTerm ? `?searchTerm=${searchTerm}`: ''}`);
+      const res = await axios.get(`/api/get-notes${searchTerm ? `?searchTerm=${searchTerm}`: ''}`);
 
       console.log(searchTerm)
 
@@ -95,7 +95,7 @@ const AppContextProvider = (props: Props) => {
 
   const getPinnedNotesFromMongoDB = async () => {
     try {
-      const res = await axios.get(`/api/notes?isPinned=true&${searchTerm ? `searchTerm=${searchTerm}`: ''}`);
+      const res = await axios.get(`/api/get-notes?isPinned=true&${searchTerm ? `searchTerm=${searchTerm}`: ''}`);
 
       setPinnedNotes(res.data.pinnedNotes);
     } catch (error) {
