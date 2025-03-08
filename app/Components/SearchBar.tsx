@@ -10,7 +10,7 @@ import { AppContext, AppContextType } from '@/context/AppContext';
 
 const SearchBar = () => {
 
-  const searchParams = useSearchParams();
+  const searchParams = useSearchParams() as any;
   const router = useRouter();
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -38,7 +38,7 @@ const SearchBar = () => {
   }, []);
 
   return (
-    <div className='w-lg px-4 bg-zinc-300/80 rounded-full mx-auto
+    <div className='md:w-lg w-full px-4 bg-zinc-300/80 rounded-full mx-auto
     flex flex-row items-center justify-center gap-2'>
       <input type="text" className="w-full py-[7.25px] focus:outline-none text-black
       font-semibold tracking-wider text-[17.5px]"

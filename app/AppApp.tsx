@@ -10,7 +10,7 @@ import SearchBar from './Components/SearchBar'
 
 const App = () => {
   return (
-    <div className="relative w-[700px] h-[700px] bg-white rounded-md shadow-md p-7 flex flex-col gap-6">
+    <div className="relative md:w-[700px] w-[95vw] h-[700px] bg-white rounded-md shadow-md p-7 flex flex-col gap-6">
       <Title />
       <SearchBar />
       {/* <Categories /> */}
@@ -18,7 +18,7 @@ const App = () => {
       <DropDown />
       <Toaster
         containerStyle={{
-          fontSize: '10px',
+          fontSize: '20px',
         }}
       />
     </div>

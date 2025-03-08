@@ -64,6 +64,11 @@ body {
   @apply rounded-full px-[14px] py-1 text-lg font-semibold tracking-wide cursor-pointer;
 }
 
+.notes {
+  @apply grid md:grid-cols-3 grid-cols-2 gap-x-3 gap-y-5
+  mx-5 justify-center items-center;
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;

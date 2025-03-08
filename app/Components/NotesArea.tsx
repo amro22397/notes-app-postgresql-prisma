@@ -23,15 +23,18 @@ const NotesArea = () => {
   return (
     // <div className="flex flex-col overflow-hidden hover:overflow-y-auto gap-14 my-2">
     <>
-      <ScrollArea className="h-[90vh] overflow-hidden w-full flex flex-col my-2">
-      {pinnedNotes.length > 0 && (
-        <div className="flex flex-col items-center justify-center gap-y-2 mb-14">
+      <ScrollArea className="h-[90vh] overflow-hidden w-full flex flex-col
+      items-center justify-center mt-2">
+        
           {/* <span className="text-[20px] font-semibold">Pinned</span> */}
+          {/* <div className="flex flex-col items-center justify-center gap-y-2 mb-14"></div> */}
           <div
-            className="grid grid-cols-3 gap-x-3 gap-y-5
-    mx-5 justify-center items-center"
+            className="notes mb-14"
           >
-            {pinnedNotes.map((singleNote: SingleNoteType, index: number) => (
+            {pinnedNotes.length > 0 && pinnedNotes.map((singleNote: SingleNoteType, index: number) => {
+              return (
+
+              
               <>
                 <SingleNote
                   singleNote={singleNote}
@@ -39,14 +42,13 @@ const NotesArea = () => {
                   openedNote={openedNote}
                 />
               </>
-            ))}
+              )
+            }
+            )}
           </div>
-        </div>
-      )}
 
       <div
-        className="grid grid-cols-3 gap-x-3 gap-y-5
-    mx-5 justify-center items-center"
+        className="notes"
       >
         {allNotes.map((singleNote: any, index: number) => {
           console.log(singleNote._id);
