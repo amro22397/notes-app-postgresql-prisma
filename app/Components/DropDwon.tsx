@@ -88,6 +88,12 @@ const DropDwon = () => {
       const res = await axios.delete(`/api/notes?id=${noteSelected._id}`);
 
       if (res.data.success) {
+
+        getNotesFromMongoDB();
+        getPinnedNotesFromMongoDB();
+
+        toast.success("The note has been deleted successfully");
+
         const filterAllNotes = allNotes.filter(
           (note: any) => note._id !== noteSelected._id
         );
@@ -102,11 +108,7 @@ const DropDwon = () => {
         if (filterAllNotes.length === 0) {
           setClickedCategory(null);
         }
-
-        getNotesFromMongoDB();
-        getPinnedNotesFromMongoDB();
-
-        toast.success("The note has been deleted successfully");
+        
         setNoteSelected(null);
         setOpenWindowNote(false);
       }
