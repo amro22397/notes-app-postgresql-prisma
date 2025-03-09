@@ -12,18 +12,21 @@ import axios from "axios";
 import { MdKeyboardArrowLeft } from "react-icons/md";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import { useRouter, useSearchParams } from "next/navigation";
+import { SingleNoteType } from "@/types/singleNote";
 
 const NoteWindow = ({ singleNote }: { singleNote: any }) => {
   const router = useRouter();
-  const searchParams = useSearchParams();
+  // const searchParams = useSearchParams() as any;
 
-  const id = searchParams.get("id");
+  // const id = searchParams.get("id");
 
-  console.log(id);
+  // console.log(id);
 
   const removeAllQueries = () => {
     router.push(window.location.pathname, { scroll: false });
   };
+
+  console.log(singleNote)
 
   const {
     openWindowNote,
@@ -56,6 +59,9 @@ const NoteWindow = ({ singleNote }: { singleNote: any }) => {
     noteTitle: "",
     noteContent: "",
   });
+
+  console.log(noteSelected)
+  console.log(textInputs.noteContent)
 
   async function addNewNoteToDB() {
     try {
@@ -107,9 +113,12 @@ const NoteWindow = ({ singleNote }: { singleNote: any }) => {
           noteTitle: singleNote?.noteName,
           noteContent: singleNote?.noteContent,
         });
-        setTags(noteSelected.categories);
+        // setTags(noteSelected.categories);
       }
     }
+
+    console.log(textInputs.noteContent)
+    console.log(noteSelected)
   }, [openWindowNote]);
 
   async function updateNoteToDB() {
@@ -293,7 +302,6 @@ const NoteWindow = ({ singleNote }: { singleNote: any }) => {
           onClick={() => {
             setNoteSelected(null);
             setOpenWindowNote(false);
-            setNoteSelected(false);
             console.log(noteSelected);
             // removeAllQueries();
             getNotesFromMongoDB();
@@ -367,10 +375,10 @@ const NoteWindow = ({ singleNote }: { singleNote: any }) => {
         <textarea
           placeholder="Add Your Content Here..."
           name="noteContent"
-          defaultValue={noteSelected === null ? "" : textInputs.noteContent}
+          defaultValue={textInputs.noteContent}
           onChange={updateTextInputs}
-          className="px-3 py-4 outline-none rounded-md w-full resize-none h-full text-[15px] font-semibold
-          tracking-wider
+          className="px-3 py-4 outline-none rounded-md w-full resize-none text-[19px]
+          tracking-wider overflow-y-auto h-[66.5vh]
           text-black"
           style={{ fontFamily: "Arial" }}
         ></textarea>

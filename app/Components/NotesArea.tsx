@@ -35,13 +35,17 @@ const NotesArea = () => {
               return (
 
               
-              <>
+              <div className="flex flex-col items-center justify-center gap-y-[11px] ">
                 <SingleNote
                   singleNote={singleNote}
                   setOpenedNote={setOpenedNote}
-                  openedNote={openedNote}
+                  // openedNote={openedNote}
                 />
-              </>
+
+                <span className="font-semibold text-[17px] text-center">
+              {stringTruncation(singleNote.noteContent, 20)}
+              </span>
+              </div>
               )
             }
             )}
@@ -53,13 +57,16 @@ const NotesArea = () => {
         {allNotes.map((singleNote: any, index: number) => {
           console.log(singleNote._id);
           return (
-            <>
+            <div className="flex flex-col items-center justify-center gap-y-[11px] ">
               <SingleNote
                 singleNote={singleNote}
                 setOpenedNote={setOpenedNote}
-                openedNote={openedNote}
+                // openedNote={openedNote}
               />
-            </>
+              <span className="font-semibold text-[17px] text-center">
+              {stringTruncation(singleNote.noteContent, 20)}
+              </span>
+            </div>
           );
         })}
       </div>
@@ -72,3 +79,11 @@ const NotesArea = () => {
 };
 
 export default NotesArea;
+
+
+function stringTruncation(str: any, strLength: number) {
+  if (str?.length >= 40) {
+    return str.substring(0, strLength) + "...";
+  }
+  return str;
+}

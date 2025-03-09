@@ -15,6 +15,7 @@ const Title = () => {
 
   const { noteSelected, setNoteSelected } = noteSelectedObject
 
+
   const openWindowNoteFunction = () => {
     setOpenWindowNote(true)
     setNoteSelected(null);
@@ -44,7 +45,6 @@ const Title = () => {
       <button
         onClick={() => {
           openWindowNoteFunction();
-          setNoteSelected(null);
           console.log(noteSelected)
         }}
         className=" px-3 py-1 rounded border border-amber-700/90 text-[22.5px] text-amber-700/90 hover:bg-amber-700/90

@@ -6,6 +6,7 @@ import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import { AppContext, AppContextType } from "@/context/AppContext";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Lock, Pin } from "lucide-react";
+import { SingleNoteType } from "@/types/singleNote";
 // import { useGlobalProvider } from '../ContextApi';
 
 function formatDate(date: Date) {
@@ -20,14 +21,14 @@ function stringTruncation(str: any, strLength: number) {
   return str;
 }
 
-const SingleNote = ({ singleNote, openedNote, setOpenedNote }: { 
+const SingleNote = ({ singleNote, setOpenedNote }: { 
   singleNote: any,
   setOpenedNote: (value: boolean) => void,
-  openedNote: any,
+  // openedNote: SingleNoteType,
  }) => {
 
   const router = useRouter();
-  const searchParams = useSearchParams();  
+  const searchParams = useSearchParams() as any;
 
   const addIdtoQueryString = (id: string) => {
 
@@ -74,7 +75,17 @@ const SingleNote = ({ singleNote, openedNote, setOpenedNote }: {
 
   // console.log(keyA)
   return (
-    <div className="relative">
+    <div className=""
+    onClick={() => {
+      if (!singleNote?.isLocked) {
+        setOpenedNote(singleNote);
+      setOpenWindowNote(true);
+      setOpenDropDown(false);
+      setNoteSelected(false);
+      }
+      // addIdtoQueryString(singleNote._id);
+     }}
+    >
       {/* {singleNote.isLocked && (
     <div className="flex justify-center items-center absolute w-full h-full z-40 blur-none">
       
@@ -102,21 +113,12 @@ const SingleNote = ({ singleNote, openedNote, setOpenedNote }: {
 
       <div
       key={singleNote._id}
-      className={`rounded-lg flex flex-col w-45 gap-2 border h-[170px] text-[19px] border-gray-200 bg-white p-4
-       shadow-sm hover:shadow-2xl active:bg-gray-300/50 mx-auto
+      className={`rounded-lg flex flex-col justify-between w-45 gap-2 border h-[170px] text-[19px] border-gray-200 bg-white p-4
+       shadow-sm hover:shadow-2xl active:bg-gray-300/50 mx-auto relative
        ${
         singleNote?.isLocked && 'hover:shadow-none'
         // singleNote?.isLocked && 'blur-[12px]'
       }`}
-       onClick={() => {
-        if (!singleNote?.isLocked) {
-          setOpenedNote(singleNote);
-        setOpenWindowNote(true);
-        setOpenDropDown(false);
-        }
-        // addIdtoQueryString(singleNote._id);
-        console.log(noteSelected)
-       }}
     >
 
       <div className="flex justify-between items-center relative">
@@ -139,22 +141,39 @@ const SingleNote = ({ singleNote, openedNote, setOpenedNote }: {
 
         <div className="absolute top-0 left-0">
           {singleNote.isPinned && (
-            <Pin size={19} />
+            <Pin size={21} className="text-black" />
           )}
         </div>
+
+        <span className="text-white">s</span>
       </div>
+
+      {!singleNote.isLocked && (
+        <div className="absolute top-[18px] left-0 text-[5px] z-10
+        px-4 w-[175px] h-[106.5px] overflow-hidden whitespace-pre-line
+        text-black/85">
+          {singleNote.noteContent}
+        </div>
+      )}
 
       <div className="flex flex-col justify-between items-center h-full mt-[1.25px]">
         {/* Title's note */}
-        <h3 className="mt-0.5 font-bold text-[18px] text-gray-900 text-center
+        {/* <h3 className="mt-0.5 font-bold text-[18px] text-gray-900 text-center
         w-[77.5%] break-words cursor-default">
           {stringTruncation(singleNote.noteContent, 12)}
-        </h3>
+        </h3> */}
 
-        {singleNote.isLocked && (
-          <div className="blur-none">
+        {singleNote.isLocked ? (
+          <>
+          <div className="blur-none z-30">
           <Lock size={22} />
           </div>
+          
+          <span className="text-white text-[0.1px]">s</span>
+          </>
+          
+        ): (
+          <span className="text-white text-[0.1px]">s</span>
         )}
 
         {/* the note itself */}

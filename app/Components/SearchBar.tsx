@@ -42,10 +42,14 @@ const SearchBar = () => {
     flex flex-row items-center justify-center gap-2'>
       <input type="text" className="w-full py-[7.25px] focus:outline-none text-black
       font-semibold tracking-wider text-[17.5px]"
-      onChange={(e) => {
+      onChange={(e: any) => {
         setSearchTerm(e.target.value);
         // handleSearchFx();
-      }} />
+      }} 
+      onKeyUp={(e: any) => {
+        e.key === "Enter" && handleSearchFx();
+      }}
+      />
 
       <IoSearch size={25} className='text-black/70 hover:text-gray-900/70 active:scale-95 cursor-pointer'
       onClick={() => {
