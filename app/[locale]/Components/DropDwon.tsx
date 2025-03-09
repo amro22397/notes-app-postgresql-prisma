@@ -30,8 +30,13 @@ import {
   InputOTPSeparator,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
+import { Session } from "@/types/session";
 
-const DropDwon = () => {
+
+
+const DropDwon = ({ user }: {
+  user: Session | null | undefined
+}) => {
   const pathname = usePathname();
   console.log(pathname);
 
@@ -161,14 +166,16 @@ const DropDwon = () => {
   const LockNoteFx = async () => {
 
     try {
-      const res = await axios.put(
-        `/api/notes/lock-note?id=${noteSelected._id}`
-      );
+      const res = await axios.put(`/api/user/lock-note?id=${noteSelected._id}`, {
+        lockedPassword: lockPasswordOTPvalue,
+        email: user?.user?.email,
+      });
 
       console.log(res.data);
 
       getNotesFromMongoDB();
       getPinnedNotesFromMongoDB();
+      window.location.reload();
 
       if (res.data.success) {
         toast.success(res.data.message);
@@ -183,6 +190,10 @@ const DropDwon = () => {
     }
   };
 
+  console.log(lockPasswordOTPvalue)
+
+  console.log(user?.user)
+
 
   const handleChangleLockPassword = async () => {
     
@@ -190,13 +201,15 @@ const DropDwon = () => {
 
       console.log(lockPasswordOTPvalue)
       
-      if (!noteSelected?.lockedPassword) {
-        const res = await axios.put(`/api/notes/lock-note?id=${noteSelected._id}`, {
-          lockedPassword: lockPasswordOTPvalue
+      if (!user?.user?.lockedPassword) {
+        const res = await axios.put(`/api/user/lock-note?id=${noteSelected._id}`, {
+          lockedPassword: lockPasswordOTPvalue,
+          email: user?.user?.email,
         })
 
         getNotesFromMongoDB();
       getPinnedNotesFromMongoDB();
+      window.location.reload();
 
         if (res.data.success) {
           toast.success(res.data.message)
@@ -208,8 +221,9 @@ const DropDwon = () => {
 
       } else {
 
-        const res = await axios.post(`/api/notes/lock-note?id=${noteSelected._id}`, {
-          lockedPassword: lockPasswordOTPvalue
+        const res = await axios.post(`/api/user/lock-note?id=${noteSelected._id}`, {
+          lockedPassword: lockPasswordOTPvalue,
+          email: user?.user?.email,
         })
 
         getNotesFromMongoDB();
@@ -375,13 +389,13 @@ ${/* index === menuItems.length - 1 && "border-none" */ ""}
               onClick={() => {
                 setOpenDropDown(false);
 
-                if (!noteSelected?.lockedPassword) {
+                if (!user?.user?.lockedPassword) {
                   setIsLockPasswordCard(true);
             
                   return;
                 }
 
-                if (noteSelected?.lockedPassword) {
+                if (user?.user?.lockedPassword) {
                   LockNoteFx();
                 }
               }}
@@ -400,7 +414,7 @@ border-none
               onClick={() => {
                 setOpenDropDown(false);
 
-                if (noteSelected?.lockedPassword) {
+                if (user?.user?.lockedPassword) {
                   setIsLockPasswordCard(true);
             
                   return;
@@ -421,7 +435,7 @@ border-none
         <DialogContent>
           <DialogHeader className="flex flex-col gap-5">
             <DialogTitle>
-              {!noteSelected?.lockedPassword ? 'Set Lock OTP' : 'Enter Lock OTP'}
+              {!user?.user.lockedPassword ? 'Set Lock OTP' : 'Enter Lock OTP'}
             </DialogTitle>
             <DialogDescription>
 

@@ -151,7 +151,7 @@ const SingleNote = ({ singleNote, setOpenedNote }: {
       {!singleNote.isLocked && (
         <div className="absolute top-[18px] left-0 text-[8px] z-10
         px-4 w-[175px] h-[106.5px] overflow-hidden whitespace-pre-line
-        text-black/60">
+        text-black/60 cursor-default">
           {singleNote.noteContent}
         </div>
       )}

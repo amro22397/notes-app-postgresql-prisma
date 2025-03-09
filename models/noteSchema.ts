@@ -25,6 +25,10 @@ const noteSchema = new mongoose.Schema({
         default: false,
       },
 
+      emailRef: {
+        type: String,
+      },
+
       lockedPassword: {
         type: String,
       },

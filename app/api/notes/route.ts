@@ -11,15 +11,16 @@ export async function POST(req: any) {
 
     try {
 
-        const { noteName, noteContent, categories } = await req.json();
+        const { noteName, noteContent, categories, emailRef } = await req.json();
 
         const newNote = await Note.create({
             noteName, noteContent, categories,
             dateCreation: new Date(),
+            emailRef: emailRef,
         })
 
         return NextResponse.json(
-            { _id: newNote._id, noteName, noteContent, categories },
+            { _id: newNote._id, noteName, noteContent, categories, emailRef },
             { status: 200 },
         );
 

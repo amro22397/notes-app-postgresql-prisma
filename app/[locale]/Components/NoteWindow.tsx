@@ -14,8 +14,10 @@ import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import { useRouter, useSearchParams } from "next/navigation";
 import { SingleNoteType } from "@/types/singleNote";
 
-const NoteWindow = ({ singleNote }: { singleNote: any }) => {
+const NoteWindow = ({ singleNote, email }: { singleNote: any, email: string | null | undefined }) => {
   const router = useRouter();
+
+  console.log(email);
   // const searchParams = useSearchParams() as any;
 
   // const id = searchParams.get("id");
@@ -71,6 +73,7 @@ const NoteWindow = ({ singleNote }: { singleNote: any }) => {
         noteName: textInputs.noteTitle,
         noteContent: textInputs.noteContent,
         categories: tags,
+        emailRef: email,
       });
 
       const newNoteData = res.data;
@@ -300,8 +303,8 @@ const NoteWindow = ({ singleNote }: { singleNote: any }) => {
           className="flex flex-row justify-center items-center
         text-orange-600 active:scale-95 cursor-pointer hover:text-orange-600/95"
           onClick={() => {
-            setNoteSelected(null);
             setOpenWindowNote(false);
+            setNoteSelected(null);
             console.log(noteSelected);
             // removeAllQueries();
             getNotesFromMongoDB();
@@ -375,7 +378,7 @@ const NoteWindow = ({ singleNote }: { singleNote: any }) => {
         <textarea
           placeholder="Add Your Content Here..."
           name="noteContent"
-          defaultValue={textInputs.noteContent}
+          defaultValue={textInputs.noteContent || ""}
           onChange={updateTextInputs}
           className="px-3 py-4 outline-none rounded-md w-full resize-none text-[19px]
           tracking-wider overflow-y-auto h-[66.5vh]

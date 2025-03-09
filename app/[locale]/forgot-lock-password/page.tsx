@@ -1,0 +1,32 @@
+import { getSession, getUser } from "@/actions/getUser";
+import ForgetForm from "@/components/ForgetForm";
+import { redirect } from "next/navigation";
+import React from "react";
+import ForgetLockForm from "./ForgetLockForm";
+
+const page = async () => {
+
+    
+
+  const session = await getUser();
+  const jUser = JSON.parse(JSON.stringify(session))
+
+
+  console.log(jUser);
+
+
+    // if (jUser?.user?.email) {
+    //   redirect('/');
+    // }
+        
+
+  return (
+    <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
+          <div className="w-full max-w-sm">
+          <ForgetLockForm email={session?.user?.email} />
+          </div>
+        </div>
+  )
+}
+
+export default page

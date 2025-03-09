@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState } from "react";
-import notesData from "../app/NotesData";
+import notesData from "../app/[locale]/NotesData";
 
 import axios from "axios";
 import { SingleNoteType } from "@/types/singleNote";

@@ -1,0 +1,118 @@
+{
+  "HomePage": {
+    "title": "Hello world!",
+    "about": "Go to the about page"
+  },
+
+
+  "LoginPage": {
+    "Login": "Login",
+    "ُEnterYourEmailAddress": "Enter your email below to login to your account",
+    "Email": "Email",
+    "Forgot your password?": "Forgot your password?",
+    "Don't have an account?": "Don't have an account?",
+    "Register": "Register",
+    "Continue With Google": "Continue With Google",
+    "Password": "Password",
+    "LoginButton": "Login",
+    "Example7": "Example",
+    "Example7": "Example",
+    "Example7": "Example"
+  },
+
+
+  "RegisterPage": {
+    "Register": "Register",
+    "EnterDetailsRegister": "Enter your details below to register to your account",
+    "User name": "User name",
+    "Email": "Email",
+    "AtLeastOneLowercase1": "You need at least one lowercase and uppercase letter, number and special character ",
+    "AtLeastOneLowercase2": "(A-Z, a-z, 0-9 and !@#$%^&*)",
+    "Confirm password": "Confirm password",
+    "RegisterButton": "Register",
+    "Continue With Google": "Continue With Google",
+    "Already have an account?": "Already have an account?",
+    "Sign In": "Sign In",
+    "Password": "Password",
+    "Or": "Or",
+    "Example3": "Example",
+    "Example4": "Example",
+    "Example5": "Example"
+  },
+
+
+  "ForgetPage": {
+    "Forgot Password": "Forgot Password",
+    "Enter your email": "Enter your email...",
+    "SendYouReset": "We will send you a link to reset",
+    "Send": "Send",
+    "Back to sign in": "Back to sign in",
+    "Email": "Email",
+    "Example7": "Example"
+  },
+
+
+  "ResetPage": {
+    "Reset Password": "Reset Password",
+    "p-Password": "Password",
+    "p-Confirm Password": "Confirm Password",
+    "Submit": "Submit",
+    "Back to sign in": "Back to sign in",
+    "Example6": "Example",
+    "Example7": "Example"
+  },
+
+
+  "VerifyPage": {
+    "Email is verified!": "Email is verified!",
+    "VerifiedSuccessfully": "Your email has been verified successfully.",
+    "Email verification failed!": "Email verification failed!",
+    "Example4": "Example",
+    "Example5": "Example",
+    "Example6": "Example",
+    "Example7": "Example"
+  },
+
+
+  "EmailIsNotVerified": {
+    "Your account": "Your account ",
+    "is not": "is not",
+    "VerifiedYetPlease": "verified yet. Please check your email for verification link and refresh the page.",
+    "YourAccountIsNot": "Your account is not verified yet. Please check your email for verification link andrefresh the page.",
+    "IfYouHaveNotRecieved": "If you have not recieved the email, check you spam folder or ",
+    "click here": "click here",
+    "Example7": "Example"
+  },
+
+  "SomethingWentWrongPage": {
+    "Something went wrong!": "Something went wrong!",
+    "Example2": "Example",
+    "Example3": "Example",
+    "Example4": "Example",
+    "Example5": "Example",
+    "Example6": "Example",
+    "Example7": "Example"
+  },
+
+
+  "VerificationEmail": {
+    "Verify Your Email Address": "Verify Your Email Address",
+    "ThankYouForSigningUp": "Thank you for signing up! To complete your registration, please click the button below to verify your email address.",
+    "Verify Email": "Verify Email",
+    "WillExpireIn": "This link will expire in 30 minutes.",
+    "Example5": "Example",
+    "Example6": "Example",
+    "Example7": "Example"
+  }, 
+
+
+  "CreatePasswordPage": {
+    "Create Password": "Create Password",
+    "Create a new password": "Your account is registered with google, but you don't have a password. Please create one below",
+    "p-Password": "Password",
+    "p-Confirm Password": "Confirm Password",
+    "Send": "Send",
+    "Example6": "Example",
+    "Example7": "Example"
+  }
+}

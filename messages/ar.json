@@ -1,0 +1,125 @@
+{
+    "HomePage": {
+      "title": "Hello world!",
+      "about": "Go to the about page"
+    },
+
+
+    "LoginPage": {
+      "Login": "سجل الدخول",
+      "ُEnterYourEmailAddress": "إكتب البريد الإلكتروني بالأسفل لتسجل الدخول بالحساب",
+      "Email": "البريد الإلكتروني",
+      "Forgot your password?": "هل نسيت كلمة السر ؟",
+      "Don't have an account?": "هل ليس لديك حساب ؟",
+      "Register": "سجل الآن",
+      "Continue With Google": "سجل الدخول عن طريق قوقل",
+      "Password": "كلمة السر",
+      "LoginButton": "سجل الدخول",
+      "Example7": "Example",
+      "Example7": "Example",
+      "Example7": "Example",
+      "Example7": "Example"
+    },
+
+
+    "RegisterPage": {
+      "Register": "سجل حساباً جديداً",
+      "EnterDetailsRegister": "أدخل التفاصيل الآتية لتسجيل حسابك الجديد",
+      "User name": "إسم المستخدم",
+      "Email": "البريد الإلكتروني",
+      "AtLeastOneLowercase1": "You need at least one lowercase and uppercase letter, number and special character ",
+      "عربي" : "تحتاج على الأقل لحرف صغير وحرف كبير ورقم وعلامة ترقيم ",
+      "AtLeastOneLowercase2": "(A-Z, a-z, 0-9 and !@#$%^&*)",
+      "Confirm password": "أكد كلمة السر",
+      "RegisterButton": "سجل الآن",
+      "Continue With Google": "سجل الدخول عن طريق قوقل",
+      "Already have an account?": "هل لديك حساب مسبقاً ؟",
+      "Sign In": "سجل الدخول",
+      "Password": "كلمة السر",
+      "Or": "أو",
+      "Example3": "Example",
+      "Example4": "Example",
+      "Example5": "Example"
+    },
+
+
+    "ForgetPage": {
+      "Forgot Password": "كلمة السر المنسية",
+      "Enter your email": "أدخل البريد الإلكتروني",
+      "SendYouReset": "سوف نرسل لك رابطاً لإستعادة كلمة المرور",
+      "Send": "أرسل",
+      "Back to sign in": "العودة لتسجيل الدخول",
+      "Email": "البريد الإلكتروني",
+      "Example6": "Example",
+      "Example7": "Example"
+    },
+
+
+    "ResetPage": {
+      "Reset Password": "أعد إنشاء كلمة السر",
+      "p-Password": "كلمة السر",
+      "p-Confirm Password": "أكد كلمة السر",
+      "Submit": "أرسل",
+      "Back to sign in": "العودة لتسجيل الدخول",
+      "Example6": "Example",
+      "Example7": "Example"
+    },
+
+
+    "VerifyPage": {
+      "Email is verified!": "تم تأكيد البريد الإلكتروني",
+      "VerifiedSuccessfully": "تم تأكيد بريدك الإلكتروني بنجاح.",
+      "Email verification failed!": "فشل تأكيد بريدك الإلكتروني",
+      "Example4": "Example",
+      "Example5": "Example",
+      "Example6": "Example",
+      "Example7": "Example"
+    },
+
+
+    "EmailIsNotVerified": {
+      "Your account": "حسابك ",
+      "is not": "لم يتم",
+      "VerifiedYetPlease": "تأكيده بعد ، راجع بريدك الإلكتروني لتجد رابط التأكيد وقم بتحديث الصفحة",
+      "عربي" : "إذا لم تستلم بريداً إلكترونياً، راجع بريد المهملات (spam) أو",
+      "YourAccountIsNot": "حسابك لم يتم تأكيده بعد راجع بريدك الإلكتروني لتجد رابط التأكيد وقم بتحديث الصفحة .",
+      "IfYouHaveNotRecieved": "إذا لم يصلك البريد الإلكتروني راجع بريد المهملات (spam) أو ",
+      "click here": "أضغط هنا",
+      "Example5": "Example",
+      "Example6": "Example",
+      "Example7": "Example"
+    },
+
+    "SomethingWentWrongPage": {
+      "Something went wrong!": "هنالك خطأ ما",
+      "Example2": "Example",
+      "Example3": "Example",
+      "Example4": "Example",
+      "Example5": "Example",
+      "Example6": "Example",
+      "Example7": "Example"
+    },
+
+
+    "VerificationEmail": {
+      "Verify Your Email Address": "أكد بريدك الإلكتروني",
+      "ThankYouForSigningUp": "Thank you for signing up! To complete your registration, please click the button below to verify your email address.",
+      "Verify Email": "Verify Email",
+      "عربي" : "شكراً لك على تسجيل حسابك! لإكمال تسجيل الحساب أضغط على الزر التالي لتأكيد بريدك الإلكتروني .",
+      "WillExpireIn": "صلاحية هذا الرابط ستنتهي خلال 30 دقيقة .",
+      "Example5": "Example",
+      "Example6": "Example",
+      "Example7": "Example"
+    },
+
+
+    "Example": {
+      "Example1": "Example",
+      "Example2": "Example",
+      "Example3": "Example",
+      "Example4": "Example",
+      "Example5": "Example",
+      "Example6": "Example",
+      "Example7": "Example"
+    }
+  }

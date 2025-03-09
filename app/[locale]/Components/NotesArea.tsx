@@ -10,7 +10,11 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 // import SingeNote from './SingeNote';
 // import { useGlobalProvider } from '../ContextApi';
 
-const NotesArea = () => {
+const NotesArea = ({ email }: {
+  email: string | null | undefined
+}) => {
+
+  console.log(email)
   const { notesObject, initialNotesObject } = useContext(
     AppContext
   ) as AppContextType;
@@ -20,6 +24,7 @@ const NotesArea = () => {
 
   console.log(allNotes);
 
+  console.log(pinnedNotes.length)
   return (
     // <div className="flex flex-col overflow-hidden hover:overflow-y-auto gap-14 my-2">
     <>
@@ -29,7 +34,7 @@ const NotesArea = () => {
           {/* <span className="text-[20px] font-semibold">Pinned</span> */}
           {/* <div className="flex flex-col items-center justify-center gap-y-2 mb-14"></div> */}
           <div
-            className="notes mb-14"
+            className={`notes ${pinnedNotes.length === 0 ? 'hidden mb-0' : 'mb-14'}`}
           >
             {pinnedNotes.length > 0 && pinnedNotes.map((singleNote: SingleNoteType, index: number) => {
               return (
@@ -71,7 +76,7 @@ const NotesArea = () => {
         })}
       </div>
       </ScrollArea>
-      <NoteWindow singleNote={openedNote} />
+      <NoteWindow singleNote={openedNote} email={email} />
       </>
 
     // {/* </div> */}

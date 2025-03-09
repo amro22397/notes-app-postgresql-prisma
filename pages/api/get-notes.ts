@@ -1,7 +1,7 @@
 import { connectToDatabase } from "@/lib/db";
 import Note from "@/models/noteSchema";
-// import { getServerSession } from 'next-auth';
-// import { authOptions } from '@/pages/api/auth/[...nextauth]';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { NextApiRequest, NextApiResponse } from "next";
 // model import 
 
@@ -12,16 +12,16 @@ export default async function handler(req: any, res: any) {
     
     await connectToDatabase();
     console.log('Hello')
-    // const session = await getServerSession(req, res, authConfig);
-    // console.log(session?.user?.email);
+    const session = await getServerSession(req, res, authOptions);
+    console.log(session?.user?.email);
 
 
-    // if (!session) {
-    //     return res.status(401).json({
-    //         message: "Unauthorized",
-    //         success: false,
-    //     })
-    // }
+    if (!session) {
+        return res.status(401).json({
+            message: "Unauthorized",
+            success: false,
+        })
+    }
 
     // const searchTerm = req.nextUrl.searchParams.get('searchTerm');
 
@@ -49,6 +49,7 @@ export default async function handler(req: any, res: any) {
         if (isPinned) {
             const pinnedNotes = await Note.find({ 
                 isPinned: true,
+                emailRef: session?.user?.email, 
                 noteContent: { $regex: searchString, $options: 'i'},
              }).sort({
                 updatedAt: -1,
@@ -59,6 +60,7 @@ export default async function handler(req: any, res: any) {
 
         const allNotes = await Note.find({
             isPinned: { $ne: true },
+            emailRef: session?.user?.email, 
             noteContent: { $regex: searchString, $options: 'i'},
         }).sort({ createdAt: -1 });
 
