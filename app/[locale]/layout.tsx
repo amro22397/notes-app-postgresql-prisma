@@ -17,6 +17,11 @@ import { Button } from "@/components/ui/button";
 import { signOut } from "next-auth/react";
 import Header from "@/components/Header";
 
+import { Toaster } from "@/components/ui/sonner"
+
+
+import { Analytics } from "@vercel/analytics/next";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -64,8 +69,10 @@ export default async function RootLayout({
                 <NextIntlClientProvider messages={messages}>
                   <EmailIsNotVerified session={jUser} />
 
-                  
                   {children}
+                  <Toaster />
+
+                  <Analytics />
                 </NextIntlClientProvider>
               </Providers>
             </AppProvider>
