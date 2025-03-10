@@ -65,6 +65,7 @@ export async function POST(req: Request) {
 
                 return Response.json({
                     success: true,
+                    message: "OTP Reset Link was sent",
                     status: 250,
                 })
 
