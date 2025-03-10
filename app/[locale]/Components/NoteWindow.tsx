@@ -41,6 +41,12 @@ const NoteWindow = ({ singleNote, email }: { singleNote: any, email: string | nu
     dropDownPositionsObject,
     getNotesFromMongoDB,
     getPinnedNotesFromMongoDB,
+    addNewNoteToDB,
+    updateNoteToDB,
+    submitSaveBtn,
+    setTextInputs,
+    textInputs,
+    isLoading
   } = useContext(AppContext) as AppContextType;
 
   const { allNotes, setAllNotes } = notesObject;
@@ -51,58 +57,27 @@ const NoteWindow = ({ singleNote, email }: { singleNote: any, email: string | nu
 
   const [tags, setTags] = useState(["study", "projects"]);
 
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
 
   // const [singleNote, setSingleNote] = useState<any>(null);
 
   console.log(singleNote);
 
-  const [textInputs, setTextInputs] = useState({
-    noteTitle: "",
-    noteContent: "",
-  });
+  // const [textInputs, setTextInputs] = useState({
+  //   noteTitle: "",
+  //   noteContent: "",
+  // });
 
   console.log(noteSelected)
   console.log(textInputs.noteContent)
 
-  async function addNewNoteToDB() {
-    try {
-      setIsLoading(true);
-
-      const res = await axios.post("/api/notes", {
-        noteName: textInputs.noteTitle,
-        noteContent: textInputs.noteContent,
-        categories: tags,
-        emailRef: email,
-      });
-
-      const newNoteData = res.data;
-
-      getNotesFromMongoDB();
-      getPinnedNotesFromMongoDB();
-
-      toast.success("Note is created successfully.");
-      setAllNotes([...allNotes, newNoteData]);
-      setInitialAllNotes([...initialAllNotes, newNoteData]);
-    } catch (error: any) {
-      toast.error(`Error: ${error.message}`);
-    } finally {
-      setIsLoading(false);
-    }
-
-    if (isLoading === false) {
-      setOpenWindowNote(false);
-    }
-  }
-
-  const noteInputRef = useRef<any>(null);
 
   useEffect(() => {
-    if (openWindowNote) {
-      setTimeout(() => {
-        noteInputRef.current?.focus();
-      }, 200);
-    }
+    // if (openWindowNote) {
+    //   setTimeout(() => {
+    //     noteInputRef.current?.focus();
+    //   }, 200);
+    // }
 
     if (openWindowNote) {
       if (noteSelected === null) {
@@ -114,7 +89,7 @@ const NoteWindow = ({ singleNote, email }: { singleNote: any, email: string | nu
       } else {
         setTextInputs({
           noteTitle: singleNote?.noteName,
-          noteContent: singleNote?.noteContent,
+          noteContent: singleNote.noteContent,
         });
         // setTags(noteSelected.categories);
       }
@@ -124,62 +99,8 @@ const NoteWindow = ({ singleNote, email }: { singleNote: any, email: string | nu
     console.log(noteSelected)
   }, [openWindowNote]);
 
-  async function updateNoteToDB() {
-    try {
-      setIsLoading(true);
 
-      const res = await axios.put(`/api/notes?id=${singleNote._id}`, {
-        newTitle: textInputs.noteTitle,
-        newContent: textInputs.noteContent,
-        newCategories: tags,
-      });
-
-      // if (res.data) {
-      //   const updateNotesArray = ({
-      //     prevState,
-      //     textInputs,
-      //     tags,
-      //   }: {
-      //     prevState: any;
-      //     textInputs: any;
-      //     tags: any;
-      //   }) => {
-      //     const tempArray = [...prevState];
-      //     const findSelectedItemIndex = tempArray.findIndex(
-      //       (note) => note._id === singleNote._id
-      //     );
-
-      //     tempArray[findSelectedItemIndex].noteName = textInputs?.noteTitle || "";
-      //     tempArray[findSelectedItemIndex].noteContent = textInputs?.noteContent || '';
-      //     tempArray[findSelectedItemIndex].categories = tags || [];
-
-      //     return tempArray;
-      //   };
-
-      //   setAllNotes((prevState: any) =>
-      //     updateNotesArray({ prevState, textInputs, tags })
-      //   );
-
-      //   setInitialAllNotes((prevState: any) =>
-      //     updateNotesArray({ prevState, textInputs, tags })
-      //   );
-
-      // }
-
-      getNotesFromMongoDB();
-      getPinnedNotesFromMongoDB();
-
-      toast.success("The note has been updated successfully");
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsLoading(false);
-    }
-
-    if (isLoading === false) {
-      setOpenWindowNote(false);
-    }
-  }
+  
 
   // const findNoteById = async (id: string | null) => {
   //   try {
@@ -216,58 +137,15 @@ const NoteWindow = ({ singleNote, email }: { singleNote: any, email: string | nu
 
   //   }, [singleNote]);
 
-  const submitSaveBtn = async () => {
-    if (
-      // textInputs.noteTitle.trim().length === 0 ||
-      textInputs.noteContent.trim().length === 0
-      // tags.length === 0
-    ) {
-      toast.error("Please fill all the fields");
-      return;
-    }
-
-    const newNote = {
-      id: uuidv4(),
-      noteName: textInputs.noteTitle,
-      noteContent: textInputs.noteContent,
-      dateCreation: new Date(),
-      categories: tags,
-    };
-
-    if (noteSelected === null) {
-      addNewNoteToDB();
-      //   setAllNotes([...allNotes, newNote]);
-      //   setInitialAllNotes([...initialAllNotes, newNote]);
-
-      // toast.success('Note is created successfully');
-      // setOpenWindowNote(false);
-    } else {
-      updateNoteToDB();
-      // setAllNotes((prevState: any) => {
-      //   const tempArray = [...prevState];
-      //   const findSelectedItemIndex = tempArray.findIndex(
-      //     (note) => note.noteName === noteSelected.noteName,
-      //   );
-
-      //   tempArray[findSelectedItemIndex].noteName = textInputs.noteTitle;
-      //   tempArray[findSelectedItemIndex].noteContent = textInputs.noteContent;
-      //   tempArray[findSelectedItemIndex].categories = tags;
-
-      //   return tempArray;
-      // });
-
-      // setOpenWindowNote(false);
-      // toast.success('The note has been updated successfully');
-    }
-
-    console.log(newNote);
-  };
-
+  
   function updateTextInputs(event: any) {
+    
+    event.preventDefault();
+    
     const inputName = event.target.name;
     const inputValue = event.target.value;
 
-    setTextInputs((prevState) => ({
+    setTextInputs((prevState: any) => ({
       ...prevState,
       [inputName]: inputValue,
     }));
@@ -286,6 +164,13 @@ const NoteWindow = ({ singleNote, email }: { singleNote: any, email: string | nu
     setOpenDropDown(true);
     setNoteSelected(noteClicked);
   }
+
+
+
+  console.log(noteSelected)
+  console.log(singleNote?.noteContent)
+  console.log(textInputs.noteContent)
+  console.log(openWindowNote)
 
   return (
     <div
@@ -344,7 +229,7 @@ const NoteWindow = ({ singleNote, email }: { singleNote: any, email: string | nu
 
           <div className="">
             <button
-              onClick={() => submitSaveBtn()}
+              onClick={() => submitSaveBtn(singleNote?._id)}
               className="rounded text-[18px] tracking-wide
               text-orange-600 active:scale-95 cursor-pointer hover:text-orange-600/95"
             >
@@ -378,7 +263,7 @@ const NoteWindow = ({ singleNote, email }: { singleNote: any, email: string | nu
         <textarea
           placeholder="Add Your Content Here..."
           name="noteContent"
-          defaultValue={textInputs.noteContent || ""}
+          value={textInputs.noteContent || ""}
           onChange={updateTextInputs}
           className="px-3 py-4 outline-none rounded-md w-full resize-none text-[19px]
           tracking-wider overflow-y-auto h-[66.5vh]

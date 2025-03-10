@@ -59,11 +59,13 @@ export default async function RootLayout({
   const user = await getUser();
   const jUser = JSON.parse(JSON.stringify(user) || '{}')
 
+  console.log(jUser?.user?.email)
+
   return (
     <html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"}>
       <body className={`${poppins.variable}`}>
         <Suspense fallback={<p>Loading...</p>}>
-          <AppContextProvider>
+          <AppContextProvider email={jUser?.user?.email}>
             <AppProvider session>
               <Providers>
                 <NextIntlClientProvider messages={messages}>

@@ -1,11 +1,13 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 import notesData from "../app/[locale]/NotesData";
 
 import axios from "axios";
 import { SingleNoteType } from "@/types/singleNote";
 import { useSearchParams } from "next/navigation";
+import toast from "react-hot-toast";
+import { textInputs } from "@/types/textInputs";
 
 // should declare here the type of the things that i pass as props
 
@@ -44,12 +46,19 @@ export type AppContextType = {
   setClickedCategory: (value: any) => void;
   getNotesFromMongoDB: () => void;
   getPinnedNotesFromMongoDB: () => void;
+  addNewNoteToDB: () => void,
+    updateNoteToDB: (id: string | null | undefined) => void,
+    submitSaveBtn: (id: string | null | undefined) => void,
+    setTextInputs: (value: any) => void,
+    textInputs: textInputs,
+    isLoading: boolean,
 };
 
 export const AppContext = createContext<AppContextType | null>(null);
 
 interface Props {
   [propName: string]: any;
+  email: string | null | undefined;
 }
 
 const AppContextProvider = (props: Props) => {
@@ -65,9 +74,164 @@ const AppContextProvider = (props: Props) => {
   const [uniqueCategories, setUniqueCategoies] = useState<any[]>([]);
   const [clickedCategory, setClickedCategory] = useState<any>(null);
 
+    const [isLoading, setIsLoading] = useState(false);
+      const [textInputs, setTextInputs] = useState({
+        noteTitle: "",
+        noteContent: "",
+      });
+        const [tags, setTags] = useState(["study", "projects"]);
+      
   
-  const searchParams = useSearchParams();
+
+  
+  const searchParams = useSearchParams() as any;
       const searchTerm = searchParams.get("searchTerm");
+
+
+      console.log(props.email)
+
+      async function addNewNoteToDB() {
+        try {
+          setIsLoading(true);
+    
+          const res = await axios.post("/api/notes", {
+            noteName: textInputs.noteTitle,
+            noteContent: textInputs.noteContent,
+            categories: tags,
+            emailRef: props.email,
+          });
+    
+          const newNoteData = res.data;
+    
+          getNotesFromMongoDB();
+          getPinnedNotesFromMongoDB();
+    
+          toast.success("Note is created successfully.");
+          // setAllNotes([...allNotes, newNoteData]);
+          // setInitialAllNotes([...initialAllNotes, newNoteData]);
+        } catch (error: any) {
+          toast.error(`Error: ${error.message}`);
+        } finally {
+          setIsLoading(false);
+        }
+    
+        if (isLoading === false) {
+          setOpenWindowNote(false);
+        }
+      }
+    
+      const noteInputRef = useRef<any>(null);
+    
+      console.log(openWindowNote)
+    
+      async function updateNoteToDB(id: string | null | undefined) {
+        try {
+          setIsLoading(true);
+    
+          const res = await axios.put(`/api/notes?id=${id}`, {
+            newTitle: textInputs.noteTitle,
+            newContent: textInputs.noteContent,
+            newCategories: tags,
+          });
+    
+          // if (res.data) {
+          //   const updateNotesArray = ({
+          //     prevState,
+          //     textInputs,
+          //     tags,
+          //   }: {
+          //     prevState: any;
+          //     textInputs: any;
+          //     tags: any;
+          //   }) => {
+          //     const tempArray = [...prevState];
+          //     const findSelectedItemIndex = tempArray.findIndex(
+          //       (note) => note._id === singleNote._id
+          //     );
+    
+          //     tempArray[findSelectedItemIndex].noteName = textInputs?.noteTitle || "";
+          //     tempArray[findSelectedItemIndex].noteContent = textInputs?.noteContent || '';
+          //     tempArray[findSelectedItemIndex].categories = tags || [];
+    
+          //     return tempArray;
+          //   };
+    
+          //   setAllNotes((prevState: any) =>
+          //     updateNotesArray({ prevState, textInputs, tags })
+          //   );
+    
+          //   setInitialAllNotes((prevState: any) =>
+          //     updateNotesArray({ prevState, textInputs, tags })
+          //   );
+    
+          // }
+    
+          getNotesFromMongoDB();
+          getPinnedNotesFromMongoDB();
+    
+          toast.success("The note has been updated successfully");
+        } catch (error) {
+          console.log(error);
+        } finally {
+          setIsLoading(false);
+        }
+    
+        if (isLoading === false) {
+          setOpenWindowNote(false);
+        }
+      }
+
+
+
+
+
+      const submitSaveBtn = async (id: string | null | undefined) => {
+        if (
+          // textInputs.noteTitle.trim().length === 0 ||
+          textInputs.noteContent.trim().length === 0
+          // tags.length === 0
+        ) {
+          toast.error("Please fill all the fields");
+          return;
+        }
+    
+        // const newNote = {
+        //   id: uuidv4(),
+        //   noteName: textInputs.noteTitle,
+        //   noteContent: textInputs.noteContent,
+        //   dateCreation: new Date(),
+        //   categories: tags,
+        // };
+    
+        if (noteSelected === null) {
+          addNewNoteToDB();
+          //   setAllNotes([...allNotes, newNote]);
+          //   setInitialAllNotes([...initialAllNotes, newNote]);
+    
+          // toast.success('Note is created successfully');
+          // setOpenWindowNote(false);
+        } else {
+          updateNoteToDB(id);
+          // setAllNotes((prevState: any) => {
+          //   const tempArray = [...prevState];
+          //   const findSelectedItemIndex = tempArray.findIndex(
+          //     (note) => note.noteName === noteSelected.noteName,
+          //   );
+    
+          //   tempArray[findSelectedItemIndex].noteName = textInputs.noteTitle;
+          //   tempArray[findSelectedItemIndex].noteContent = textInputs.noteContent;
+          //   tempArray[findSelectedItemIndex].categories = tags;
+    
+          //   return tempArray;
+          // });
+    
+          // setOpenWindowNote(false);
+          // toast.success('The note has been updated successfully');
+        }
+    
+        // console.log(newNote);
+      };
+    
 
   useEffect(() => {
     getNotesFromMongoDB();
@@ -150,6 +314,12 @@ const AppContextProvider = (props: Props) => {
     setClickedCategory,
     getNotesFromMongoDB,
     getPinnedNotesFromMongoDB,
+    addNewNoteToDB,
+    updateNoteToDB,
+    submitSaveBtn,
+    setTextInputs,
+    textInputs,
+    isLoading
   };
 
   return (
