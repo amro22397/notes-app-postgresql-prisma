@@ -13,8 +13,8 @@ import Header from '@/components/Header';
 const page = async () => {
 
   const user = await getUser();
- const jUser = JSON.parse(JSON.stringify(user))
- const locale = await getLocale();
+  const jUser = JSON.parse(JSON.stringify(user) || '{}')
+   const locale = await getLocale();
 
  console.log(jUser)
 

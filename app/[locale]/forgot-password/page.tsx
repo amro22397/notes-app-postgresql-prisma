@@ -8,7 +8,7 @@ const page = async () => {
     
 
   const session = await getUser();
-  const jUser = JSON.parse(JSON.stringify(session))
+  const jUser = JSON.parse(JSON.stringify(session) || '{}')
 
 
   console.log(jUser);

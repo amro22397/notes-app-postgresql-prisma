@@ -57,7 +57,7 @@ export default async function RootLayout({
   const messages = await getMessages();
 
   const user = await getUser();
-  const jUser = JSON.parse(JSON.stringify(user));
+  const jUser = JSON.parse(JSON.stringify(user) || '{}')
 
   return (
     <html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"}>

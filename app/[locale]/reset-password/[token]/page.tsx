@@ -35,7 +35,7 @@ type strength = 0 | 1 | 2 | 3;
 const page = async () => {
 
   const session = await getUser();
-  const jUser = JSON.parse(JSON.stringify(session))
+  const jUser = JSON.parse(JSON.stringify(session) || '{}')
 
   if (jUser?.user?.email) {
     redirect('/');

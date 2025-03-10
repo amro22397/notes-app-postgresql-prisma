@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 export default async function Page() {
 
   const session = await getUser();
-  const jUser = JSON.parse(JSON.stringify(session))
+  const jUser = JSON.parse(JSON.stringify(session) || '{}')
 
 
     console.log(jUser);

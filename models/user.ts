@@ -5,7 +5,6 @@ import crypto from "crypto"
 const UserSchema = new Schema({
     name: {
         type: String,
-        unique: true,
     },
 
     email: {
