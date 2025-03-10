@@ -50,6 +50,9 @@
       "Send": "أرسل",
       "Back to sign in": "العودة لتسجيل الدخول",
       "Email": "البريد الإلكتروني",
+      "عربي" : "إذا لم تستلم بريد تغيير كلمة السر ، راجع بريد المهملات (spam) أو ",
+      "IfYouDidntRecieve": "If you didn't recieve reset password email, check your spam folder or",
+      "click here": "أضغط هنا",
       "Example6": "Example",
       "Example7": "Example"
     },

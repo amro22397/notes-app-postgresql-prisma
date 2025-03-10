@@ -121,6 +121,7 @@ export async function POST(req: Request) {
     return Response.json({
         success: true,
         message: "User created successfully",
+        data: user,
     })
 
 }

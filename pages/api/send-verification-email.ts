@@ -8,7 +8,7 @@ import mongoose from "mongoose";
 
 
 
-export default async function handler(req: Request, res: Response) {
+export default async function handler(req: any, res: any) {
   if (req.method !== "POST") {
 
     await connectToDatabase();
@@ -29,7 +29,10 @@ export default async function handler(req: Request, res: Response) {
   console.log(email, subject, locale)
 
   if (!email || !subject) {
-    return res.status(400).json({ error: "Missing required fields" });
+    return res.status(400).json({ 
+      success: false,
+      error: "Missing required fields" 
+    });
     // return Response.json({
     //     success: false,
     //     message: "Missing required fields"
@@ -83,9 +86,12 @@ export default async function handler(req: Request, res: Response) {
     //     message: "Email sent successfully!"
     // })
 
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error sending email:", error);
-    res.status(500).json({ error: "Failed to send email" });
+    res.status(500).json({ 
+      success: false,
+      message: "Api Error: " + error.message
+     });
     // return Response.json({
     //     success: false,
     //     message: "Failed to send email"

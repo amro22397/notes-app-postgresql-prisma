@@ -5,6 +5,7 @@ import crypto from "crypto"
 const UserSchema = new Schema({
     name: {
         type: String,
+        // unique: true,
     },
 
     email: {
@@ -20,11 +21,6 @@ const UserSchema = new Schema({
     hashedPassword: {
         type: String,
     },
-
-    lockedPassword: {
-        type: String,
-    },
-
     resetPasswordToken: {
         type: String,
         required: false,
@@ -33,16 +29,6 @@ const UserSchema = new Schema({
         type: Date,
         required: false,
     },
-
-    resetLockPasswordToken: {
-        type: String,
-        required: false,
-    },
-    resetLockPasswordExpires: {
-        type: Date,
-        required: false,
-    },
-
     isVerified: {
         type: Boolean,
         default: false,
@@ -54,10 +40,10 @@ const UserSchema = new Schema({
         type: Date,
     },
 
-}, { timestamps: true })
+}, {timestamps: true})
 
 
-UserSchema.methods.getVerificationToken = function (): string {
+UserSchema.methods.getVerificationToken = function ():string {
     const verificationToken = crypto.randomBytes(20).toString("hex");
 
     this.verifyToken = crypto.createHash("sha256").update(verificationToken).digest("hex");
