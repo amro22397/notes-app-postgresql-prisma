@@ -47,7 +47,8 @@ const NotesArea = ({ email }: {
                   // openedNote={openedNote}
                 />
 
-                <span className="font-semibold text-[17px] text-center">
+                <span className="font-semibold text-[17px] text-center
+                ">
               {stringTruncation(singleNote.noteContent, 20)}
               </span>
               </div>
