@@ -174,7 +174,7 @@ const NoteWindow = ({ singleNote, email }: { singleNote: any, email: string | nu
 
   return (
     <div
-      className={`poppins px-8 py-[19px] w-[700px] h-[700px] bg-white absolute left-0 top-0 z-50  rounded-md transition-all ${
+      className={`poppins px-8 py-[19px] md:w-[700px] w-[95vw] h-[700px] bg-white absolute left-0 top-0 z-50  rounded-md transition-all ${
         openWindowNote ? "visible opacity-100" : "invisible opacity-0 "
       }`}
     >

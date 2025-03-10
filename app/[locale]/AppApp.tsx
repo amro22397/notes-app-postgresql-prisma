@@ -15,7 +15,7 @@ const App = ({ email, user }: {
   user: Session | null | undefined
 }) => {
   return (
-    <div className="relative md:w-[700px] w-[95vw] h-[700px] bg-white rounded-md shadow-md p-7 flex flex-col gap-6
+    <div className="relative md:w-[700px] w-[95vw] h-[700px] rounded-md shadow-md p-7 flex flex-col gap-6
     bg-zinc-200/75">
       <Title />
       

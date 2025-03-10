@@ -20,12 +20,13 @@ const Header = ({
   console.log(email);
 
   return (
-    <div className="flex flex-row justify-between items-center gap-2 my-3 mx-2">
+    <div className="flex md:flex-row flex-col
+     justify-between items-center gap-2 my-3 mx-2">
       {user?.user?.lockedPassword && (
         <Link
         href={`/${locale}/forgot-lock-password`}
         className="hover:underline active:scale-95 cursor-pointer">
-          Forget your lock OTP?
+          Forget your lock OTP ?
         </Link>
       )}
 

@@ -63,7 +63,8 @@ export default async function RootLayout({
 
   return (
     <html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"}>
-      <body className={`${poppins.variable}`}>
+      <body className={`${poppins.variable}
+      overflow-x-hidden`}>
         <Suspense fallback={<p>Loading...</p>}>
           <AppContextProvider email={jUser?.user?.email}>
             <AppProvider session>
