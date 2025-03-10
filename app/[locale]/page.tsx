@@ -9,6 +9,7 @@ import { getUser } from '@/actions/getUser';
 import { getLocale } from 'next-intl/server';
 import { redirect } from 'next/navigation';
 import Header from '@/components/Header';
+import EmailIsNotVerified from '@/components/EmailIsNotVerified';
 
 const page = async () => {
 
@@ -27,6 +28,7 @@ const page = async () => {
     <div>
       {/* <GlobalProvier> */}
       
+      <EmailIsNotVerified session={jUser} />
         <App email={jUser?.user?.email} user={jUser}/>
         <Header email={jUser?.user?.email} user={jUser} />
         <></>

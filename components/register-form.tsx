@@ -224,6 +224,16 @@ export function RegisterForm({
 
     const res = await axios.post("/api/register", { ...formData, locale });
 
+    if (!res.data.success) {
+      // toast({
+      //   variant: "destructive",
+      //   title: `${res.data.message}`,
+      // });
+      toast.error(`${res.data.message}`);
+      setLoading(false);
+      return;
+    }
+
     if (res.data.status !== 150) {
       try {
         const verifyRes = await axios.post("/api/send-verification-email", {
@@ -256,14 +266,6 @@ export function RegisterForm({
     }
 
     try {
-      if (!res.data.success) {
-        // toast({
-        //   variant: "destructive",
-        //   title: `${res.data.message}`,
-        // });
-        toast.error(`${res.data.message}`);
-        setLoading(false);
-      }
 
       if (res.data.success) {
         // toast({

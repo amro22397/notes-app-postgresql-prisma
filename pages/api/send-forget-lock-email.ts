@@ -5,10 +5,11 @@ import { User } from "@/models/user";
 import crypto from 'crypto'
 import { connectToDatabase } from "@/lib/db";
 import mongoose from "mongoose";
+import { NextApiRequest, NextApiResponse } from "next";
 
 
 
-export default async function handler(req: Request, res: Response) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method !== "POST") {
 
         await connectToDatabase();
@@ -29,7 +30,10 @@ export default async function handler(req: Request, res: Response) {
     console.log(email, subject, locale)
 
     if (!email || !subject) {
-        return res.status(400).json({ error: "Missing required fields" });
+        return res.status(400).json({
+            success: false,
+            message: "Missing required fields"
+        });
         // return Response.json({
         //     success: false,
         //     message: "Missing required fields"
@@ -44,12 +48,15 @@ export default async function handler(req: Request, res: Response) {
     const token = crypto.randomBytes(20).toString('hex')
     const lockPasswordToken = crypto.createHash("sha256").update(token).digest("hex");
 
-    await User.updateOne({ email: email }, {
-        $set: {
-            resetLockPasswordToken: lockPasswordToken,
-            resetLockPasswordExpires: new Date(Date.now() + 3600000),
-        }
+    console.log(lockPasswordToken)
+    console.log(new Date(Date.now() + 3600000))
+
+    const updatedUser = await User.updateOne({ email: email }, {
+        resetLockPasswordToken: lockPasswordToken,
+        resetLockPasswordExpires: new Date(Date.now() + 3600000)
     })
+
+    console.log(updatedUser)
 
 
     const resetURL = `${process.env.NEXTAUTH_URL}/${locale}/reset-lock-password/${token}`
@@ -89,7 +96,7 @@ export default async function handler(req: Request, res: Response) {
         //     message: "Email sent successfully!"
         // })
 
-    } catch (error) {
+    } catch (error: any) {
         console.error("Error sending email:", error);
 
         await User.updateOne({ email: email }, {
@@ -99,7 +106,10 @@ export default async function handler(req: Request, res: Response) {
             }
         })
 
-        res.status(500).json({ error: "Failed to send email" });
+        res.status(500).json({
+            success: false,
+            message: "Send lock OTP reset email api error: " + error.message
+        });
         // return Response.json({
         //     success: false,
         //     message: "Failed to send email"

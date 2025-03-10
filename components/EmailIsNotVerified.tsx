@@ -40,7 +40,7 @@ const EmailIsNotVerified = ({ session }: {
               {emailIsNotVerified('Your account')}<span className="mx-1 underline">{emailIsNotVerified('is not')}</span>{" "}
               {emailIsNotVerified('VerifiedYetPlease')}
               </span>
-              <IfYouDontRecieve />
+              <IfYouDontRecieve email={session?.user?.email} />
             </div>
 
             <div
@@ -48,7 +48,7 @@ const EmailIsNotVerified = ({ session }: {
     lg:hidden justify-center text-lg py-1 flex"
             >
               {emailIsNotVerified('YourAccountIsNot')}
-              <IfYouDontRecieve />
+              <IfYouDontRecieve email={session?.user?.email} />
             </div>
           </div>
         )}
