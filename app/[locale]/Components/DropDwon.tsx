@@ -96,10 +96,10 @@ const DropDwon = ({ user }: {
 
       if (res.data.success) {
 
+        toast.success("The note has been deleted successfully");
+
         getNotesFromMongoDB();
         getPinnedNotesFromMongoDB();
-
-        toast.success("The note has been deleted successfully");
 
         const filterAllNotes = allNotes.filter(
           (note: any) => note._id !== noteSelected._id
