@@ -88,6 +88,8 @@ const DropDwon = ({ user }: {
     },
   ];
 
+  //ss
+
   async function deleteNoteFx() {
     try {
       const res = await axios.delete(`/api/notes?id=${noteSelected._id}`);
