@@ -8,6 +8,7 @@ import { NextResponse } from "next/server";
 export async function POST(req: any) {
 
     await connenctToMongoDB();
+    mongoose.connect(process.env.MONGO_URL as string);
 
     try {
 
@@ -40,6 +41,7 @@ export async function GET(req: any) {
     try {
 
         await connenctToMongoDB();
+        mongoose.connect(process.env.MONGO_URL as string);
 
         const searchTerm = req.nextUrl.searchParams.get('searchTerm');
 
@@ -93,6 +95,8 @@ export async function GET(req: any) {
 
 export async function DELETE(req: any) {
 
+    mongoose.connect(process.env.MONGO_URL as string);
+
     try {
 
         const id = req.nextUrl.searchParams.get('id');
@@ -114,6 +118,8 @@ export async function DELETE(req: any) {
 
 
 export async function PUT(req: any) {
+
+    mongoose.connect(process.env.MONGO_URL as string);
 
     try {
 
