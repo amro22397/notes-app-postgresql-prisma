@@ -10,13 +10,13 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+// import { Input } from "@/components/ui/input";
 import axios from "axios";
 // import { toast } from "@/hooks/use-toast";
 import { toast } from "sonner";
 import Link from "next/link";
 
-import { Label } from "@/components/ui/label";
+// import { Label } from "@/components/ui/label";
 /* import {
   Select,
   SelectContent,
@@ -26,8 +26,8 @@ import { Label } from "@/components/ui/label";
 } from "@/components/ui/select" */
 import { useParams, useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { EyeIcon, EyeOffIcon, Loader2 } from "lucide-react";
-import ShowPassStrength from "@/components/ShowPassStrength";
+import { Loader2 } from "lucide-react";
+// import ShowPassStrength from "@/components/ShowPassStrength";
 import { passwordStrength } from "check-password-strength";
 
 import { useLocale, useTranslations } from 'next-intl' 
@@ -50,8 +50,8 @@ const ResetLockPasswordForm = () => {
   const params = useParams<any>();
 
   console.log(params.token);
-  const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
+  // const [email, setEmail] = useState("");
+  // const [message, setMessage] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
@@ -61,7 +61,7 @@ const ResetLockPasswordForm = () => {
     const [strength, setStrength] = useState<strength>(0);
 
 
-  const [type, setType] = useState("password");
+  // const [type, setType] = useState("password");
   const [validation, setValidation] = useState(false);
 
     const [lockPasswordOTPvalue, setLockPasswordOTPvalue] = useState("");
@@ -72,23 +72,23 @@ const ResetLockPasswordForm = () => {
   const session = useSession();
   console.log(session);
 
-  const handleValidation = (value: string) => {
-    const lower = new RegExp("(?=.*[a-z])");
-    const upper = new RegExp("(?=.*[A-Z])");
-    const number = new RegExp("(?=.*[0-9])");
-    const special = new RegExp("(?=.*[!@#$%^&*])");
+  // const handleValidation = (value: string) => {
+  //   const lower = new RegExp("(?=.*[a-z])");
+  //   const upper = new RegExp("(?=.*[A-Z])");
+  //   const number = new RegExp("(?=.*[0-9])");
+  //   const special = new RegExp("(?=.*[!@#$%^&*])");
 
-    if (
-      lower.test(value) &&
-      upper.test(value) &&
-      number.test(value) &&
-      special.test(value)
-    ) {
-      setValidation(true);
-    } else {
-      setValidation(false);
-    }
-  };
+  //   if (
+  //     lower.test(value) &&
+  //     upper.test(value) &&
+  //     number.test(value) &&
+  //     special.test(value)
+  //   ) {
+  //     setValidation(true);
+  //   } else {
+  //     setValidation(false);
+  //   }
+  // };
 
   useEffect(() => {
     const verifyToken = async () => {
@@ -105,7 +105,7 @@ const ResetLockPasswordForm = () => {
         if (res.data.status === true) {
           setError("");
           setVerified(true);
-          setUser(res.data.user);
+          setUser(res?.data?.user);
         }
       } catch (error) {
         console.log(error);
@@ -161,8 +161,8 @@ const ResetLockPasswordForm = () => {
 
   console.log(password, confirmPassword);
 
-  const formStyles = `text-md`;
-  const iconClass = `absolute right-4 top-2 text-gray-500 cursor-pointer`;
+  // const formStyles = `text-md`;
+  // const iconClass = `absolute right-4 top-2 text-gray-500 cursor-pointer`;
 
 
   useEffect(() => {

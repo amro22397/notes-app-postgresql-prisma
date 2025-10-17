@@ -26,7 +26,7 @@ const page = async () => {
   }
 
   const sessionUser = await prisma.user.findUnique({
-    where: { email: jUser.user.email }
+    where: { email: jUser?.user?.email }
   })
 
   return (

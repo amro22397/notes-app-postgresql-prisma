@@ -96,7 +96,7 @@ const ResetForm = () => {
         if (res.data.status === true) {
           setError("");
           setVerified(true);
-          setUser(res.data.user);
+          setUser(res?.data?.user);
         }
       } catch (error) {
         console.log(error);

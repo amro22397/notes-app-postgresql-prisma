@@ -23,6 +23,8 @@ import { Toaster } from "@/components/ui/sonner"
 import { Analytics } from "@vercel/analytics/next";
 
 import styles from "./layout.module.css"; 
+import EmailIsNotVerified from "@/components/EmailIsNotVerified";
+import prisma from "@/lib/prisma";
 
 // const geistSans = Geist({
 //   variable: "--font-geist-sans",
@@ -63,17 +65,22 @@ export default async function RootLayout({
 
   console.log(jUser?.user?.email)
 
+  // const sessionUser = await prisma.user.findUnique({
+  //     where: { email: jUser?.user?.email }
+  //   })
+
   return (
     <html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"}>
       <body className={`${poppins.variable}
       overflow-x-hidden antialiased relative
         ${locale === 'ar' ? styles.arabic : styles.english}`}>
+          
         <Suspense fallback={<p>Loading...</p>}>
           <AppContextProvider email={jUser?.user?.email}>
             <AppProvider session>
               <Providers>
                 <NextIntlClientProvider messages={messages}>
-
+                  {/* <EmailIsNotVerified session={sessionUser} /> */}
                   {children}
                   <Toaster />
 
