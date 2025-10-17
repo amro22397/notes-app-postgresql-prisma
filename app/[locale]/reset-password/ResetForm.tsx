@@ -16,7 +16,7 @@ import axios from "axios";
 import { toast } from "sonner";
 import Link from "next/link";
 
-import { Label } from "@/components/ui/label";
+// import { Label } from "@/components/ui/label";
 /* import {
   Select,
   SelectContent,
@@ -44,8 +44,8 @@ const ResetForm = () => {
   const params = useParams<any>();
 
   console.log(params.token);
-  const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
+  // const [email, setEmail] = useState("");
+  // const [message, setMessage] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
@@ -231,8 +231,8 @@ const ResetForm = () => {
 
   console.log(password, confirmPassword);
 
-  const formStyles = `text-md`;
-  const iconClass = `absolute right-4 top-2 text-gray-500 cursor-pointer`;
+  // const formStyles = `text-md`;
+  // const iconClass = `absolute right-4 top-2 text-gray-500 cursor-pointer`;
 
 
   useEffect(() => {

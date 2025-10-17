@@ -1,42 +1,67 @@
-import { connenctToMongoDB } from "@/libs/mongodb";
-import Note from "@/models/noteSchema";
-import { User } from "@/models/user";
+// import { connenctToMongoDB } from "@/libs/mongodb";
+// import Note from "@/models/noteSchema";
+// import { User } from "@/models/user";
+import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
 
 export async function PUT(req: any) {
 
     try {
-        await connenctToMongoDB();
+        // await connenctToMongoDB();
 
         const { lockedPassword, email } = await req.json();
 
         const id = req.nextUrl.searchParams.get('id');
 
-        const user = await User.findOne({ email: email });
+        // const user = await User.findOne({ email: email });
 
-        const theNote = await Note.findById(id);
+        const user = await prisma.user.findUnique({
+            where: { email: email }
+        }) as any | null | undefined
+
+        // const theNote = await Note.findById(id);
+
+        const theNote = await prisma.note.findUnique({
+            where: { id: id }
+        }) as any | null | undefined
 
         if (!user.lockedPassword) {
-            const updateUser = await User.updateOne({ email: email }, {
-                lockedPassword: lockedPassword
-            });
+            // const updateUser = await User.updateOne({ email: email }, {
+            //     lockedPassword: lockedPassword
+            // });
+
+            const updateUser = await prisma.user.update({
+                where: { email: email },
+                data: { lockedPassword: lockedPassword }
+            })
     
-            const updateNoteLocked = await Note.findByIdAndUpdate(id, {
-                isLocked: true,
+            // const updateNoteLocked = await Note.findByIdAndUpdate(id, {
+            //     isLocked: true,
+            // })
+
+            const updateNoteLocked = await prisma.note.update({
+                where: { id: id },
+                data: { isLocked: true }
             })
     
             return NextResponse.json({
                 success: true,
                 message: "Note has been locked successfully",
                 data: updateNoteLocked,
+                updateUser: updateUser,
             })
         }
 
         
         if (user.lockedPassword) {
             if (!theNote.isLocked) {
-                const updatedNote = await Note.findByIdAndUpdate(id, { isLocked: true });
+                // const updatedNote = await Note.findByIdAndUpdate(id, { isLocked: true });
+
+                const updatedNote = await prisma.note.update({
+                    where: { id: id },
+                    data: { isLocked: true }
+                })
 
             return NextResponse.json({
                 success: true,
@@ -44,7 +69,12 @@ export async function PUT(req: any) {
                 data: updatedNote,
             })
             } else {
-                const updatedNote = await Note.findByIdAndUpdate(id, { isLocked: false });
+                // const updatedNote = await Note.findByIdAndUpdate(id, { isLocked: false });
+
+                const updatedNote = await prisma.note.update({
+                    where: { id: id },
+                    data: { isLocked: false }
+                })
 
             return NextResponse.json({
                 success: true,
@@ -73,7 +103,7 @@ export async function PUT(req: any) {
 
 export async function POST(req: any) {
 
-    await connenctToMongoDB();
+    // await connenctToMongoDB();
 
     try {
         
@@ -81,18 +111,33 @@ export async function POST(req: any) {
 
         const { lockedPassword, email } = await req.json();
 
-        const user = await User.findOne({ email: email})
-        const theNote = await Note.findById(id);
+        // const user = await User.findOne({ email: email })
+
+        const user = await prisma.user.findUnique({
+            where: { email: email }
+        }) as any | null | undefined
+
+        // const theNote = await Note.findById(id);
+
+        const theNote = await prisma.note.findUnique({
+            where: { id: id }
+        }) as any | null | undefined
 
         if (user.lockedPassword) {
             if (lockedPassword === user.lockedPassword) {
 
-                const updatedNote = await Note.findByIdAndUpdate(id, { isLocked: false });
+                // const updatedNote = await Note.findByIdAndUpdate(id, { isLocked: false });
+
+                const updatedNote = await prisma.note.update({
+                    where: { id: id },
+                    data: { isLocked: false }
+                })
 
                 return NextResponse.json({
                     success: true,
                     message: 'The note is unlocked',
                     data: updatedNote,
+                    theNote: theNote,
                 })
             } else {
                 return NextResponse.json({

@@ -12,15 +12,17 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { signIn, useSession } from "next-auth/react";
 // import { CircularProgress } from "@mui/material"
 // import { UserAuth } from "@/context/AuthContext"
-import { useRouter } from "next/navigation";
-import { EyeIcon, EyeOffIcon, Loader, Loader2 } from "lucide-react";
+// import { useRouter } from "next/navigation";
+import { EyeIcon, EyeOffIcon, Loader2 } from "lucide-react";
 
 import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
+import axios from "axios";
+import { toast } from "sonner";
 
 export function LoginForm({
   className,
@@ -33,7 +35,9 @@ export function LoginForm({
   // const { user, googleSignIn, logOut } = UserAuth();
   // console.log(user);
 
-  const router = useRouter();
+  // const router = useRouter();
+
+  const locale = useLocale();
 
   const [formData, setFormData] = useState({
     email: "",
@@ -60,9 +64,26 @@ export function LoginForm({
     e.preventDefault();
     setLoading(true);
 
-    await signIn("credentials", { ...formData, callbackUrl: `/${locale}/` });
+    const res = await axios.post("/api/login", { ...formData, locale });
 
-    setLoading(false);
+    console.log(res)
+
+    if (!res.data.success) {
+      toast.error(`${res.data.message}`);
+      setLoading(false);
+      return
+    }
+
+    if (res.data.success) {
+      await signIn("credentials", { ...formData, callbackUrl: `/${locale}/` });
+      setLoading(false);
+    }
+
+    
+
+    
+
+    
   };
 
   /*    useEffect(() => {
@@ -76,13 +97,13 @@ export function LoginForm({
   console.log(formData);
 
   const formStyles = `text-md`;
-  const iconClass = `absolute right-4 top-2 text-gray-500 cursor-pointer`;
+  // const iconClass = `absolute right-4 top-2 text-gray-500 cursor-pointer`;
 
   const session = useSession();
   console.log(session);
 
   const loginPage = useTranslations("LoginPage");
-  const locale = useLocale();
+  
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>

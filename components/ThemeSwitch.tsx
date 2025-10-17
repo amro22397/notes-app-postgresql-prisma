@@ -16,7 +16,7 @@ export default function ThemeSwitch() {
 
     if (!mounted) return (
         <Image
-        src=""
+        src="/"
         width={36}
         height={36}
         sizes="36x36"

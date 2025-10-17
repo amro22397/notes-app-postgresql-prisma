@@ -92,7 +92,7 @@ const DropDwon = ({ user }: {
 
   async function deleteNoteFx() {
     try {
-      const res = await axios.delete(`/api/notes?id=${noteSelected._id}`);
+      const res = await axios.delete(`/api/notes?id=${noteSelected.id}`);
 
       if (res.data.success) {
 
@@ -102,11 +102,11 @@ const DropDwon = ({ user }: {
         getPinnedNotesFromMongoDB();
 
         const filterAllNotes = allNotes.filter(
-          (note: any) => note._id !== noteSelected._id
+          (note: any) => note.id !== noteSelected.id
         );
 
         const filterInitialNotes = initialAllNotes.filter(
-          (note: any) => note._id !== noteSelected._id
+          (note: any) => note.id !== noteSelected.id
         );
 
         setAllNotes(filterAllNotes);
@@ -144,7 +144,7 @@ const DropDwon = ({ user }: {
   const updatePinNoteFx = async () => {
     try {
       const res = await axios.put(
-        `/api/notes/pin-note?id=${noteSelected._id}&noteSelected=${noteSelected}`
+        `/api/notes/pin-note?id=${noteSelected.id}&noteSelected=${noteSelected}`
       );
 
       console.log(res.data);
@@ -168,9 +168,9 @@ const DropDwon = ({ user }: {
   const LockNoteFx = async () => {
 
     try {
-      const res = await axios.put(`/api/user/lock-note?id=${noteSelected._id}`, {
+      const res = await axios.put(`/api/user/lock-note?id=${noteSelected.id}`, {
         lockedPassword: lockPasswordOTPvalue,
-        email: user?.user?.email,
+        email: user?.email,
       });
 
       console.log(res.data);
@@ -194,7 +194,7 @@ const DropDwon = ({ user }: {
 
   console.log(lockPasswordOTPvalue)
 
-  console.log(user?.user)
+  console.log(user)
 
 
   const handleChangleLockPassword = async () => {
@@ -203,10 +203,10 @@ const DropDwon = ({ user }: {
 
       console.log(lockPasswordOTPvalue)
       
-      if (!user?.user?.lockedPassword) {
-        const res = await axios.put(`/api/user/lock-note?id=${noteSelected._id}`, {
+      if (!user?.lockedPassword) {
+        const res = await axios.put(`/api/user/lock-note?id=${noteSelected.id}`, {
           lockedPassword: lockPasswordOTPvalue,
-          email: user?.user?.email,
+          email: user?.email,
         })
 
         getNotesFromMongoDB();
@@ -223,9 +223,9 @@ const DropDwon = ({ user }: {
 
       } else {
 
-        const res = await axios.post(`/api/user/lock-note?id=${noteSelected._id}`, {
+        const res = await axios.post(`/api/user/lock-note?id=${noteSelected.id}`, {
           lockedPassword: lockPasswordOTPvalue,
-          email: user?.user?.email,
+          email: user?.email,
         })
 
         getNotesFromMongoDB();
@@ -391,19 +391,20 @@ ${/* index === menuItems.length - 1 && "border-none" */ ""}
               onClick={() => {
                 setOpenDropDown(false);
 
-                if (!user?.user?.lockedPassword) {
+                if (!user?.lockedPassword) {
                   setIsLockPasswordCard(true);
             
                   return;
                 }
 
-                if (user?.user?.lockedPassword) {
+                if (user?.lockedPassword) {
                   LockNoteFx();
                 }
               }}
             >
               <Lock size={19} />
               <div className=" ">Lock Note</div>
+              {/* {JSON.stringify(user, null, 2)} */}
             </div>
           )}
 
@@ -416,7 +417,7 @@ border-none
               onClick={() => {
                 setOpenDropDown(false);
 
-                if (user?.user?.lockedPassword) {
+                if (user?.lockedPassword) {
                   setIsLockPasswordCard(true);
             
                   return;
@@ -437,7 +438,7 @@ border-none
         <DialogContent>
           <DialogHeader className="flex flex-col gap-5">
             <DialogTitle>
-              {!user?.user.lockedPassword ? 'Set Lock OTP' : 'Enter Lock OTP'}
+              {!user?.lockedPassword ? 'Set Lock OTP' : 'Enter Lock OTP'}
             </DialogTitle>
             <DialogDescription>
 

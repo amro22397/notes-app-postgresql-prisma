@@ -1,5 +1,5 @@
-import { User } from "@/models/user";
-import mongoose from "mongoose";
+// import { User } from "@/models/user";
+// import mongoose from "mongoose";
 import { getServerSession } from "next-auth"
 
 import type {
@@ -8,6 +8,7 @@ import type {
   NextApiResponse,
 } from "next"
 import type { NextAuthOptions } from "next-auth"
+import prisma from "@/lib/prisma";
 
 
 export const config = {
@@ -26,7 +27,7 @@ export function getSession(
     | [GetServerSidePropsContext["req"], GetServerSidePropsContext["res"]]
     | [NextApiRequest, NextApiResponse]
     | []
-): any | null {
+) {
   return getServerSession(...args, config)
 }
 
@@ -37,7 +38,7 @@ export function getSession(
 export async function getUser() {
 
   try {
-    let session = await getSession();
+    const session = await getSession();
     console.log(session);
 
 
@@ -46,18 +47,33 @@ export async function getUser() {
       return null;
     }
 
-    mongoose.connect(process.env.MONGO_URL as string);
-    const currentUser = await User.findOne({ email: session?.user?.email })
+    // mongoose.connect(process.env.MONGO_URL as string);
+    // const currentUser = await User.findOne({ email: session?.user?.email })
+
+    const currentUser = await prisma.user.findUnique({
+      where: { email: session?.user?.email }
+    })
 
     if (!currentUser) {
 
-      const user = await User.create({
-        name: session?.user.name,
-        email: session?.user?.email,
-        image: session?.user?.image,
-        isVerified: true,
+      // await User.create({
+      //   name: session?.user.name,
+      //   email: session?.user?.email,
+      //   image: session?.user?.image,
+      //   isVerified: true,
+      // })
+
+      const user = await prisma.user.create({
+        data: {
+          name: session?.user.name,
+          email: session?.user?.email,
+          image: session?.user?.image,
+          isVerified: true,
+        }
       })
-      session.user = user;
+
+      console.log(user)
+      // session.user = user;
       // session.user._id = user._id;
       // session.user.isVerified = true;
       // session.user.createdAt = user.createdAt;
@@ -67,23 +83,32 @@ export async function getUser() {
 
     } else {
 
-      const updatedUser = await User.findOneAndUpdate({ email: session?.user?.email }, {
-        name: session?.user?.name,
-        image: session?.user?.image,
+      // const updatedUser = await User.findOneAndUpdate({ email: session?.user?.email }, {
+      //   name: session?.user?.name,
+      //   image: session?.user?.image,
+      // })
+
+      const updatedUser = await prisma.user.update({
+        where: { email: session?.user?.email },
+        data: {
+          name: session?.user?.name,
+          image: session?.user?.image,
+        }
       })
 
       console.log(updatedUser)
-      session.user = updatedUser;
+      // session.user = updatedUser;
       // session.user._id = currentUser._id;
       // session.user.isVerified = true;
       // session.user.createdAt = currentUser.createdAt;
       // session.user.updatedAt = currentUser.updatedAt;
-      
+
       return session;
     }
 
   } catch (error) {
 
-    console.log(error)
+    console.log(`Server Error getting session user: ${error}`)
   }
+
 }

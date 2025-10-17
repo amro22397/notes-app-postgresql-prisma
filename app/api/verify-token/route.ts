@@ -1,18 +1,29 @@
-import mongoose from "mongoose";
+// import mongoose from "mongoose";
+import prisma from "@/lib/prisma";
 import crypto from "crypto"
-import { User } from "@/models/user";
+// import { User } from "@/models/user";
 
 
 export async function POST(req: Request) {
-    mongoose.connect(process.env.MONGO_URL as string);
+    // mongoose.connect(process.env.MONGO_URL as string);
 
-    const { token } = await req.json();
+    try {
+        
+        const { token } = await req.json();
 
     const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
 
-    const user = await User.findOne({
-        resetPasswordToken: hashedToken,
-        resetPasswordExpires: { $gt: Date.now() },
+    // const user = await User.findOne({
+    //     resetPasswordToken: hashedToken,
+    //     resetPasswordExpires: { $gt: Date.now() },
+    // })
+
+    const user = await prisma.user.findFirst({
+        where: {
+            resetPasswordToken: hashedToken,
+            resetPasswordExpires: { gt: new Date() },
+            // resetPasswordExpires: { gt: Date.now() },
+        }
     })
 
     if (!user) {
@@ -27,4 +38,17 @@ export async function POST(req: Request) {
         status: true,
         user: user
     })
+
+    } catch (error) {
+        
+        console.log(`Server Error verifying token: ${error}`);
+
+        return Response.json({
+        message: `Server Error verifying token: ${error}`,
+        status: false,
+    })
+    
+    }
 }
+
+

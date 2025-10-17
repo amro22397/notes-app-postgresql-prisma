@@ -16,13 +16,13 @@ const Header = ({
 }) => {
   const locale = useLocale();
 
-  console.log(user?.user);
+  console.log(user);
   console.log(email);
 
   return (
     <div className="flex md:flex-row flex-col
      justify-between items-center gap-2 my-3 mx-2">
-      {user?.user?.lockedPassword && (
+      {user?.lockedPassword && (
         <Link
         href={`/${locale}/forgot-lock-password`}
         className="hover:underline active:scale-95 cursor-pointer">

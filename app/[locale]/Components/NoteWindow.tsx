@@ -4,55 +4,55 @@ import React, { useState, useRef, useEffect, useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 // import { useGlobalProvider } from '../ContextApi';
-import { v4 as uuidv4 } from "uuid";
-import toast from "react-hot-toast";
+// import { v4 as uuidv4 } from "uuid";
+// import toast from "react-hot-toast";
 import { AppContext, AppContextType } from "@/context/AppContext";
-import axios from "axios";
+// import axios from "axios";
 
 import { MdKeyboardArrowLeft } from "react-icons/md";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
-import { useRouter, useSearchParams } from "next/navigation";
-import { SingleNoteType } from "@/types/singleNote";
+// import { useRouter } from "next/navigation";
+// import { SingleNoteType } from "@/types/singleNote";
 
 const NoteWindow = ({ singleNote, email }: { singleNote: any, email: string | null | undefined }) => {
-  const router = useRouter();
+  // const router = useRouter();
 
-  console.log(email);
+  // console.log(email);
   // const searchParams = useSearchParams() as any;
 
   // const id = searchParams.get("id");
 
   // console.log(id);
 
-  const removeAllQueries = () => {
-    router.push(window.location.pathname, { scroll: false });
-  };
+  // const removeAllQueries = () => {
+  //   router.push(window.location.pathname, { scroll: false });
+  // };
 
-  console.log(singleNote)
+  // console.log(singleNote)
 
   const {
     openWindowNote,
     setOpenWindowNote,
-    notesObject,
+    // notesObject,
     noteSelectedObject,
-    initialNotesObject,
-    setClickedCategory,
+    // initialNotesObject,
+    // setClickedCategory,
     dropDownToogle,
     dropDownPositionsObject,
     getNotesFromMongoDB,
     getPinnedNotesFromMongoDB,
-    addNewNoteToDB,
-    updateNoteToDB,
+    // addNewNoteToDB,
+    // updateNoteToDB,
     submitSaveBtn,
     setTextInputs,
     textInputs,
     isLoading
   } = useContext(AppContext) as AppContextType;
 
-  const { allNotes, setAllNotes } = notesObject;
-  const { initialAllNotes, setInitialAllNotes } = initialNotesObject;
+  // const { allNotes, setAllNotes } = notesObject;
+  // const { initialAllNotes, setInitialAllNotes } = initialNotesObject;
   const { noteSelected, setNoteSelected } = noteSelectedObject;
-  const { openDropDown, setOpenDropDown } = dropDownToogle;
+  const { setOpenDropDown } = dropDownToogle;
   const { setDropDownPositions } = dropDownPositionsObject;
 
   const [tags, setTags] = useState(["study", "projects"]);
@@ -61,7 +61,7 @@ const NoteWindow = ({ singleNote, email }: { singleNote: any, email: string | nu
 
   // const [singleNote, setSingleNote] = useState<any>(null);
 
-  console.log(singleNote);
+  // console.log(singleNote);
 
   // const [textInputs, setTextInputs] = useState({
   //   noteTitle: "",
@@ -95,8 +95,8 @@ const NoteWindow = ({ singleNote, email }: { singleNote: any, email: string | nu
       }
     }
 
-    console.log(textInputs.noteContent)
-    console.log(noteSelected)
+    // console.log(textInputs.noteContent)
+    // console.log(noteSelected)
   }, [openWindowNote]);
 
 
@@ -151,7 +151,7 @@ const NoteWindow = ({ singleNote, email }: { singleNote: any, email: string | nu
     }));
   }
 
-  console.log(textInputs.noteContent);
+  // console.log(textInputs.noteContent);
 
   function openDropDownFx(event: any, noteClicked: any) {
     if (event) {
@@ -167,10 +167,10 @@ const NoteWindow = ({ singleNote, email }: { singleNote: any, email: string | nu
 
 
 
-  console.log(noteSelected)
-  console.log(singleNote?.noteContent)
-  console.log(textInputs.noteContent)
-  console.log(openWindowNote)
+  // console.log(noteSelected)
+  // console.log(singleNote?.noteContent)
+  // console.log(textInputs.noteContent)
+  // console.log(openWindowNote)
 
   return (
     <div
@@ -190,7 +190,7 @@ const NoteWindow = ({ singleNote, email }: { singleNote: any, email: string | nu
           onClick={() => {
             setOpenWindowNote(false);
             setNoteSelected(null);
-            console.log(noteSelected);
+            // console.log(noteSelected);
             // removeAllQueries();
             getNotesFromMongoDB();
             getPinnedNotesFromMongoDB();
@@ -229,7 +229,7 @@ const NoteWindow = ({ singleNote, email }: { singleNote: any, email: string | nu
 
           <div className="">
             <button
-              onClick={() => submitSaveBtn(singleNote?._id)}
+              onClick={() => submitSaveBtn(singleNote?.id)}
               className="rounded text-[18px] tracking-wide
               text-orange-600 active:scale-95 cursor-pointer hover:text-orange-600/95"
             >

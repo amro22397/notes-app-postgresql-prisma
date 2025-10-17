@@ -1,10 +1,11 @@
-import VerifyEmailTemplate from "@/app/emails/VerifyEmailTemplate";
-import { connectToDatabase } from "@/lib/db";
-import { User } from "@/models/user";
-import { render } from "@react-email/components";
-import mongoose from "mongoose";
+// import VerifyEmailTemplate from "@/app/emails/VerifyEmailTemplate";
+// import { connectToDatabase } from "@/lib/db";
+// import { User } from "@/models/user";
+// import { render } from "@react-email/components";
+// import mongoose from "mongoose";
 import nodemailer from "nodemailer";
 import crypto from 'crypto'
+import prisma from "@/lib/prisma";
 
 
 export default async function handler(req: any, res: any) {
@@ -15,7 +16,7 @@ export default async function handler(req: any, res: any) {
         });
     }
 
-    await connectToDatabase();
+    // await connectToDatabase();
 
     const { email, subject, locale } = req.body;
 
@@ -28,15 +29,29 @@ export default async function handler(req: any, res: any) {
         });
     }
 
-    mongoose.connect(process.env.MONGO_URL as string);
-    const user = await User.findOne({ email: email })
+    // mongoose.connect(process.env.MONGO_URL as string);
+    // const user = await User.findOne({ email: email })
+
+    const user = await prisma.user.findUnique({
+        where: { email: email }
+    })
+
+    console.log(user)
 
 
     const token = crypto.randomBytes(20).toString('hex')
     const passwordToken = crypto.createHash("sha256").update(token).digest("hex");
 
-    await User.updateOne({ email: email }, {
-        $set: {
+    // await User.updateOne({ email: email }, {
+    //     $set: {
+    //         resetLockPasswordToken: passwordToken,
+    //         resetLockPasswordExpires: new Date(Date.now() + 3600000),
+    //     }
+    // })
+
+    await prisma.user.update({
+        where: { email: email },
+        data: {
             resetLockPasswordToken: passwordToken,
             resetLockPasswordExpires: new Date(Date.now() + 3600000),
         }
@@ -72,8 +87,16 @@ export default async function handler(req: any, res: any) {
     } catch (error: any) {
         console.error(error);
 
-        await User.updateOne({ email: email }, {
-            $set: {
+        // await User.updateOne({ email: email }, {
+        //     $set: {
+        //         resetLockPasswordToken: null,
+        //         resetLockPasswordExpires: null,
+        //     }
+        // })
+
+        await prisma.user.update({
+            where: { email: email },
+            data: {
                 resetLockPasswordToken: null,
                 resetLockPasswordExpires: null,
             }

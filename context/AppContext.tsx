@@ -1,7 +1,7 @@
 "use client";
 
-import { createContext, useContext, useEffect, useRef, useState } from "react";
-import notesData from "../app/[locale]/NotesData";
+import { createContext,useEffect, useRef, useState } from "react";
+// import notesData from "../app/[locale]/NotesData";
 
 import axios from "axios";
 import { SingleNoteType } from "@/types/singleNote";
@@ -87,8 +87,10 @@ const AppContextProvider = (props: Props) => {
   const searchParams = useSearchParams() as any;
       const searchTerm = searchParams.get("searchTerm");
 
+      console.log(textInputs.noteContent)
 
-      console.log(props.email)
+
+      // console.log(props.email)
 
       async function addNewNoteToDB() {
         try {
@@ -122,7 +124,7 @@ const AppContextProvider = (props: Props) => {
     
       const noteInputRef = useRef<any>(null);
     
-      console.log(openWindowNote)
+      // console.log(openWindowNote)
     
       async function updateNoteToDB(id: string | null | undefined) {
         try {
@@ -231,27 +233,17 @@ const AppContextProvider = (props: Props) => {
     
         // console.log(newNote);
       };
-    
 
-  useEffect(() => {
-    getNotesFromMongoDB();
-    getPinnedNotesFromMongoDB();
-  }, [searchTerm]);
-
-      console.log(searchTerm);
-
-      if (!searchTerm) {
-        
-      }
-
-  const getNotesFromMongoDB = async () => {
+      const getNotesFromMongoDB = async () => {
     try {
       const res = await axios.get(`/api/get-notes${searchTerm ? `?searchTerm=${searchTerm}`: ''}`);
 
-      console.log(searchTerm)
+      // console.log(searchTerm)
 
       setAllNotes(res.data.allNotes);
       setInitialAllNotes(res.data.allNotes);
+
+      // console.log(res)
     } catch (error) {
       console.log(error);
     }
@@ -266,8 +258,12 @@ const AppContextProvider = (props: Props) => {
       console.log(error);
     }
   };
+    
 
-  console.log(allNotes);
+  useEffect(() => {
+    getNotesFromMongoDB();
+    getPinnedNotesFromMongoDB();
+  }, [searchTerm]);
 
   // useEffect(() => {
   //   setAllNotes(notesData);

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Poppins } from "next/font/google";
+import { Poppins } from "next/font/google";
 import "./globals.css";
 import AppContextProvider from "@/context/AppContext";
 import { Suspense } from "react";
@@ -11,26 +11,28 @@ import { routing } from "@/i18n/routing";
 import { Providers } from "./provider";
 
 import AppProvider from "@/components/AppContext";
-import EmailIsNotVerified from "@/components/EmailIsNotVerified";
+// import EmailIsNotVerified from "@/components/EmailIsNotVerified";
 import { getUser } from "@/actions/getUser";
-import { Button } from "@/components/ui/button";
-import { signOut } from "next-auth/react";
-import Header from "@/components/Header";
+// import { Button } from "@/components/ui/button";
+// import { signOut } from "next-auth/react";
+// import Header from "@/components/Header";
 
 import { Toaster } from "@/components/ui/sonner"
 
 
 import { Analytics } from "@vercel/analytics/next";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+import styles from "./layout.module.css"; 
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+// const geistSans = Geist({
+//   variable: "--font-geist-sans",
+//   subsets: ["latin"],
+// });
+
+// const geistMono = Geist_Mono({
+//   variable: "--font-geist-mono",
+//   subsets: ["latin"],
+// });
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -64,7 +66,8 @@ export default async function RootLayout({
   return (
     <html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"}>
       <body className={`${poppins.variable}
-      overflow-x-hidden`}>
+      overflow-x-hidden antialiased relative
+        ${locale === 'ar' ? styles.arabic : styles.english}`}>
         <Suspense fallback={<p>Loading...</p>}>
           <AppContextProvider email={jUser?.user?.email}>
             <AppProvider session>

@@ -1,8 +1,8 @@
 'use client'
 
-import { getSession, getUser } from "@/actions/getUser";
-import { User } from "@/models/user";
-import mongoose from "mongoose";
+// import { getSession, getUser } from "@/actions/getUser";
+// import { User } from "@/models/user";
+// import mongoose from "mongoose";
 import React from "react";
 import IfYouDontRecieve from "./IfYouDontRecieve";
 
@@ -11,7 +11,7 @@ import { Session } from "@/types/session";
 
 
 const EmailIsNotVerified = ({ session }: {
-  session: Session
+  session: Session | null
 }) => {
   // const session = await getUser();
   // console.log(session?.user);
@@ -27,9 +27,9 @@ const EmailIsNotVerified = ({ session }: {
 
   return (
     <>
-      {!session?.user?.isVerified &&
-        session?.user !== null &&
-        session?.user !== undefined && (
+      {!session?.isVerified &&
+        session !== null &&
+        session !== undefined && (
           <div className="flex flex-col">
             <div
               className="bg-red-500 text-white w-full
@@ -40,15 +40,20 @@ const EmailIsNotVerified = ({ session }: {
               {emailIsNotVerified('Your account')}<span className="mx-1 underline">{emailIsNotVerified('is not')}</span>{" "}
               {emailIsNotVerified('VerifiedYetPlease')}
               </span>
-              <IfYouDontRecieve email={session?.user?.email} />
+
+
+              <IfYouDontRecieve email={session?.email} /> 
             </div>
 
             <div
               className="bg-red-500 text-white w-full
-    lg:hidden justify-center text-lg py-1 flex"
+    lg:hidden justify-center text-lg py-1 flex flex-col items-center text-center"
             >
-              {emailIsNotVerified('YourAccountIsNot')}
-              <IfYouDontRecieve email={session?.user?.email} />
+              <span className="">
+                {emailIsNotVerified('YourAccountIsNot')}
+              </span>
+              
+              <IfYouDontRecieve email={session?.email} />
             </div>
           </div>
         )}

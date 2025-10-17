@@ -12,12 +12,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Image from "next/image";
-import React, { useActionState, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 // import { toast } from "@/hooks/use-toast";
 import { toast } from "sonner";
 import axios from "axios";
 import { signIn, useSession } from "next-auth/react";
-import { EyeIcon, EyeOffIcon, Loader, Loader2 } from "lucide-react";
+import { EyeIcon, EyeOffIcon, Loader2 } from "lucide-react";
 // import { CircularProgress } from "@mui/material";
 /* import { Register } from "@/actions/actions"
 import { parseWithZod } from "@conform-to/zod"
@@ -26,7 +26,7 @@ import { z } from "zod"
 import { useForm } from "react-hook-form" */
 // import type { Control, FieldPath } from "react-hook-form";
 // import { zodResolver } from "@hookform/resolvers/zod"
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import ShowPassStrength from "./ShowPassStrength";
 import { passwordStrength } from "check-password-strength";
 import { useLocale, useTranslations } from "next-intl";
@@ -41,20 +41,20 @@ export function RegisterForm({
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [loadingGoogle, setLoadingGoogle] = useState(false);
-  const [password, setPassword] = useState("");
+  // const [password, setPassword] = useState("");
   const [strength, setStrength] = useState<strength>(0);
 
   const [type, setType] = useState("password");
   const [validation, setValidation] = useState(false);
 
-  const [passwordFocused, setPasswordFocused] = useState(false);
-  const [passwordValidity, setPasswordValidity] = useState({
-    minChar: null,
-    number: null,
-    specialChar: null,
-  });
+  // const [passwordFocused, setPasswordFocused] = useState(false);
+  // const [passwordValidity, setPasswordValidity] = useState({
+  //   minChar: null,
+  //   number: null,
+  //   specialChar: null,
+  // });
 
-  const router = useRouter();
+  // const router = useRouter();
 
   const handleValidation = (value: string) => {
     const lower = new RegExp("(?=.*[a-z])");
@@ -224,15 +224,17 @@ export function RegisterForm({
 
     const res = await axios.post("/api/register", { ...formData, locale });
 
+    console.log(res.data.data)
+
     if (!res.data.success) {
-      // toast({
-      //   variant: "destructive",
-      //   title: `${res.data.message}`,
-      // });
-      toast.error(`${res.data.message}`);
-      setLoading(false);
-      return;
-    }
+        // toast({
+        //   variant: "destructive",
+        //   title: `${res.data.message}`,
+        // });
+        toast.error(`${res.data.message}`);
+        setLoading(false);
+        return
+      }
 
     if (res.data.status !== 150) {
       try {
@@ -251,6 +253,7 @@ export function RegisterForm({
           toast.error(`Client Error: ${verifyRes.data.message}`);
           return;
         }
+        
       } catch (error: any) {
         console.log(`Error sending verification email: ${error.message}`);
 
@@ -261,11 +264,11 @@ export function RegisterForm({
         // })
 
         toast.error(`Error sending verification email: ${error.message}`);
-        return;
       }
     }
 
     try {
+      
 
       if (res.data.success) {
         // toast({
@@ -289,14 +292,16 @@ export function RegisterForm({
     setLoading(false);
   };
 
-  const onChangePassword = (password: string) => {};
+  // const onChangePassword = (password: string) => {
+  //   console.log(password)
+  // };
 
   useEffect(() => {
     setStrength(passwordStrength(formData.password).id as strength);
   });
 
   const formStyles = `text-md`;
-  const iconClass = `absolute right-4 top-2 text-gray-500 cursor-pointer`;
+  // const iconClass = `absolute right-4 top-2 text-gray-500 cursor-pointer`;
 
   const session = useSession();
   console.log(session);
@@ -375,7 +380,7 @@ export function RegisterForm({
                     onChange={(e) => {
                       handleChange(e);
                       handleValidation(e.target.value);
-                      onChangePassword(e.target.value);
+                      // onChangePassword(e.target.value);
                     }}
                     required
                   />

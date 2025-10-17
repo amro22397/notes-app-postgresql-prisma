@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Card,
   CardContent,
@@ -16,8 +16,8 @@ import axios from "axios";
 import { toast } from "sonner";
 import Link from "next/link";
 import { Loader2, LoaderCircle } from "lucide-react";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+// import { useSession } from "next-auth/react";
+// import { useRouter } from "next/navigation";
 
 import { useLocale, useTranslations } from "next-intl";
 
@@ -30,7 +30,7 @@ const ForgetForm = () => {
 
   const [ifYouDidntLoading, setIfYouDidntLoading] = useState(false);
 
-  const router = useRouter();
+  // const router = useRouter();
 
   const locale = useLocale();
 
@@ -38,6 +38,8 @@ const ForgetForm = () => {
     e.preventDefault();
 
     setLoading(true);
+
+    setMessage("");
 
     try {
       const res = await axios.post("/api/forget-password", { email, locale });
@@ -138,6 +140,8 @@ const ForgetForm = () => {
     }
   };
 
+  //
+
   return (
     <Card
       className="flex flex-col justify-center items-start w-[400px] mx-auto
@@ -188,8 +192,9 @@ const ForgetForm = () => {
             {forgetPage("IfYouDidntRecieve")}
             {ifYouDidntLoading ? <LoaderCircle className='animate-spin' size={35} /> : (
             <span
-              className="ml-1 text-indigo-600 dark:text-indigo-200
-      hover:underline active:text-indigo-700 dark:active:text-indigo-300 cursor-pointer"
+              className={`ml-1 text-indigo-600 dark:text-indigo-200
+      hover:underline active:text-indigo-700 dark:active:text-indigo-300 cursor-pointer
+      ${locale === "ar" && "mr-1"}`}
               onClick={ResendForgetEmail}
             >
               {forgetPage("click here")}

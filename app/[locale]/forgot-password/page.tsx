@@ -1,4 +1,4 @@
-import { getSession, getUser } from "@/actions/getUser";
+import { getUser } from "@/actions/getUser";
 import ForgetForm from "@/components/ForgetForm";
 import { redirect } from "next/navigation";
 import React from "react";
@@ -20,7 +20,7 @@ const page = async () => {
         
 
   return (
-    <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
+    <div className="flex min-h-[90vh] w-full items-center justify-center p-6 md:p-10">
           <div className="w-full max-w-sm">
           <ForgetForm />
           </div>

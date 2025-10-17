@@ -1,12 +1,12 @@
 import React from 'react'
 import Title from './Components/Title'
-import Categories from './Components/Categories'
+// import Categories from './Components/Categories'
 import NotesArea from './Components/NotesArea'
-import NoteWindow from './Components/NoteWindow'
+// import NoteWindow from './Components/NoteWindow'
 import DropDown from './Components/DropDwon';
 import { Toaster } from 'react-hot-toast';
 import SearchBar from './Components/SearchBar'
-import { Button } from '@/components/ui/button'
+// import { Button } from '@/components/ui/button'
 import { Session } from '@/types/session'
 
 

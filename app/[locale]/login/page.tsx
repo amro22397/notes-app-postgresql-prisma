@@ -1,4 +1,4 @@
-import { getSession, getUser } from "@/actions/getUser";
+import { getUser } from "@/actions/getUser";
 import { LoginForm } from "@/components/login-form"
 import { redirect } from "next/navigation";
 

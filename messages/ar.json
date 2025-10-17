@@ -5,7 +5,7 @@
     },
 
 
-    "LoginPage": {
+        "LoginPage": {
       "Login": "سجل الدخول",
       "ُEnterYourEmailAddress": "إكتب البريد الإلكتروني بالأسفل لتسجل الدخول بالحساب",
       "Email": "البريد الإلكتروني",
@@ -50,8 +50,7 @@
       "Send": "أرسل",
       "Back to sign in": "العودة لتسجيل الدخول",
       "Email": "البريد الإلكتروني",
-      "عربي" : "إذا لم تستلم بريد تغيير كلمة السر ، راجع بريد المهملات (spam) أو ",
-      "IfYouDidntRecieve": "If you didn't recieve reset password email, check your spam folder or",
+      "IfYouDidntRecieve": "إذا لم تصلك رسالة إعادة تعيين كلمة السر ، راجع بريد المهملات (Spam) أو",
       "click here": "أضغط هنا",
       "Example6": "Example",
       "Example7": "Example"
@@ -87,7 +86,7 @@
       "عربي" : "إذا لم تستلم بريداً إلكترونياً، راجع بريد المهملات (spam) أو",
       "YourAccountIsNot": "حسابك لم يتم تأكيده بعد راجع بريدك الإلكتروني لتجد رابط التأكيد وقم بتحديث الصفحة .",
       "IfYouHaveNotRecieved": "إذا لم يصلك البريد الإلكتروني راجع بريد المهملات (spam) أو ",
-      "click here": "أضغط هنا",
+      "click here": " أضغط هنا",
       "Example5": "Example",
       "Example6": "Example",
       "Example7": "Example"
@@ -114,6 +113,7 @@
       "Example6": "Example",
       "Example7": "Example"
     },
+
 
 
     "Example": {

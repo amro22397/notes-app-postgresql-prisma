@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Container, Head, Heading, Html, Link, Section, Tailwind, Text } from '@react-email/components'
+import { Container, Heading, Html, Link, Section, Tailwind, Text } from '@react-email/components'
 // import './VerifyEmailTemplate.css'
 
 const VerifyEmailTemplate = (verificationLink: string) => {

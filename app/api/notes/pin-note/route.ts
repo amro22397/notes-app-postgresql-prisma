@@ -1,5 +1,6 @@
-import { connenctToMongoDB } from "@/libs/mongodb";
-import Note from "@/models/noteSchema";
+// import { connenctToMongoDB } from "@/libs/mongodb";
+// import Note from "@/models/noteSchema";
+import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
 
@@ -7,16 +8,25 @@ export async function PUT(req: any) {
 
     try {
         
-        await connenctToMongoDB();
+        // await connenctToMongoDB();
 
         const id = req.nextUrl.searchParams.get('id');
         
-        const noteSelected = await Note.findById(id);
+        // const noteSelected = await Note.findById(id);
+
+        const noteSelected = await prisma.note.findUnique({
+            where: { id: id }
+        }) as any | null | undefined
 
         console.log(noteSelected)
 
         if (!noteSelected.isPinned) {
-            const pinnedNote = await Note.findByIdAndUpdate(id, { isPinned: true });
+            // const pinnedNote = await Note.findByIdAndUpdate(id, { isPinned: true });
+
+            const pinnedNote = await prisma.note.update({
+                where: { id: id },
+                data: { isPinned: true }
+            })
 
         return NextResponse.json({
             success: true,
@@ -26,7 +36,12 @@ export async function PUT(req: any) {
         }
 
         if (noteSelected.isPinned) {
-            const pinnedNote = await Note.findByIdAndUpdate(id, { isPinned: false });
+            // const pinnedNote = await Note.findByIdAndUpdate(id, { isPinned: false });
+
+            const pinnedNote = await prisma.note.update({
+                where: { id: id },
+                data: { isPinned: false }
+            })
 
         return NextResponse.json({
             success: true,
@@ -37,11 +52,11 @@ export async function PUT(req: any) {
 
         
 
-    } catch (error: any) {
+    } catch (error) {
         
         return NextResponse.json({
             success: false,
-            message: `Error: ${error.message}`,
+            message: `Server Error updating pinned note: ${error}`,
         })
     }
 }

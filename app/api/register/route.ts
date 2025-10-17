@@ -1,54 +1,74 @@
-import { User } from "@/models/user";
-import mongoose from "mongoose";
+// import { User } from "@/models/user";
+// import mongoose from "mongoose";
+import prisma from "@/lib/prisma";
 import bcrypt from "bcrypt"
 // import { sendEmail } from "@/utils/sendEmail";
-import sgMail from '@sendgrid/mail'
+// import sgMail from '@sendgrid/mail'
 
 export async function POST(req: Request) {
-    mongoose.connect(process.env.MONGO_URL as string);
-    const { name, email, password, locale } = await req.json();
+    // mongoose.connect(process.env.MONGO_URL as string);
+    const { name, email, password } = await req.json();
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const isUserExist = await User.findOne({ name: name });
+    // const isUserExist = await User.findOne({ name: name });
+
+    const isUserExist = await prisma.user.findUnique({
+        where: { name: name },
+    })
 
     if (isUserExist) {
 
         return Response.json({
             success: false,
             message: "User name already exists",
+            data: isUserExist
         })
 
         // if (isUserExist.hashedPassword) {
-            
+
         // } else {
-            // const updateUser = await User.updateOne({ name: name }, {
-            //     $set: {
-            //         name: name,
-            //         hashedPassword: hashedPassword,
-            //     }
-            // })
+        // const updateUser = await User.updateOne({ name: name }, {
+        //     $set: {
+        //         name: name,
+        //         hashedPassword: hashedPassword,
+        //     }
+        // })
 
-            // return Response.json({
-            //     success: true,
-            //     message: "User created successfully",
-            //     user: updateUser,
-            // })
-        }
+        // return Response.json({
+        //     success: true,
+        //     message: "User created successfully",
+        //     user: updateUser,
+        // })
+    }
 
 
 
-    const isEmailExist = await User.findOne({ email: email });
+    // const isEmailExist = await User.findOne({ email: email });
+
+    const isEmailExist = await prisma.user.findUnique({
+        where: { email: email },
+    })
 
     if (isEmailExist) {
         if (isEmailExist.hashedPassword) {
             return Response.json({
                 success: false,
                 message: "Email already exists",
+                data: isEmailExist
             })
         } else {
-            const updateUser = await User.updateOne({ email: email }, {
-                $set: {
+            // const updateUser = await User.updateOne({ email: email }, {
+            //     $set: {
+            //         name: name,
+            //         hashedPassword: hashedPassword,
+            //     }
+            // })
+
+            const updateUser = await prisma.user.update({
+                where: { email: email },
+
+                data: {
                     name: name,
                     hashedPassword: hashedPassword,
                 }
@@ -63,10 +83,18 @@ export async function POST(req: Request) {
         }
     }
 
-    const user = await User.create({
-        name,
-        email,
-        hashedPassword
+    // const user = await User.create({
+    //     name,
+    //     email,
+    //     hashedPassword
+    // })
+
+    const user = await prisma.user.create({
+        data: {
+            name,
+            email,
+            hashedPassword
+        }
     })
 
 
@@ -84,7 +112,7 @@ export async function POST(req: Request) {
 
     // const message = verificationEmailTemplate(verificationLink);
     // console.log(message)
-    
+
     // // Click here to verify your email: ${verificationLink}
     //     const msg = {
     //                     to : user?.email,
@@ -92,9 +120,9 @@ export async function POST(req: Request) {
     //                     subject: "Email Verification",
     //                     html: message,
     //                 }
-            
+
     //                 sgMail.setApiKey(process.env.SENDGRID_API_KEY || '');
-            
+
     //                 sgMail
     //                 .send(msg)
     //                 .then(() => {
@@ -108,7 +136,7 @@ export async function POST(req: Request) {
     //                         verifyToken: null,
     //                         verifyTokenExpires: null,
     //                     }})
-                        
+
     //                     console.log(error)
 
     //                     return Response.json({
@@ -116,7 +144,7 @@ export async function POST(req: Request) {
     //                         message: "Failed sending email. Try again",
     //                     });
     //                 });
-    
+
 
     return Response.json({
         success: true,

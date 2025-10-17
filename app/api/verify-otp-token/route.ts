@@ -1,18 +1,26 @@
-import mongoose from "mongoose";
+// import mongoose from "mongoose";
+import prisma from "@/lib/prisma";
 import crypto from "crypto"
-import { User } from "@/models/user";
+// import { User } from "@/models/user";
 
 
 export async function POST(req: Request) {
-    mongoose.connect(process.env.MONGO_URL as string);
+    // mongoose.connect(process.env.MONGO_URL as string);
 
     const { token } = await req.json();
 
     const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
 
-    const user = await User.findOne({
-        resetLockPasswordToken: hashedToken,
-        resetLockPasswordExpires: { $gt: Date.now() },
+    // const user = await User.findOne({
+    //     resetLockPasswordToken: hashedToken,
+    //     resetLockPasswordExpires: { $gt: Date.now() },
+    // })
+
+    const user = await prisma.user.findFirst({
+        where: {
+            resetLockPasswordToken: hashedToken,
+            resetLockPasswordExpires: { gt: new Date() },
+        }
     })
 
     if (!user) {

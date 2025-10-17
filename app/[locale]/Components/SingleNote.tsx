@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import { AppContext, AppContextType } from "@/context/AppContext";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Lock, Pin } from "lucide-react";
-import { SingleNoteType } from "@/types/singleNote";
+// import { SingleNoteType } from "@/types/singleNote";
 // import { useGlobalProvider } from '../ContextApi';
 
 function formatDate(date: Date) {
@@ -14,12 +14,12 @@ function formatDate(date: Date) {
   return new Date(date).toLocaleDateString("en-US", options);
 }
 
-function stringTruncation(str: any, strLength: number) {
-  if (str?.length >= 40) {
-    return str.substring(0, strLength) + "...";
-  }
-  return str;
-}
+// function stringTruncation(str: any, strLength: number) {
+//   if (str?.length >= 40) {
+//     return str.substring(0, strLength) + "...";
+//   }
+//   return str;
+// }
 
 const SingleNote = ({ singleNote, setOpenedNote }: { 
   singleNote: any,
@@ -27,30 +27,30 @@ const SingleNote = ({ singleNote, setOpenedNote }: {
   // openedNote: SingleNoteType,
  }) => {
 
-  const router = useRouter();
-  const searchParams = useSearchParams() as any;
+  // const router = useRouter();
+  // const searchParams = useSearchParams() as any;
 
-  const addIdtoQueryString = (id: string) => {
+  // const addIdtoQueryString = (id: string) => {
 
-    const url = new URLSearchParams(searchParams.toString());
-    url.set("id", id);
+  //   const url = new URLSearchParams(searchParams.toString());
+  //   url.set("id", id);
 
-    router.push(`?${url.toString()}`, { scroll: false });
+  //   router.push(`?${url.toString()}`, { scroll: false });
 
-  }
+  // }
   // console.log(keyA)
 
   const {
     dropDownToogle,
     dropDownPositionsObject,
     noteSelectedObject,
-    notesObject,
+    // notesObject,
     setOpenWindowNote
   } = useContext(AppContext) as AppContextType;
 
   const { openDropDown, setOpenDropDown } = dropDownToogle;
   const { setDropDownPositions } = dropDownPositionsObject;
-  const { setNoteSelected, noteSelected } = noteSelectedObject;
+  const { setNoteSelected } = noteSelectedObject;
 
   console.log(openDropDown);
 
@@ -112,7 +112,7 @@ const SingleNote = ({ singleNote, setOpenedNote }: {
       )} */}
 
       <div
-      key={singleNote._id}
+      key={singleNote.id}
       className={`rounded-lg flex flex-col justify-between w-45 gap-2 border h-[170px] text-[19px] border-gray-200 bg-white p-4
        shadow-sm hover:shadow-2xl active:bg-gray-300/50 mx-auto relative
        ${

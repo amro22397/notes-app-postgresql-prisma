@@ -1,5 +1,5 @@
 
-import { getSession, getUser } from "@/actions/getUser";
+import { getUser } from "@/actions/getUser";
 import { RegisterForm } from "@/components/register-form"
 import { redirect } from "next/navigation";
 // import { useSession } from "next-auth/react"

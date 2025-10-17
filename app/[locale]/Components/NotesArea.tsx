@@ -6,6 +6,8 @@ import SingleNote from "./SingleNote";
 import NoteWindow from "./NoteWindow";
 import { SingleNoteType } from "@/types/singleNote";
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { useSearchParams } from "next/navigation";
+// import axios from "axios";
 
 // import SingeNote from './SingeNote';
 // import { useGlobalProvider } from '../ContextApi';
@@ -19,12 +21,58 @@ const NotesArea = ({ email }: {
     AppContext
   ) as AppContextType;
   const { allNotes, pinnedNotes } = notesObject;
-  const { initialAllNotes, setInitialAllNotes } = initialNotesObject;
+  const {} = initialNotesObject;
   const [openedNote, setOpenedNote] = useState({});
 
-  console.log(allNotes);
+  
 
-  console.log(pinnedNotes.length)
+  // const [initialAllNotes, setInitialAllNotes] = useState<any[]>([]);
+  //   const [allNotes, setAllNotes] = useState<any[]>([]);
+  //   const [pinnedNotes, setPinnedNotes] = useState<any[]>([]);
+
+  //   console.log(allNotes);
+
+  // console.log(pinnedNotes.length)
+
+  const searchParams = useSearchParams() as any;
+      const searchTerm = searchParams.get("searchTerm");
+
+      console.log(searchTerm)
+
+
+
+  // const getNotesFromMongoDB = async () => {
+  //     try {
+  //       const res = await axios.get(`/api/get-notes${searchTerm ? `?searchTerm=${searchTerm}`: ''}`);
+  
+  //       console.log(searchTerm)
+  
+  //       setAllNotes(res.data.allNotes);
+  //       setInitialAllNotes(res.data.allNotes);
+  
+  //       console.log(res)
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+  
+  //   const getPinnedNotesFromMongoDB = async () => {
+  //     try {
+  //       const res = await axios.get(`/api/get-notes?isPinned=true&${searchTerm ? `searchTerm=${searchTerm}`: ''}`);
+  
+  //       setPinnedNotes(res.data.pinnedNotes);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+      
+  
+  //   useEffect(() => {
+  //     getNotesFromMongoDB();
+  //     getPinnedNotesFromMongoDB();
+  //   }, [searchTerm]);
+
+
   return (
     // <div className="flex flex-col overflow-hidden hover:overflow-y-auto gap-14 my-2">
     <>
@@ -40,8 +88,11 @@ const NotesArea = ({ email }: {
               return (
 
               
-              <div className="flex flex-col items-center justify-center gap-y-[11px] ">
+              <div 
+              key={index}
+              className="flex flex-col items-center justify-center gap-y-[11px] ">
                 <SingleNote
+                
                   singleNote={singleNote}
                   setOpenedNote={setOpenedNote}
                   // openedNote={openedNote}
@@ -61,9 +112,11 @@ const NotesArea = ({ email }: {
         className="notes"
       >
         {allNotes.map((singleNote: any, index: number) => {
-          console.log(singleNote._id);
+          console.log(singleNote.id);
           return (
-            <div className="flex flex-col items-center justify-center gap-y-[11px] ">
+            <div 
+            key={index}
+            className="flex flex-col items-center justify-center gap-y-[11px] ">
               <SingleNote
                 singleNote={singleNote}
                 setOpenedNote={setOpenedNote}

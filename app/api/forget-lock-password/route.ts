@@ -1,13 +1,19 @@
-import { User } from "@/models/user";
-import mongoose from "mongoose";
-import sgMail from '@sendgrid/mail'
-import crypto from 'crypto'
+// import { User } from "@/models/user";
+// import mongoose from "mongoose";
+// import sgMail from '@sendgrid/mail'
+// import crypto from 'crypto'
+
+import prisma from "@/lib/prisma";
 
 export async function POST(req: Request) {
-    mongoose.connect(process.env.MONGO_URL as string);
-    const { email, locale } = await req.json();
+    // mongoose.connect(process.env.MONGO_URL as string);
+    const { email } = await req.json();
 
-    const user = await User.findOne({ email: email });
+    // const user = await User.findOne({ email: email });
+
+    const user = await prisma.user.findUnique({
+        where: { email: email }
+    })
 
     try {
         if (!user) {
@@ -16,7 +22,7 @@ export async function POST(req: Request) {
                 success: false,
             })
         }
-    
+
         // const resetURL = `${process.env.NEXTAUTH_URL}/${locale}/reset-password/${token}`
 
         // console.log(resetURL)
@@ -57,22 +63,22 @@ export async function POST(req: Request) {
             "Password Reset Request",
             `please click the link to reset your password ${resetURL}`
         ) */
-    
+
         /* return Response.json({
             message: "Password reset email was sent",
                 success: true,
         }) */
 
-                return Response.json({
-                    success: true,
-                    message: "OTP Reset Link was sent",
-                    status: 250,
-                })
+        return Response.json({
+            success: true,
+            message: "OTP Reset Link was sent",
+            status: 250,
+        })
 
     } catch (error) {
         return Response.json({
-            message: "Something went wrong",
-                success: false,
+            message: `Error sending reset Lock OTP link: ${error}`,
+            success: false,
         })
     }
 }

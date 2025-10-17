@@ -1,17 +1,18 @@
 import nodemailer from "nodemailer";
-import { render } from '@react-email/components';
-import VerifyEmailTemplate from "@/app/emails/VerifyEmailTemplate";
-import { User } from "@/models/user";
+// import { render } from '@react-email/components';
+// import VerifyEmailTemplate from "@/app/emails/VerifyEmailTemplate";
+// import { User } from "@/models/user";
 import crypto from 'crypto'
-import { connectToDatabase } from "@/lib/db";
-import mongoose from "mongoose";
+import prisma from "@/lib/prisma";
+// import { connectToDatabase } from "@/lib/db";
+// import mongoose from "mongoose";
 
 
 
 export default async function handler(req: any, res: any) {
   if (req.method !== "POST") {
 
-    await connectToDatabase();
+    // await connectToDatabase();
 
     // return res.status(405).json({ error: "Method Not Allowed" });
     res.status(200).json({
@@ -29,10 +30,10 @@ export default async function handler(req: any, res: any) {
   console.log(email, subject, locale)
 
   if (!email || !subject) {
-    return res.status(400).json({ 
+    return res.status(400).json({
       success: false,
       message: "Missing required fields"
-     });
+    });
     // return Response.json({
     //     success: false,
     //     message: "Missing required fields"
@@ -40,15 +41,28 @@ export default async function handler(req: any, res: any) {
   }
 
 
-  mongoose.connect(process.env.MONGO_URL as string);
-  const user = await User.findOne({ email: email })
+  // mongoose.connect(process.env.MONGO_URL as string);
+  // const user = await User.findOne({ email: email })
+
+
+  // const user = await prisma.user.findUnique({
+  //   where: { email: email }
+  // })
 
 
   const token = crypto.randomBytes(20).toString('hex')
   const passwordToken = crypto.createHash("sha256").update(token).digest("hex");
 
-  await User.updateOne({ email: email }, {
-    $set: {
+  // await User.updateOne({ email: email }, {
+  //   $set: {
+  //     resetPasswordToken: passwordToken,
+  //     resetPasswordExpires: new Date(Date.now() + 3600000),
+  //   }
+  // })
+
+  await prisma.user.update({
+    where: { email: email },
+    data: {
       resetPasswordToken: passwordToken,
       resetPasswordExpires: new Date(Date.now() + 3600000),
     }
@@ -72,7 +86,7 @@ export default async function handler(req: any, res: any) {
     secure: true,
     auth: {
       user: process.env.SMTP_USERNAME, // Use environment variables for security
-      pass: process.env.SMTP_PASSWORD,
+      pass: process.env.GENERATED_ZOHO_PASSWORD,
     },
   });
 
@@ -95,8 +109,16 @@ export default async function handler(req: any, res: any) {
   } catch (error: any) {
     console.error("Error sending email:", error);
 
-    await User.updateOne({ email: email }, {
-      $set: {
+    // await User.updateOne({ email: email }, {
+    //   $set: {
+    //     resetPasswordToken: null,
+    //     resetPasswordExpires: null,
+    //   }
+    // })
+
+    await prisma.user.update({
+      where: { email: email },
+      data: {
         resetPasswordToken: null,
         resetPasswordExpires: null,
       }
