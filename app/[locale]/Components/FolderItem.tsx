@@ -1,56 +1,51 @@
-'use client'
+"use client";
 
-import { Folder } from '@/types/folder'
-import { useLocale } from 'next-intl'
-import Link from 'next/link'
-import React from 'react'
-import { IoFolder } from 'react-icons/io5'
-import { MdKeyboardArrowRight } from 'react-icons/md'
+import { Folder } from "@/types/folder";
+import { useLocale } from "next-intl";
+import Link from "next/link";
+import React from "react";
+import { IoFolder } from "react-icons/io5";
+import { MdKeyboardArrowRight } from "react-icons/md";
+import FolderItemInsideLink from "./FolderItemInsideLink";
+import FolderItemBorderBottom from "./FolderItemBorderBottom";
 
-const FolderItem = ({ folder, index, folders, folderNotesLength }: {
-    folder: Folder,
-    index: number,
-    folders: Folder[],
-    folderNotesLength: number
+const FolderItem = ({
+  folder,
+  index,
+  folders,
+  folderNotesLength,
+  // isMoveNoteId,
+}: {
+  folder: Folder;
+  index: number;
+  folders: Folder[];
+  folderNotesLength: number;
+  // isMoveNoteId?: boolean;
 }) => {
-
-    const locale = useLocale();
+  const locale = useLocale();
 
   return (
     <>
+      <Link
+        href={`/${locale}/${folder.id}`}
+        className={`w-full mx-auto flex justify-center items-center`}
+        // onClick={(e) => {
+        //   if (isMoveNoteId) {
+        //     e.preventDefault();
+        //     e.stopPropagation();
+        //   }
+        // }}
+      >
+        <FolderItemInsideLink folder={folder} folderNotesLength={folderNotesLength} />
+      </Link>
 
-    <Link href={`/${locale}/${folder.id}`} className='w-full mx-auto flex justify-center items-center'>
-          
-          <div key={folder.name} className="folder-style">
+      {/* {index !== folders.length - 1 && (
+        <div className="w-[70%] border border-black/10"></div>
+      )} */}
 
-            <div className="folder-style-firts-div">
-
-              <IoFolder size={40} className='text-yellow-500' />
-
-            <span className="text-lg tracking-wide text-black">{folder.name}</span>
-
-            </div>
-
-
-            <div className="flex flex-row items-center">
-
-              <span className="mt-[2.495px]">{folderNotesLength}</span>
-
-              <MdKeyboardArrowRight size={25} />
-
-            </div>
-
-          </div>
-
-          </Link>
-
-          {index !== folders.length - 1 && (
-            <div className="w-[70%] border border-black/10"></div>
-          )}
-
+      <FolderItemBorderBottom index={index} folders={folders} />
     </>
+  );
+};
 
-  )
-}
-
-export default FolderItem
+export default FolderItem;

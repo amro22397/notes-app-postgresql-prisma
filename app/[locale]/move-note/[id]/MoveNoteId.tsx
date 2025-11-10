@@ -4,11 +4,14 @@ import GoToNormalPage from "@/components/GoToNormalPage";
 import React, { useEffect, useState } from "react";
 import Title from "../../Components/Title";
 import { Session } from "@/types/session";
-import { useSearchParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import SearchBar from "../../Components/SearchBar";
 import axios from "axios";
 import { Folder } from "@/types/folder";
 import FolderItem from "../../Components/FolderItem";
+import FolderItemDiv from "../../Components/FolderItemDiv";
+import { useLocale } from "next-intl";
+import Link from "next/link";
 
 const MoveNoteId = ({
   email,
@@ -20,11 +23,17 @@ const MoveNoteId = ({
   console.log(user);
 
   const params = useSearchParams() as any;
+  const locale = useLocale();
+
+  const routerParams = useParams() as any;
 
   const folderId = params.get("folderId");
 
   const [folders, setFolders] = useState([]);
   const [allNotes, setAllNotes] = useState([]);
+
+  const [selectedNote, setSelectedNote] = useState<any>(null);
+
 
   const searchParams = useSearchParams() as any;
 
@@ -43,6 +52,22 @@ const MoveNoteId = ({
 
     setAllNotes(res.data.data);
   };
+
+
+
+  const findNoteById = async () => {
+  
+      const res = await axios.get(`/api/get-note-by-id?id=${routerParams.id}`);
+  
+      setSelectedNote(res.data.data)
+  
+  
+    }
+  
+  
+    useEffect(() => {
+      findNoteById();
+    }, [routerParams.id]);
 
   useEffect(() => {
     getFolders();
@@ -78,16 +103,43 @@ const MoveNoteId = ({
             );
 
             return (
-              <FolderItem
+              //   <FolderItem
+              //     key={folder.name}
+              //     folder={folder}
+              //     index={index}
+              //     folders={folders}
+              //     folderNotesLength={notesByListId.length}
+              //     isMoveNoteId={true}
+              //   />
+
+              <>
+              {/* <pre className="">{JSON.stringify(selectedNote, null, 2)}</pre> */}
+              {selectedNote?.listId !== folder.id && (
+                <FolderItemDiv
                 key={folder.name}
                 folder={folder}
                 index={index}
                 folders={folders}
                 folderNotesLength={notesByListId.length}
+                isMoveNoteId={true}
+                noteListId={selectedNote?.listId}
               />
+              )}
+              </>
             );
           })}
       </div>
+
+
+      <div className="flex items-center justify-center">
+        <Link href={`/${locale}/`}
+        className="text-[16px] hover:underline active:scale-95 cursor-pointer"
+        >
+            Back to folders
+        </Link>
+      </div>
+
+
     </div>
   );
 };
