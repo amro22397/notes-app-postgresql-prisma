@@ -13,6 +13,7 @@ import { useLocale } from "next-intl";
 // import { IoTrashSharp } from "react-icons/io5";
 import FolderEditDialog from "@/components/FolderEditDialog";
 import FolderDeleteDialog from "@/components/FolderDeleteDialog";
+import FolderName from "@/components/FolderName";
 
 
 const Title = ({
@@ -54,9 +55,10 @@ const Title = ({
 
   return (
     <div
-      className="flex flex-row max-[380px]:flex-col justify-between items-center max-[380px]:gap-[13px]
-    w-full mx-auto max-sm:px-4"
-    >
+      className={`flex flex-row  justify-between items-center 
+    w-full mx-auto ${params.id ? "max-sm:px-0" : "max-[380px]:flex-col max-[380px]:gap-[13px] max-sm:px-4" }`}
+    // max-md:flex-col gap-[13px]"
+      >
       {!params.id && (
         <div className="flex gap-2 items-center">
           {/* <FontAwesomeIcon
@@ -84,19 +86,7 @@ const Title = ({
       )}
 
       {folderName && (
-        <div className="flex flex-row items-center gap-4">
-
-          <span className="text-black text-lg tracking-wide">{folderName}</span>
-
-
-          <div className="flex flex-row items-center gap-1">
-            
-            <FolderEditDialog folderId={folderId} folderNameInput={folderName} getFolderById={getFolderById} />
-
-            <FolderDeleteDialog folderId={folderId} getFolderById={getFolderById} />
-          </div>
-
-        </div>
+        <FolderName folderName={folderName} folderId={folderId} getFolderById={getFolderById} />
       )}
 
       {/* <div className='w-lg py-4 px-4 bg-orange-200/70 rounded-full mx-auto'>
@@ -104,7 +94,15 @@ const Title = ({
     </div> */}
 
       {!isAddList && !isMoveNoteId && (
-        <button
+        <div className="flex flex-col items-center gap-[13px]">
+
+          {folderName && (
+        <FolderName folderName={folderName} folderId={folderId} getFolderById={getFolderById}
+        paramsId={params.id}
+        />
+      )}
+
+          <button
           onClick={() => {
             openWindowNoteFunction();
             console.log(noteSelected);
@@ -114,12 +112,14 @@ const Title = ({
         >
           Add a note
         </button>
+
+        </div>
       )}
 
       {isAddList && <AddFolderComponent isAddList={isAddList} email={email} getFolders={getFolders} />}
 
       {isMoveNoteId && (
-        <span className="text-lg tracking-wide text-black mx-2 mt-[2px]">
+        <span className="sm:text-lg max-sm:text-center tracking-wide text-black mx-2 mt-[2px]">
           choose a folder to move your note to
         </span>
       )}

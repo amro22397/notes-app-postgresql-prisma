@@ -96,8 +96,12 @@ const FolderItemDiv = ({
       )}
 
       {index !== allFolderWithoutHidden.length - 1 && (
-        <FolderItemBorderBottom index={index} folders={folders} />
+        <></>
       )}
+
+      <FolderItemBorderBottom index={index} folders={folders} />
+
+      
     </>
   );
 };

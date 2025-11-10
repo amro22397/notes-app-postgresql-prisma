@@ -76,7 +76,7 @@ const NotesArea = ({ email }: {
   return (
     // <div className="flex flex-col overflow-hidden hover:overflow-y-auto gap-14 my-2">
     <>
-      <ScrollArea className="h-[90vh] overflow-hidden w-full flex flex-col
+      <ScrollArea className="h-[90vh] overflow-x-hidden w-full flex flex-col
       items-center justify-center mt-2">
         
           {/* <span className="text-[20px] font-semibold">Pinned</span> */}

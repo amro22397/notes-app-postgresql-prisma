@@ -313,7 +313,7 @@ function InputTags({ tags, setTags }: any) {
   };
 
   return (
-    <div className="border text-[11px] overflow-auto flex flex-wrap gap-2 w-full h-12 rounded-md border-gray-300 p-2 relative">
+    <div className="border text-[11px] overflow-x-auto flex flex-wrap gap-2 w-full h-12 rounded-md border-gray-300 p-2 relative">
       <ul className="flex flex-wrap gap-2 items-center ">
         {tags?.map((tag: any, index: number) => (
           <li
