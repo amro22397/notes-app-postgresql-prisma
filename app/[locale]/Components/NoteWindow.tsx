@@ -240,7 +240,7 @@ const NoteWindow = ({ singleNote, email }: { singleNote: any, email: string | nu
               className="rounded text-[18px] tracking-wide
               text-orange-600 active:scale-95 cursor-pointer hover:text-orange-600/95"
             >
-              {isLoading ? <Loader2 className='animate-spin' /> : "Save"}
+              {isLoading ? <Loader2 className='animate-spin mt-1' /> : "Save"}
             </button>
           </div>
         </div>

@@ -68,7 +68,7 @@ const AppAppLists = ({ email, user }: {
       <SearchBar isAddList={true} />
 
       <div className={`flex flex-col items-center justify-center
-      sm:rounded-md rounded-md py-3 sm:w-[80%] w-[97.5%] mx-auto ${folders.length > 0 && 'bg-white/50 '}`}>
+      sm:rounded-md rounded-md py-[8px] sm:w-[80%] w-[97.5%] mx-auto ${folders.length > 0 && 'bg-white/50 '}`}>
         {/* <pre className="">{JSON.stringify(folders, null, 2)}</pre> */}
 
         <>
