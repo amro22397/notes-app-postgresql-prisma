@@ -11,6 +11,8 @@ import { AppContext, AppContextType } from "@/context/AppContext";
 
 import { MdKeyboardArrowLeft } from "react-icons/md";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
+import { useParams } from "next/navigation";
+import { Loader2 } from "lucide-react";
 // import { useRouter } from "next/navigation";
 // import { SingleNoteType } from "@/types/singleNote";
 
@@ -29,6 +31,10 @@ const NoteWindow = ({ singleNote, email }: { singleNote: any, email: string | nu
   // };
 
   // console.log(singleNote)
+
+  console.log(email)
+
+  const params = useParams() as any;
 
   const {
     openWindowNote,
@@ -178,6 +184,7 @@ const NoteWindow = ({ singleNote, email }: { singleNote: any, email: string | nu
         openWindowNote ? "visible opacity-100" : "invisible opacity-0 "
       }`}
     >
+      {/* {params.id} */}
       {/* Modal Header */}
       <div className="flex flex-row poppins-bold justify-between items-center w-full">
         {/* <div className="text-xl text-black">{`${
@@ -229,11 +236,11 @@ const NoteWindow = ({ singleNote, email }: { singleNote: any, email: string | nu
 
           <div className="">
             <button
-              onClick={() => submitSaveBtn(singleNote?.id)}
+              onClick={() => submitSaveBtn(singleNote?.id, params.id)}
               className="rounded text-[18px] tracking-wide
               text-orange-600 active:scale-95 cursor-pointer hover:text-orange-600/95"
             >
-              {isLoading ? "Loading..." : "Save"}
+              {isLoading ? <Loader2 className='animate-spin' /> : "Save"}
             </button>
           </div>
         </div>

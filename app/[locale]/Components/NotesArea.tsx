@@ -98,9 +98,10 @@ const NotesArea = ({ email }: {
                   // openedNote={openedNote}
                 />
 
-                <span className="font-semibold text-[17px] text-center
+                <span className="font-semibold text-[17px] text-center w-full line-clamp-1
                 ">
-              {stringTruncation(singleNote.noteContent, 20)}
+              {/* {stringTruncation(singleNote.noteContent, 20)} */}
+              {singleNote.noteContent}
               </span>
               </div>
               )
@@ -122,8 +123,9 @@ const NotesArea = ({ email }: {
                 setOpenedNote={setOpenedNote}
                 // openedNote={openedNote}
               />
-              <span className="font-semibold text-[17px] text-center">
-              {stringTruncation(singleNote.noteContent, 20)}
+              <span className="font-semibold text-[17px] text-center w-full line-clamp-1">
+              {/* {stringTruncation(singleNote.noteContent, 20)} */}
+              {singleNote.noteContent}
               </span>
             </div>
           );
@@ -140,9 +142,9 @@ const NotesArea = ({ email }: {
 export default NotesArea;
 
 
-function stringTruncation(str: any, strLength: number) {
-  if (str?.length >= 40) {
-    return str.substring(0, strLength) + "...";
-  }
-  return str;
-}
+// function stringTruncation(str: any, strLength: number) {
+//   if (str?.length >= 40) {
+//     return str.substring(0, strLength) + "...";
+//   }
+//   return str;
+// }

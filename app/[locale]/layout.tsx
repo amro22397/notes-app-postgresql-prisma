@@ -23,8 +23,9 @@ import { Toaster } from "@/components/ui/sonner"
 import { Analytics } from "@vercel/analytics/next";
 
 import styles from "./layout.module.css"; 
-import EmailIsNotVerified from "@/components/EmailIsNotVerified";
-import prisma from "@/lib/prisma";
+import { Loader2 } from "lucide-react";
+// import EmailIsNotVerified from "@/components/EmailIsNotVerified";
+// import prisma from "@/lib/prisma";
 
 // const geistSans = Geist({
 //   variable: "--font-geist-sans",
@@ -74,8 +75,8 @@ export default async function RootLayout({
       <body className={`${poppins.variable}
       overflow-x-hidden antialiased relative
         ${locale === 'ar' ? styles.arabic : styles.english}`}>
-          
-        <Suspense fallback={<p>Loading...</p>}>
+          {/* {params.id} */}
+        <Suspense fallback={<Loader2 className='animate-spin' />}>
           <AppContextProvider email={jUser?.user?.email}>
             <AppProvider session>
               <Providers>

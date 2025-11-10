@@ -10,7 +10,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 
 import { Lock, Pin, PinOff, Unlock } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button"
 
 
@@ -31,11 +31,14 @@ import {
   InputOTPSlot,
 } from "@/components/ui/input-otp";
 import { Session } from "@/types/session";
+import { MdDriveFileMoveRtl } from "react-icons/md";
+import { useLocale } from "next-intl";
 
 
 
-const DropDwon = ({ user }: {
-  user: Session | null | undefined
+const DropDwon = ({ user, folderId }: {
+  user: Session | null | undefined,
+  folderId?: string | null | undefined
 }) => {
   const pathname = usePathname();
   console.log(pathname);
@@ -69,6 +72,9 @@ const DropDwon = ({ user }: {
   console.log(lockPasswordOTPvalue)
 
   const dropDownRef = useRef<any>(null);
+
+  const router = useRouter();
+  const locale = useLocale();
 
   const menuItems = [
     // { name: "Modify", icon: faPencil },
@@ -298,6 +304,19 @@ const DropDwon = ({ user }: {
     // }
   }
 
+
+
+  const handleMoveNoteFx = async () => {
+    
+    setOpenDropDown(false);
+
+    router.push(`/${locale}/move-note/${noteSelected?.id}?folderId=${folderId}`);
+
+    
+  }
+
+
+
   useEffect(() => {
     function handleOutsideClick(event: any) {
       if (
@@ -335,6 +354,8 @@ ${
 }
  `}
         >
+
+          {/* <pre className="">{JSON.stringify(noteSelected, null, 2)}</pre> */}
           <div
             className={`flex gap-2 items-center
 select-none cursor-pointer hover:text-gray-900 text-[15px] border-b border-gray-400/95 pb-[6px]
@@ -347,6 +368,25 @@ ${/* index === menuItems.length - 1 && "border-none" */ ""}
             <FontAwesomeIcon className="size-4" icon={faTrash} />
             <div className=" ">Delete</div>
           </div>
+
+
+          <div
+            className={`flex gap-2 items-center
+select-none cursor-pointer hover:text-gray-900 text-[15px] border-b
+ border-gray-400/95 pb-[6px]
+${/* index === menuItems.length - 1 && "border-none" */ ""}
+`}
+            onClick={() => {
+              // handleDeleteClicked();
+              handleMoveNoteFx()
+            }}
+          >
+            <MdDriveFileMoveRtl size={20} />
+
+            <div className=" ">Move Note</div>
+          </div>
+
+
 
           {!noteSelected?.isPinned && (
             <div

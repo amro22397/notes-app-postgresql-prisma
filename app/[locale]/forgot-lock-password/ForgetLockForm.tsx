@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Card,
   CardContent,
@@ -10,22 +10,20 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import axios from "axios";
 // import { toast } from '@/hooks/use-toast'
 import { toast } from "sonner";
 import Link from "next/link";
 import { Loader2, LoaderCircle } from "lucide-react";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 
-import { useLocale, useTranslations } from "next-intl";
+import { useLocale } from "next-intl";
 
 const ForgetLockForm = ({ email }: { email?: string | null | undefined }) => {
   console.log(email);
 
   // const [email, setEmail] = useState("");
-  const [emailIfyouDidnt, setEmailIfyouDidnt] = useState("");
+  // const [emailIfyouDidnt, setEmailIfyouDidnt] = useState("");
 
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -34,7 +32,7 @@ const ForgetLockForm = ({ email }: { email?: string | null | undefined }) => {
 
   const [ifYouDidntLoading, setIfYouDidntLoading] = useState(false);
 
-  const router = useRouter();
+  // const router = useRouter();
 
   const locale = useLocale();
 
@@ -182,7 +180,7 @@ const ForgetLockForm = ({ email }: { email?: string | null | undefined }) => {
             className={`mt-3 text-sm text-orange-600 dark:text-yellow-400
                   w-full ${ifYouDidntLoading && "flex flex-row items-center justify-center"}`}
           >
-            If you didn't recieve reset Lock OTP email, check your spam folder or
+            If you didn&apos;t recieve reset Lock OTP email, check your spam folder or
             {ifYouDidntLoading ? (
               <LoaderCircle className="animate-spin" size={35} />
             ) : (

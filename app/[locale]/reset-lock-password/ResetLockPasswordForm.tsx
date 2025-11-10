@@ -62,7 +62,7 @@ const ResetLockPasswordForm = () => {
 
 
   // const [type, setType] = useState("password");
-  const [validation, setValidation] = useState(false);
+  // const [validation, setValidation] = useState(false);
 
     const [lockPasswordOTPvalue, setLockPasswordOTPvalue] = useState("");
   

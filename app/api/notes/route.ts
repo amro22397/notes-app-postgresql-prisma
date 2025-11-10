@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
 
     try {
 
-        const { noteName, noteContent, categories, emailRef } = await req.json();
+        const { noteName, noteContent, categories, emailRef, listId } = await req.json();
 
         // const newNote = await Note.create({
         //     noteName, noteContent, categories,
@@ -27,11 +27,12 @@ export async function POST(req: NextRequest) {
                 noteName, noteContent, categories,
                 dateCreation: new Date(),
                 emailRef: emailRef,
+                listId: listId,
             }
         })
 
         return NextResponse.json(
-            { id: newNote.id, noteName, noteContent, categories, emailRef },
+            { id: newNote.id, noteName, noteContent, categories, emailRef, listId },
             { status: 200 },
         );
 

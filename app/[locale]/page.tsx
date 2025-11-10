@@ -1,4 +1,5 @@
-import App from '@/app/[locale]/AppApp';
+// import App from '@/app/[locale]/AppApp';
+
 // import GlobalProvier from './ContextApi';
 // import NotesBluePrint from '@/notesBluePrint';
 // import { connectToMongoDB } from './libs/mongodb';
@@ -11,6 +12,8 @@ import { redirect } from 'next/navigation';
 import Header from '@/components/Header';
 import EmailIsNotVerified from '@/components/EmailIsNotVerified';
 import prisma from '@/lib/prisma';
+import AppAppLists from './AppAppLists';
+import { Link } from 'lucide-react';
 
 const page = async () => {
 
@@ -35,7 +38,17 @@ const page = async () => {
       
       {/* {JSON.stringify(sessionUser, null, 2)} */}
       <EmailIsNotVerified session={sessionUser} />
-        <App email={jUser?.user?.email} user={sessionUser}/>
+
+      { locale === "ar" && (
+        <Link href={`/en`}
+      className="text-left w-full"
+      >
+    Go to normal page (EN)
+    </Link>
+      )}
+
+        {/* <App email={jUser?.user?.email} user={sessionUser} /> */}
+        <AppAppLists email={jUser?.user?.email} user={sessionUser} />
         <Header email={jUser?.user?.email} user={sessionUser} />
         <></>
       {/* </GlobalProvier> */}

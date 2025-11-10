@@ -12,7 +12,6 @@ export default async function handler(req: any, res: any) {
 
 
         // await connectToDatabase();
-        console.log('Hello')
         const session = await getServerSession(req, res, authOptions);
         console.log(session?.user?.email);
 
@@ -26,7 +25,9 @@ export default async function handler(req: any, res: any) {
 
         // const searchTerm = req.nextUrl.searchParams.get('searchTerm');
 
-        const { searchTerm, isPinned } = await req.query;
+        const { searchTerm, isPinned, listId } = await req.query;
+
+        console.log(`listId: ${listId}`)
 
         // const { searchParams } = new URL(req.url);
         // const searchTerm = searchParams.get('searchTerm');
@@ -47,6 +48,90 @@ export default async function handler(req: any, res: any) {
             // find from db
 
 
+            if (listId === "all") {
+
+                if (isPinned) {
+
+                    const pinnedNotes = await prisma.note.findMany({
+                    where: {
+                        AND: [
+                            { isPinned: true },
+                            // { listId: listId },
+                            { emailRef: session?.user?.email },
+                            { noteContent: { contains: searchString, mode: 'insensitive' } },
+                        ]
+                    },
+                    orderBy: [
+                        { updatedAt: 'desc' },
+                        { createdAt: 'desc' },
+                    ],
+                })
+
+
+                // const pinnedNotesNull = await prisma.note.findMany({
+                //     where: {
+                //         AND: [
+                //             { isPinned: true },
+                //             { listId: null },
+                //             { emailRef: session?.user?.email },
+                //             { noteContent: { contains: searchString, mode: 'insensitive' } },
+                //         ]
+                //     },
+                //     orderBy: [
+                //         { updatedAt: 'desc' },
+                //         { createdAt: 'desc' },
+                //     ],
+                // })
+
+
+                return res.status(200).json({ pinnedNotes }, { status: 200 });
+
+                }
+
+
+
+
+                const allNotes = await prisma.note.findMany({
+                where: {
+                    AND: [
+                        { isPinned: { not: true } },
+                        // { listId: listId },
+                        { emailRef: session?.user?.email },
+                        { noteContent: { contains: searchString, mode: 'insensitive' } },
+                    ]
+                },
+                orderBy: [
+                    { updatedAt: 'desc' },
+                    { createdAt: 'desc' },
+                ],
+
+            })
+
+
+
+            // const allNotesNull = await prisma.note.findMany({
+            //     where: {
+            //         AND: [
+            //             { isPinned: { not: true } },
+            //             { listId: null },
+            //             { emailRef: session?.user?.email },
+            //             { noteContent: { contains: searchString, mode: 'insensitive' } },
+            //         ]
+            //     },
+            //     orderBy: [
+            //         { updatedAt: 'desc' },
+            //         { createdAt: 'desc' },
+            //     ],
+
+            // })
+
+            return res.status(200).json({ allNotes }, { status: 200 });
+
+
+
+            }
+
+
             if (isPinned) {
                 // const pinnedNotes = await Note.find({ 
                 //     isPinned: true,
@@ -61,6 +146,7 @@ export default async function handler(req: any, res: any) {
                     where: {
                         AND: [
                             { isPinned: true },
+                            { listId: listId },
                             { emailRef: session?.user?.email },
                             { noteContent: { contains: searchString, mode: 'insensitive' } },
                         ]
@@ -83,6 +169,7 @@ export default async function handler(req: any, res: any) {
                 where: {
                     AND: [
                         { isPinned: { not: true } },
+                        { listId: listId },
                         { emailRef: session?.user?.email },
                         { noteContent: { contains: searchString, mode: 'insensitive' } },
                     ]

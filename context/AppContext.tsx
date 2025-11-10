@@ -5,7 +5,7 @@ import { createContext,useEffect, useRef, useState } from "react";
 
 import axios from "axios";
 import { SingleNoteType } from "@/types/singleNote";
-import { useSearchParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 import { textInputs } from "@/types/textInputs";
 
@@ -87,12 +87,16 @@ const AppContextProvider = (props: Props) => {
   const searchParams = useSearchParams() as any;
       const searchTerm = searchParams.get("searchTerm");
 
+      const params = useParams() as any;
+
+      console.log(params.id);
+
       console.log(textInputs.noteContent)
 
 
       // console.log(props.email)
 
-      async function addNewNoteToDB() {
+      async function addNewNoteToDB(listId: string | null | undefined) {
         try {
           setIsLoading(true);
     
@@ -101,6 +105,7 @@ const AppContextProvider = (props: Props) => {
             noteContent: textInputs.noteContent,
             categories: tags,
             emailRef: props.email,
+            listId: listId
           });
     
           const newNoteData = res.data;
@@ -187,7 +192,7 @@ const AppContextProvider = (props: Props) => {
 
 
 
-      const submitSaveBtn = async (id: string | null | undefined) => {
+      const submitSaveBtn = async (id: string | null | undefined, listId: string | null | undefined) => {
         if (
           // textInputs.noteTitle.trim().length === 0 ||
           textInputs.noteContent.trim().length === 0
@@ -206,7 +211,7 @@ const AppContextProvider = (props: Props) => {
         // };
     
         if (noteSelected === null) {
-          addNewNoteToDB();
+          addNewNoteToDB(listId);
           //   setAllNotes([...allNotes, newNote]);
           //   setInitialAllNotes([...initialAllNotes, newNote]);
     
@@ -236,7 +241,7 @@ const AppContextProvider = (props: Props) => {
 
       const getNotesFromMongoDB = async () => {
     try {
-      const res = await axios.get(`/api/get-notes${searchTerm ? `?searchTerm=${searchTerm}`: ''}`);
+      const res = await axios.get(`/api/get-notes${searchTerm ? `?searchTerm=${searchTerm}&listId=${params.id}`: `?listId=${params.id}`}`);
 
       // console.log(searchTerm)
 
@@ -251,7 +256,7 @@ const AppContextProvider = (props: Props) => {
 
   const getPinnedNotesFromMongoDB = async () => {
     try {
-      const res = await axios.get(`/api/get-notes?isPinned=true&${searchTerm ? `searchTerm=${searchTerm}`: ''}`);
+      const res = await axios.get(`/api/get-notes?isPinned=true&listId=${params.id}&${searchTerm ? `searchTerm=${searchTerm}`: ''}`);
 
       setPinnedNotes(res.data.pinnedNotes);
     } catch (error) {
@@ -263,7 +268,7 @@ const AppContextProvider = (props: Props) => {
   useEffect(() => {
     getNotesFromMongoDB();
     getPinnedNotesFromMongoDB();
-  }, [searchTerm]);
+  }, [searchTerm, params.id]);
 
   // useEffect(() => {
   //   setAllNotes(notesData);

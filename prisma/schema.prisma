@@ -45,7 +45,18 @@ model Note {
   dateCreation DateTime?
   isPinned Boolean? @default(false)
   isLocked Boolean? @default(false)
-  emailRef String?
+  emailRef String
+  listId String?
   lockedPassword String?
   categories String[]
+}
+
+
+model Folder {
+  id String @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name String @unique
+  emailRef String
 }
