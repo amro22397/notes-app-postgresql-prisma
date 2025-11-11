@@ -98,7 +98,7 @@ const NotesArea = ({ email }: {
                   // openedNote={openedNote}
                 />
 
-                <span className="font-semibold text-[17px] text-center w-full line-clamp-1
+                <span className="single-note-title
                 ">
               {/* {stringTruncation(singleNote.noteContent, 20)} */}
               {singleNote.noteContent}
@@ -123,7 +123,7 @@ const NotesArea = ({ email }: {
                 setOpenedNote={setOpenedNote}
                 // openedNote={openedNote}
               />
-              <span className="font-semibold text-[17px] text-center w-full line-clamp-1">
+              <span className="single-note-title">
               {/* {stringTruncation(singleNote.noteContent, 20)} */}
               {singleNote.noteContent}
               </span>

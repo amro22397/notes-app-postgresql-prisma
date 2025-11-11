@@ -106,6 +106,10 @@ body {
     bg-zinc-200/75
 }
 
+.single-note-title {
+  @apply font-semibold text-[17px] text-center w-full line-clamp-2;
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
