@@ -72,6 +72,8 @@ const FolderItemDiv = ({
 
   const length = allFolderWithoutHidden.length;
 
+  const hiddenFolderIndex = folders.findIndex((item: Folder) => item.id === noteListId)
+
   
 
   return (
@@ -95,11 +97,16 @@ const FolderItemDiv = ({
       </div>
       )}
 
-      {index !== allFolderWithoutHidden.length - 1 && (
-        <></>
+      {hiddenFolderIndex === folders.length - 1 && index !== folders.length - 2 && (
+        <FolderItemBorderBottom index={index} folders={folders} />
       )}
 
-      <FolderItemBorderBottom index={index} folders={folders} />
+      {hiddenFolderIndex !== folders.length - 1 && (
+        <FolderItemBorderBottom index={index} folders={folders} />
+      )}
+      
+
+      
 
       
     </>
