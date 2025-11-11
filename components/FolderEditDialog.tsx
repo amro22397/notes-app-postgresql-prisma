@@ -16,7 +16,7 @@ import { Label } from "@/components/ui/label";
 import axios from "axios";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { FaRegEdit } from "react-icons/fa";
 
 
@@ -28,14 +28,20 @@ const FolderEditDialog = ({ folderId, folderNameInput, getFolderById }: {
 
     const [editFolderDialogOpen, setEditFolderDialogOpen] = useState(false);
 
-  const [folderName, setFolderName] = useState('');
+  const [folderName, setFolderName] = useState<any>(folderNameInput || "");
 
   const [editFolderLoading, setEditFolderLoading] = useState(false);
 
-  const handleAddFolder = async (e: any) => {
+  const handleEditFolder = async (e: any) => {
     e.preventDefault();
 
     setEditFolderLoading(true);
+
+    if (!folderName || folderName.trim() === "") {
+      toast.error("Please enter a folder name");
+      setEditFolderLoading(false);
+      return;
+    }
 
     try {
       const res = await axios.put("/api/lists", {
@@ -71,9 +77,10 @@ const FolderEditDialog = ({ folderId, folderNameInput, getFolderById }: {
       open={editFolderDialogOpen}
       onOpenChange={() => {
         setEditFolderDialogOpen(!editFolderDialogOpen);
-        setFolderName('');
+        setFolderName(folderNameInput);
       }}
     >
+      {/* {`is: ${folderNameInput}`} */}
       <form>
         <DialogTrigger asChild>
           <FaRegEdit size={20} className="text-green-600 hover:text-green-600/90 active:scale-95" 
@@ -99,7 +106,7 @@ const FolderEditDialog = ({ folderId, folderNameInput, getFolderById }: {
               <Input
                 id="folder-name-1"
                 name="folder-name-1"
-                defaultValue={folderNameInput}
+                defaultValue={folderName}
                 onChange={(e: any) => setFolderName(e.target.value)}
               />
             </div>
@@ -119,7 +126,7 @@ const FolderEditDialog = ({ folderId, folderNameInput, getFolderById }: {
               </Button>
             </DialogClose>
 
-            <Button onClick={handleAddFolder}>
+            <Button onClick={handleEditFolder}>
               {editFolderLoading ? <Loader2 className="animate-spin" /> : "Save"}
             </Button>
           </DialogFooter>

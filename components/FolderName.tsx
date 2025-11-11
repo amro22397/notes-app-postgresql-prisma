@@ -3,7 +3,7 @@ import FolderEditDialog from './FolderEditDialog'
 import FolderDeleteDialog from './FolderDeleteDialog'
 
 const FolderName = ({ folderName, folderId, getFolderById, paramsId }: {
-    folderName: string | null | undefined,
+    folderName?: string | null | undefined,
     folderId: string | null | undefined,
     getFolderById?: () => void,
     paramsId?: string | null | undefined
