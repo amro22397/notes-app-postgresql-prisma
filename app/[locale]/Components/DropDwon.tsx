@@ -183,7 +183,7 @@ const DropDwon = ({ user, folderId }: {
 
       getNotesFromMongoDB();
       getPinnedNotesFromMongoDB();
-      window.location.reload();
+      // window.location.reload();
 
       if (res.data.success) {
         toast.success(res.data.message);
@@ -217,7 +217,7 @@ const DropDwon = ({ user, folderId }: {
 
         getNotesFromMongoDB();
       getPinnedNotesFromMongoDB();
-      window.location.reload();
+      // window.location.reload();
 
         if (res.data.success) {
           toast.success(res.data.message)
