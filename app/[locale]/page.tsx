@@ -43,7 +43,7 @@ const page = async () => {
 
         {/* <App email={jUser?.user?.email} user={sessionUser} /> */}
         <AppAppLists email={jUser?.user?.email} user={sessionUser} />
-        <Header email={jUser?.user?.email} user={sessionUser} />
+        {/* <Header email={jUser?.user?.email} user={sessionUser} /> */}
         <></>
       {/* </GlobalProvier> */}
     </div>

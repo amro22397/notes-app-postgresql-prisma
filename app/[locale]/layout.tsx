@@ -17,14 +17,15 @@ import { getUser } from "@/actions/getUser";
 // import { signOut } from "next-auth/react";
 // import Header from "@/components/Header";
 
-import { Toaster } from "@/components/ui/sonner"
-
+import { Toaster } from "@/components/ui/sonner";
 
 import { Analytics } from "@vercel/analytics/next";
 
-import styles from "./layout.module.css"; 
+import styles from "./layout.module.css";
 import { Loader2 } from "lucide-react";
 import GoToNormalPage from "@/components/GoToNormalPage";
+import Header from "@/components/Header";
+import prisma from "@/lib/prisma";
 // import EmailIsNotVerified from "@/components/EmailIsNotVerified";
 // import prisma from "@/lib/prisma";
 
@@ -63,21 +64,27 @@ export default async function RootLayout({
   const messages = await getMessages();
 
   const user = await getUser();
-  const jUser = JSON.parse(JSON.stringify(user) || '{}')
+  const jUser = JSON.parse(JSON.stringify(user) || "{}");
 
-  console.log(jUser?.user?.email)
+  console.log(jUser?.user?.email);
 
   // const sessionUser = await prisma.user.findUnique({
   //     where: { email: jUser?.user?.email }
   //   })
 
+  const sessionUser = await prisma.user.findUnique({
+    where: { email: jUser?.user?.email }
+  })
+
   return (
     <html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"}>
-      <body className={`${poppins.variable}
+      <body
+        className={`${poppins.variable}
       overflow-x-hidden antialiased relative
-        ${locale === 'ar' ? styles.arabic : styles.english}`}>
-          {/* {params.id} */}
-        <Suspense fallback={<Loader2 className='animate-spin' />}>
+        ${locale === "ar" ? styles.arabic : styles.english}`}
+      >
+        {/* {params.id} */}
+        <Suspense fallback={<Loader2 className="animate-spin" />}>
           <AppContextProvider email={jUser?.user?.email}>
             <AppProvider session>
               <Providers>
@@ -86,6 +93,7 @@ export default async function RootLayout({
                   {/* <EmailIsNotVerified session={sessionUser} /> */}
                   {children}
                   <Toaster />
+                  <Header email={jUser?.user?.email} user={sessionUser} />
 
                   <Analytics />
                 </NextIntlClientProvider>
