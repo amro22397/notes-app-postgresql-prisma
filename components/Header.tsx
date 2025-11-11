@@ -6,6 +6,7 @@ import { signOut } from "next-auth/react";
 import { useLocale } from "next-intl";
 import { Session } from "@/types/session";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const Header = ({
   email,
@@ -16,15 +17,18 @@ const Header = ({
 }) => {
   const locale = useLocale();
 
+  const pathname = usePathname();
+
   console.log(user);
   console.log(email);
 
   return (
     <div className="flex md:flex-row flex-col
      justify-between items-center gap-2 my-3 mx-2">
+      {/* {pathname} */}
       {user?.lockedPassword && (
         <Link
-        href={`/${locale}/forgot-lock-password`}
+        href={`/${locale}/forgot-lock-password?redirectTo=${pathname}`}
         className="hover:underline active:scale-95 cursor-pointer">
           Forget your lock OTP ?
         </Link>

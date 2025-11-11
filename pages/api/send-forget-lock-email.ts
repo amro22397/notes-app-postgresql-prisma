@@ -28,6 +28,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const { email, subject, locale } = req.body;
 
+    const { redirectTo } = req.query;
+
     console.log(email, subject, locale)
 
     if (!email || !subject) {
@@ -73,7 +75,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     console.log(updatedUser)
 
 
-    const resetURL = `${process.env.NEXTAUTH_URL}/${locale}/reset-lock-password/${token}`
+    const resetURL = `${process.env.NEXTAUTH_URL}/${locale}/reset-lock-password/${token}${redirectTo ? `?redirectTo=${redirectTo}` : ''}`
 
     const body = `Reset Lock OPT by clicking on the following link: ${resetURL}`
 

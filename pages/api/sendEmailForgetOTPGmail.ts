@@ -20,6 +20,8 @@ export default async function handler(req: any, res: any) {
 
     const { email, subject, locale } = req.body;
 
+    const { redirectTo } = req.query;
+
     console.log(email, subject, locale)
 
     if (!subject || !email) {
@@ -57,7 +59,7 @@ export default async function handler(req: any, res: any) {
         }
     })
 
-    const resetURL = `${process.env.NEXTAUTH_URL}/${locale}/reset-lock-password/${token}`
+    const resetURL = `${process.env.NEXTAUTH_URL}/${locale}/reset-lock-password/${token}${redirectTo ? `?redirectTo=${redirectTo}` : ''}`
 
     const body = `Reset OTP Lock by clicking on the following link: ${resetURL}`
 

@@ -24,7 +24,7 @@ import Link from "next/link";
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select" */
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { Loader2 } from "lucide-react";
 // import ShowPassStrength from "@/components/ShowPassStrength";
@@ -48,6 +48,10 @@ const ResetLockPasswordForm = () => {
     const router = useRouter();
 
   const params = useParams<any>();
+
+  const searchParams = useSearchParams() as any;
+
+  const redirectTo = searchParams.get("redirectTo");
 
   console.log(params.token);
   // const [email, setEmail] = useState("");
@@ -144,7 +148,7 @@ const ResetLockPasswordForm = () => {
         //   title: response.data.message,
         // });
         toast.success(`${response.data.message}`);
-        router.push(`/${locale}/`);
+        router.push(`${redirectTo ? redirectTo : `/${locale}/`}`);
       }
     } catch (error) {
       console.log(error);
@@ -184,6 +188,7 @@ const ResetLockPasswordForm = () => {
   return (
     <Card className="flex flex-col justify-center items-start w-[400px] mx-auto
     bg-zinc-200/55 shadow-md dark:bg-zinc-600 dark:shadow-md">
+      {/* {redirectTo} */}
         <CardHeader>
           <CardTitle className="text-2xl">Reset Lock OTP</CardTitle>
           <CardDescription className="text-gray-600"></CardDescription>

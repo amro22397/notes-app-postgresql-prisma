@@ -18,12 +18,17 @@ import { Loader2, LoaderCircle } from "lucide-react";
 // import { useRouter } from "next/navigation";
 
 import { useLocale } from "next-intl";
+import { useSearchParams } from "next/navigation";
 
 const ForgetLockForm = ({ email }: { email?: string | null | undefined }) => {
   console.log(email);
 
   // const [email, setEmail] = useState("");
   // const [emailIfyouDidnt, setEmailIfyouDidnt] = useState("");
+
+  const searchParams = useSearchParams() as any;
+
+  const redirectTo = searchParams.get('redirectTo');
 
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -60,7 +65,7 @@ const ForgetLockForm = ({ email }: { email?: string | null | undefined }) => {
       if (res.data.success) {
         try {
           const forgetEmailRes = await axios.post(
-            "/api/send-forget-lock-email",
+            `/api/send-forget-lock-email${redirectTo ? `?redirectTo=${redirectTo}` : ''}`,
             {
               email: email,
               subject: "Reset Lock OTP",
@@ -117,7 +122,7 @@ const ForgetLockForm = ({ email }: { email?: string | null | undefined }) => {
     setIfYouDidntLoading(true);
 
     try {
-      const res = await axios.post("/api/sendEmailForgetOTPGmail", {
+      const res = await axios.post(`/api/sendEmailForgetOTPGmail${redirectTo ? `?redirectTo=${redirectTo}` : ''}` , {
         email: email,
         subject: "Reset OTP Lock",
         locale: locale,
@@ -148,6 +153,7 @@ const ForgetLockForm = ({ email }: { email?: string | null | undefined }) => {
       className="flex flex-col justify-center items-start w-[400px] mx-auto
     bg-zinc-200/55 shadow-md dark:bg-zinc-600 dark:shadow-md"
     >
+      {/* {redirectTo} */}
       <CardHeader>
         <CardTitle className="text-2xl dark:text-white">
           Forget Lock OTP
@@ -169,7 +175,8 @@ const ForgetLockForm = ({ email }: { email?: string | null | undefined }) => {
 
           <Button
             type="submit"
-            className="bg-green-500 hover:bg-green-500/95 active:bg-green-500/90 text-white"
+            className="bg-green-500 hover:bg-green-500/95 active:bg-green-500/90 text-white
+            cursor-pointer"
           >
             {loading ? <Loader2 className="animate-spin" /> : "Reset My OTP"}
           </Button>
@@ -200,10 +207,10 @@ const ForgetLockForm = ({ email }: { email?: string | null | undefined }) => {
 
       <CardFooter>
         <Link
-          href={`/${locale}/`}
+          href={`${redirectTo ? redirectTo : `/${locale}/`}`}
           className="text-sm hover:underline active:text-gray-600"
         >
-          Back to Quick Notes
+          Back
         </Link>
       </CardFooter>
     </Card>
