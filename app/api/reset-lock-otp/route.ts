@@ -51,7 +51,7 @@ export async function POST(req: Request) {
       })
 
       return Response.json({
-         message: "Password was reset successfully",
+         message: "OTP Lock was reset successfully",
          success: true,
       })
 
