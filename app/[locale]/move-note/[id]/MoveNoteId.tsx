@@ -79,7 +79,7 @@ const MoveNoteId = ({
 
   return (
     <div className="app-app-style">
-      <GoToNormalPage />
+      {/* <GoToNormalPage /> */}
 
       <Title
         email={email}

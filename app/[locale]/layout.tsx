@@ -24,6 +24,7 @@ import { Analytics } from "@vercel/analytics/next";
 
 import styles from "./layout.module.css"; 
 import { Loader2 } from "lucide-react";
+import GoToNormalPage from "@/components/GoToNormalPage";
 // import EmailIsNotVerified from "@/components/EmailIsNotVerified";
 // import prisma from "@/lib/prisma";
 
@@ -81,6 +82,7 @@ export default async function RootLayout({
             <AppProvider session>
               <Providers>
                 <NextIntlClientProvider messages={messages}>
+                  <GoToNormalPage />
                   {/* <EmailIsNotVerified session={sessionUser} /> */}
                   {children}
                   <Toaster />

@@ -45,7 +45,7 @@ const App = ({ email, user }: {
   return (
     <div className="app-app-style">
       
-      <GoToNormalPage />
+      
 
       {/* {params.id} */}
       {/* <pre className="">{JSON.stringify(folderById, null, 2)}</pre> */}

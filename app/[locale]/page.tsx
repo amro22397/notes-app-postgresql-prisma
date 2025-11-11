@@ -13,7 +13,7 @@ import Header from '@/components/Header';
 import EmailIsNotVerified from '@/components/EmailIsNotVerified';
 import prisma from '@/lib/prisma';
 import AppAppLists from './AppAppLists';
-import { Link } from 'lucide-react';
+import GoToNormalPage from '@/components/GoToNormalPage';
 
 const page = async () => {
 
@@ -39,13 +39,7 @@ const page = async () => {
       {/* {JSON.stringify(sessionUser, null, 2)} */}
       <EmailIsNotVerified session={sessionUser} />
 
-      { locale === "ar" && (
-        <Link href={`/en`}
-      className="text-left w-full"
-      >
-    Go to normal page (EN)
-    </Link>
-      )}
+      {/* <GoToNormalPage /> */}
 
         {/* <App email={jUser?.user?.email} user={sessionUser} /> */}
         <AppAppLists email={jUser?.user?.email} user={sessionUser} />
