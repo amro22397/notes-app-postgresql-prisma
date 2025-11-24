@@ -11,10 +11,12 @@ import { MdKeyboardArrowRight } from 'react-icons/md'
 import Link from 'next/link'
 import { useLocale } from 'next-intl'
 import FolderItem from './Components/FolderItem'
+import { Session } from '@/types/user'
 
-const AppAppLists = ({ email, user }: {
+const AppAppLists = ({ email, /* user */ session }: {
   email: string | null | undefined,
-  user: Session | null | undefined
+  // user: Session | null | undefined
+  session: Session | null | undefined
 }) => {
 
   const locale = useLocale();
@@ -22,6 +24,10 @@ const AppAppLists = ({ email, user }: {
     const [folders, setFolders] = useState([]);
 
     const [allNotes, setAllNotes] = useState([]);
+
+    const [sessionUser, setSessionUser] = useState<Session | null | undefined>(null);
+
+    console.log(sessionUser)
 
     const getAllNotes = async () => {
 
@@ -52,6 +58,26 @@ const AppAppLists = ({ email, user }: {
 
     useEffect(() => {
       getAllNotes();
+    }, []);
+
+
+    const getSessionUser = async () => {
+    
+    const res = await axios.get(`/api/get-session-user?email=${session?.user?.email}&locale=${locale}`, {
+      params: {
+        session: JSON.stringify(session),
+      }
+    });
+
+    // setRes(res)
+
+    setSessionUser(res.data.data);
+
+  }
+
+
+  useEffect(() => {
+      getSessionUser();
     }, []);
 
     const allId = 'all'

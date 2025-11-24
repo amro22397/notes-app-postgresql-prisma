@@ -6,43 +6,43 @@
 // import { useEffect, useState } from 'react';
 import React from 'react';
 // import { Cinzel } from 'next/font/google';
-import { getUser } from '@/actions/getUser';
+import { getSession } from '@/actions/getUser';
 import { getLocale } from 'next-intl/server';
 import { redirect } from 'next/navigation';
-import Header from '@/components/Header';
-import EmailIsNotVerified from '@/components/EmailIsNotVerified';
-import prisma from '@/lib/prisma';
+// import Header from '@/components/Header';
+// import EmailIsNotVerified from '@/components/EmailIsNotVerified';
+// import prisma from '@/lib/prisma';
 import AppAppLists from './AppAppLists';
-import GoToNormalPage from '@/components/GoToNormalPage';
+// import GoToNormalPage from '@/components/GoToNormalPage';
 
 const page = async () => {
 
-  const user = await getUser();
-  const jUser = JSON.parse(JSON.stringify(user) || '{}')
+  const session = await getSession();
+  // const jUser = JSON.parse(JSON.stringify(user) || '{}')
    const locale = await getLocale();
 
- console.log(jUser)
+ console.log(session)
 
  
-  if (!jUser?.user?.email) {
+  if (!session?.user?.email) {
     redirect(`/${locale}/register`);
   }
 
-  const sessionUser = await prisma.user.findUnique({
-    where: { email: jUser?.user?.email }
-  })
+  // const sessionUser = await prisma.user.findUnique({
+  //   where: { email: jUser?.user?.email }
+  // })
 
   return (
     <div>
       {/* <GlobalProvier> */}
       
       {/* {JSON.stringify(sessionUser, null, 2)} */}
-      <EmailIsNotVerified session={sessionUser} />
+      {/* <EmailIsNotVerified session={sessionUser} /> */}
 
       {/* <GoToNormalPage /> */}
 
         {/* <App email={jUser?.user?.email} user={sessionUser} /> */}
-        <AppAppLists email={jUser?.user?.email} user={sessionUser} />
+        <AppAppLists email={session?.user?.email} session={session} /* user={sessionUser} */ />
         {/* <Header email={jUser?.user?.email} user={sessionUser} /> */}
         <></>
       {/* </GlobalProvier> */}
