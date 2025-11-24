@@ -1,5 +1,5 @@
 
-import { getUser } from "@/actions/getUser";
+import { getSession, getUser } from "@/actions/getUser";
 import { RegisterForm } from "@/components/register-form"
 import { redirect } from "next/navigation";
 // import { useSession } from "next-auth/react"
@@ -8,13 +8,13 @@ import { redirect } from "next/navigation";
 
 export default async function Page() {
 
-  const session = await getUser();
-  const jUser = JSON.parse(JSON.stringify(session) || '{}')
+  const session = await getSession();
+  // const jUser = JSON.parse(JSON.stringify(session) || '{}')
 
-      console.log(jUser);
+      // console.log(jUser);
     
     
-        if (jUser?.user?.email) {
+        if (session?.user?.email) {
           redirect('/');
         }
 

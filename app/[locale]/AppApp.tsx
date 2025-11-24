@@ -9,22 +9,28 @@ import DropDown from './Components/DropDwon';
 import { Toaster } from 'react-hot-toast';
 import SearchBar from './Components/SearchBar'
 // import { Button } from '@/components/ui/button'
-import { Session } from '@/types/session'
 import { useLocale } from 'next-intl';
-import Link from 'next/link';
+// import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import axios from 'axios';
-import GoToNormalPage from '@/components/GoToNormalPage';
+import { Session } from '@/types/user';
+// import GoToNormalPage from '@/components/GoToNormalPage';
 
 
-const App = ({ email, user }: {
+const App = ({ email, /* user */ session }: {
   email: string | null | undefined,
-  user: Session | null | undefined
+  // user: Session | null | undefined,
+  session: Session | null | undefined
 }) => {
 
   const [folderById, setFolderById] = useState<any>(null)
 
+      const [sessionUser, setSessionUser] = useState<Session | null | undefined>(null);
+  
+
   const locale = useLocale();
+
+  console.log(locale)
 
   const params = useParams() as any;
 
@@ -40,6 +46,26 @@ const App = ({ email, user }: {
   useEffect(() => {
     getFolderById()
   }, [params.id]);
+
+
+  const getSessionUser = async () => {
+    
+    const res = await axios.get(`/api/get-session-user?email=${session?.user?.email}&locale=${locale}`, {
+      params: {
+        session: JSON.stringify(session),
+      }
+    });
+
+    // setRes(res)
+
+    setSessionUser(res.data.data);
+
+  }
+
+
+  useEffect(() => {
+      getSessionUser();
+    }, []);
 
 
   return (
@@ -59,7 +85,7 @@ const App = ({ email, user }: {
       <SearchBar  />
       {/* <Categories /> */}
       <NotesArea email={email} />
-      <DropDown user={user} folderId={params.id} />
+      <DropDown user={sessionUser} folderId={params.id} />
       <Toaster
         containerStyle={{
           fontSize: '20px',

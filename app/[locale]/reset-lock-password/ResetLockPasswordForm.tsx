@@ -231,10 +231,10 @@ const ResetLockPasswordForm = () => {
                 </Button>
 
                 <Link
-                  href={`/${locale}/login`}
+                  href={`${redirectTo ? `${redirectTo}` : `/${locale}/`}`}
                   className="text-sm hover:underline active:text-gray-600 mt-[11.5px]"
                 >
-                  {resetPage('Back to sign in')}
+                  {resetPage('Back to notes app')}
                 </Link>
               </div>
             </div>

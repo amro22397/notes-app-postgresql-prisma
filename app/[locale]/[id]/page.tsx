@@ -1,30 +1,30 @@
 import React from 'react'
 import App from '../AppApp'
-import { getUser } from '@/actions/getUser';
+import { getSession, getUser } from '@/actions/getUser';
 import { getLocale } from 'next-intl/server';
 import { redirect } from 'next/navigation';
 import prisma from '@/lib/prisma';
 
 const page = async () => {
 
-    const user = await getUser();
-  const jUser = JSON.parse(JSON.stringify(user) || '{}')
+    const session = await getSession();
+  // const jUser = JSON.parse(JSON.stringify(user) || '{}')
    const locale = await getLocale();
 
- console.log(jUser)
+//  console.log(jUser)
 
  
-  if (!jUser?.user?.email) {
+  if (!session?.user?.email) {
     redirect(`/${locale}/register`);
   }
 
-  const sessionUser = await prisma.user.findUnique({
-    where: { email: jUser?.user?.email }
-  })
+  // const sessionUser = await prisma.user.findUnique({
+  //   where: { email: jUser?.user?.email }
+  // })
 
 
   return (
-    <App email={jUser?.user?.email} user={sessionUser} />
+    <App email={session?.user?.email} /* user={sessionUser} */ session={session} />
   )
 }
 

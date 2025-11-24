@@ -159,7 +159,7 @@ const ForgetLockForm = ({ email }: { email?: string | null | undefined }) => {
           Forget Lock OTP
         </CardTitle>
         <CardDescription className="text-gray-600 dark:text-white">
-          Click on (Reset My OTP) , and we will send you a link to reset
+          Click on (Reset My OTP) , and we will send you an email with a link to reset the lock OTP
         </CardDescription>
       </CardHeader>
       <CardContent className="w-full">

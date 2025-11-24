@@ -1,4 +1,4 @@
-import { getUser } from "@/actions/getUser";
+import { getSession, getUser } from "@/actions/getUser";
 import ForgetForm from "@/components/ForgetForm";
 import { redirect } from "next/navigation";
 import React from "react";
@@ -7,14 +7,14 @@ const page = async () => {
 
     
 
-  const session = await getUser();
-  const jUser = JSON.parse(JSON.stringify(session) || '{}')
+  const session = await getSession();
+  // const jUser = JSON.parse(JSON.stringify(session) || '{}')
 
 
-  console.log(jUser);
+  // console.log(jUser);
 
 
-    if (jUser?.user?.email) {
+    if (session?.user?.email) {
       redirect('/');
     }
         

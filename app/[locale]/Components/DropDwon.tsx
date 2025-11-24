@@ -1,8 +1,8 @@
 "use client";
 
 import { AppContext, AppContextType } from "@/context/AppContext";
-import { icon } from "@fortawesome/fontawesome-svg-core";
-import { faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
+// import { icon } from "@fortawesome/fontawesome-svg-core";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 // import { useGlobalProvider } from '../ContextApi';
@@ -21,7 +21,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
+  // DialogTrigger,
 } from "@/components/ui/dialog";
 
 import {
@@ -30,9 +30,9 @@ import {
   InputOTPSeparator,
   InputOTPSlot,
 } from "@/components/ui/input-otp";
-import { Session } from "@/types/session";
 import { MdDriveFileMoveRtl } from "react-icons/md";
 import { useLocale } from "next-intl";
+import { Session } from "@/types/user";
 
 
 
@@ -51,7 +51,7 @@ const DropDwon = ({ user, folderId }: {
     openWindowNote,
     setOpenWindowNote,
     initialNotesObject,
-    clickedCategory,
+    // clickedCategory,
     setClickedCategory,
     getNotesFromMongoDB,
     getPinnedNotesFromMongoDB,
@@ -93,6 +93,8 @@ const DropDwon = ({ user, folderId }: {
       icon: <PinOff size={19} />,
     },
   ];
+
+  console.log(menuItems)
 
   //ss
 
@@ -176,7 +178,7 @@ const DropDwon = ({ user, folderId }: {
     try {
       const res = await axios.put(`/api/user/lock-note?id=${noteSelected.id}`, {
         lockedPassword: lockPasswordOTPvalue,
-        email: user?.email,
+        email: user?.user?.email,
       });
 
       console.log(res.data);
@@ -209,10 +211,10 @@ const DropDwon = ({ user, folderId }: {
 
       console.log(lockPasswordOTPvalue)
       
-      if (!user?.lockedPassword) {
+      if (!user?.user?.lockedPassword) {
         const res = await axios.put(`/api/user/lock-note?id=${noteSelected.id}`, {
           lockedPassword: lockPasswordOTPvalue,
-          email: user?.email,
+          email: user?.user?.email,
         })
 
         getNotesFromMongoDB();
@@ -231,7 +233,7 @@ const DropDwon = ({ user, folderId }: {
 
         const res = await axios.post(`/api/user/lock-note?id=${noteSelected.id}`, {
           lockedPassword: lockPasswordOTPvalue,
-          email: user?.email,
+          email: user?.user?.email,
         })
 
         getNotesFromMongoDB();
@@ -431,13 +433,13 @@ ${/* index === menuItems.length - 1 && "border-none" */ ""}
               onClick={() => {
                 setOpenDropDown(false);
 
-                if (!user?.lockedPassword) {
+                if (!user?.user?.lockedPassword) {
                   setIsLockPasswordCard(true);
             
                   return;
                 }
 
-                if (user?.lockedPassword) {
+                if (user?.user?.lockedPassword) {
                   LockNoteFx();
                 }
               }}
@@ -457,7 +459,7 @@ border-none
               onClick={() => {
                 setOpenDropDown(false);
 
-                if (user?.lockedPassword) {
+                if (user?.user?.lockedPassword) {
                   setIsLockPasswordCard(true);
             
                   return;
@@ -478,7 +480,7 @@ border-none
         <DialogContent>
           <DialogHeader className="flex flex-col gap-5">
             <DialogTitle>
-              {!user?.lockedPassword ? 'Set Lock OTP' : 'Enter Lock OTP'}
+              {!user?.user?.lockedPassword ? 'Set Lock OTP' : 'Enter Lock OTP'}
             </DialogTitle>
             <DialogDescription>
 
@@ -515,7 +517,7 @@ border-none
                   // LockNoteFx();
                 }}
                 >
-                  Save
+                  {!user?.user?.lockedPassword ? 'Save' : 'Enter'}
                 </Button>
               </DialogFooter>
 

@@ -3,24 +3,27 @@
 import GoToNormalPage from "@/components/GoToNormalPage";
 import React, { useEffect, useState } from "react";
 import Title from "../../Components/Title";
-import { Session } from "@/types/session";
+// import { Session } from "@/types/session";
 import { useParams, useSearchParams } from "next/navigation";
 import SearchBar from "../../Components/SearchBar";
 import axios from "axios";
 import { Folder } from "@/types/folder";
-import FolderItem from "../../Components/FolderItem";
+// import FolderItem from "../../Components/FolderItem";
 import FolderItemDiv from "../../Components/FolderItemDiv";
 import { useLocale } from "next-intl";
 import Link from "next/link";
+import { Session } from "@/types/user";
 
 const MoveNoteId = ({
   email,
-  user,
+  // user,
+  session
 }: {
   email: string | null | undefined;
-  user: Session | null | undefined;
+  // user: Session | null | undefined;
+  session: Session | null | undefined
 }) => {
-  console.log(user);
+  // console.log(user);
 
   const params = useSearchParams() as any;
   const locale = useLocale();
@@ -34,6 +37,11 @@ const MoveNoteId = ({
 
   const [selectedNote, setSelectedNote] = useState<any>(null);
 
+  const [sessionUser, setSessionUser] = useState<Session | null | undefined>(
+    null
+  );
+
+  console.log(sessionUser)
 
   const searchParams = useSearchParams() as any;
 
@@ -53,21 +61,15 @@ const MoveNoteId = ({
     setAllNotes(res.data.data);
   };
 
-
-
   const findNoteById = async () => {
-  
-      const res = await axios.get(`/api/get-note-by-id?id=${routerParams.id}`);
-  
-      setSelectedNote(res.data.data)
-  
-  
-    }
-  
-  
-    useEffect(() => {
-      findNoteById();
-    }, [routerParams.id]);
+    const res = await axios.get(`/api/get-note-by-id?id=${routerParams.id}`);
+
+    setSelectedNote(res.data.data);
+  };
+
+  useEffect(() => {
+    findNoteById();
+  }, [routerParams.id]);
 
   useEffect(() => {
     getFolders();
@@ -76,6 +78,26 @@ const MoveNoteId = ({
   useEffect(() => {
     getAllNotes();
   }, []);
+
+
+  const getSessionUser = async () => {
+    
+    const res = await axios.get(`/api/get-session-user?email=${session?.user?.email}&locale=${locale}`, {
+      params: {
+        session: JSON.stringify(session),
+      }
+    });
+
+    // setRes(res)
+
+    setSessionUser(res.data.data);
+
+  }
+
+
+  useEffect(() => {
+      getSessionUser();
+    }, []);
 
   return (
     <div className="app-app-style">
@@ -113,33 +135,31 @@ const MoveNoteId = ({
               //   />
 
               <>
-              {/* <pre className="">{JSON.stringify(selectedNote, null, 2)}</pre> */}
-              {selectedNote?.listId !== folder.id && (
-                <FolderItemDiv
-                key={folder.name}
-                folder={folder}
-                index={index}
-                folders={folders}
-                folderNotesLength={notesByListId.length}
-                isMoveNoteId={true}
-                noteListId={selectedNote?.listId}
-              />
-              )}
+                {/* <pre className="">{JSON.stringify(selectedNote, null, 2)}</pre> */}
+                {selectedNote?.listId !== folder.id && (
+                  <FolderItemDiv
+                    key={folder.name}
+                    folder={folder}
+                    index={index}
+                    folders={folders}
+                    folderNotesLength={notesByListId.length}
+                    isMoveNoteId={true}
+                    noteListId={selectedNote?.listId}
+                  />
+                )}
               </>
             );
           })}
       </div>
 
-
       <div className="flex items-center justify-center">
-        <Link href={`/${locale}/`}
-        className="text-[16px] hover:underline active:scale-95 cursor-pointer"
+        <Link
+          href={`/${locale}/`}
+          className="text-[16px] hover:underline active:scale-95 cursor-pointer"
         >
-            Back to folders
+          Back to folders
         </Link>
       </div>
-
-
     </div>
   );
 };

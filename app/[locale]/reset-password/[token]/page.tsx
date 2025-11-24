@@ -27,17 +27,17 @@ import { redirect } from "next/navigation";
 // import ShowPassStrength from "@/components/ShowPassStrength";
 // import { passwordStrength } from "check-password-strength";
 import ResetForm from "../ResetForm";
-import { getUser } from "@/actions/getUser";
+import { getSession, getUser } from "@/actions/getUser";
 
 
 // type strength = 0 | 1 | 2 | 3;
 
 const page = async () => {
 
-  const session = await getUser();
-  const jUser = JSON.parse(JSON.stringify(session) || '{}')
+  const session = await getSession();
+  // const jUser = JSON.parse(JSON.stringify(session) || '{}')
 
-  if (jUser?.user?.email) {
+  if (session?.user?.email) {
     redirect('/');
   }
   
