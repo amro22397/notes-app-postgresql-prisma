@@ -261,10 +261,11 @@ useEffect(() => {
     >
       {/* {params.id} */}
       {/* Modal Header */}
-      <div className="flex flex-row poppins-bold justify-between items-center md:w-[676px] sm:w-[92vw] w-[95vw] px-5
-      h-[60px] fixed top-18 left-1/2 -translate-x-1/2 bg-white z-[70]"
+      <div className="flex flex-row poppins-bold justify-between items-center md:w-[700px] sm:w-[95vw] w-[100vw] px-5
+      "
       // style={{ width: "inherit" }}
       // border-b border-gray-200
+      // h-[60px] fixed top-18 left-1/2 -translate-x-1/2 bg-white z-[70]
       // 
       >
         {/* <div className="text-xl text-black">{`${
@@ -345,8 +346,8 @@ useEffect(() => {
       </div> */}
 
       {/* Content area */}
-      <div className="mt-3 sm:pt-[35px] pt-[40px] h-[calc(100vh-220px)] px-[6px]"
-      // overflow-y-auto
+      <div className="mt-3 h-[calc(100vh-220px)] px-[6px]"
+      // overflow-y-auto sm:pt-[35px] pt-[40px]
       >
         {/* <label className="block text-[13px] font-medium text-gray-700">
           Note Content
