@@ -30,16 +30,12 @@ import { EyeIcon, EyeOffIcon, Loader2 } from "lucide-react";
 import ShowPassStrength from "@/components/ShowPassStrength";
 import { passwordStrength } from "check-password-strength";
 
-import { useLocale, useTranslations } from 'next-intl' 
-
+import { useLocale, useTranslations } from "next-intl";
 
 type strength = 0 | 1 | 2 | 3;
 
-
 const ResetForm = () => {
-
-
-    const router = useRouter();
+  const router = useRouter();
 
   const params = useParams<any>();
 
@@ -52,8 +48,7 @@ const ResetForm = () => {
   const [verified, setVerified] = useState(false);
   const [user, setUser] = useState(null);
 
-    const [strength, setStrength] = useState<strength>(0);
-
+  const [strength, setStrength] = useState<strength>(0);
 
   const [type, setType] = useState("password");
   const [validation, setValidation] = useState(false);
@@ -62,6 +57,8 @@ const ResetForm = () => {
 
   const session = useSession();
   console.log(session);
+
+  const locale = useLocale();
 
   const handleValidation = (value: string) => {
     const lower = new RegExp("(?=.*[a-z])");
@@ -86,6 +83,7 @@ const ResetForm = () => {
       try {
         const res = await axios.post("/api/verify-token", {
           token: params.token,
+          locale,
         });
 
         if (res.data.status === false) {
@@ -96,7 +94,7 @@ const ResetForm = () => {
         if (res.data.status === true) {
           setError("");
           setVerified(true);
-          setUser(res?.data?.user);
+          setUser(res.data.user);
         }
       } catch (error) {
         console.log(error);
@@ -114,83 +112,117 @@ const ResetForm = () => {
       //   variant: "destructive",
       //   title: "Passwords do not match",
       // });
-      toast.error('Passwords do not match');
+      toast.error(
+        locale === "en" ? "Passwords do not match" : "كلمتي السر غير متطابقتان"
+      );
       setLoading(false);
       return;
     }
 
-    
-        if (password.length < 6) {
-          // toast({
-          //   variant: "destructive",
-          //   title: "Password cannot be less than 6 characters",
-          // });
-          toast.error('Password cannot be less than 6 characters');
-          setLoading(false);
-          return;
-        } else if (password.length > 20) {
-          // toast({
-          //   variant: "destructive",
-          //   title: "Password cannot be more than 20 characters",
-          // });
-          toast.error('Password cannot be more than 20 characters');
-          setLoading(false);
-          return;
-        }
+    if (password.length < 6) {
+      // toast({
+      //   variant: "destructive",
+      //   title: "Password cannot be less than 6 characters",
+      // });
+      toast.error(
+        locale === "en"
+          ? "Password cannot be less than 6 characters"
+          : "كلمة السر لا يمكن أن تكون أقل من 6 حروف"
+      );
+      setLoading(false);
+      return;
+    } else if (password.length > 20) {
+      // toast({
+      //   variant: "destructive",
+      //   title: "Password cannot be more than 20 characters",
+      // });
+      toast.error(
+        locale === "en"
+          ? "Password cannot be more than 20 characters"
+          : "كلمة السر لا يمكن أن تكون أكثر من 20 حرف"
+      );
+      setLoading(false);
+      return;
+    }
 
+    const lower = new RegExp("(?=.*[a-z])");
+    const upper = new RegExp("(?=.*[A-Z])");
+    const number = new RegExp("(?=.*[0-9])");
+    const special = new RegExp("(?=.*[!@#$%^&*])");
 
+    const englishOnly = new RegExp(
+      "^[A-Za-z0-9!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?`~]*$"
+    );
 
-        const lower = new RegExp("(?=.*[a-z])");
-            const upper = new RegExp("(?=.*[A-Z])");
-            const number = new RegExp("(?=.*[0-9])");
-            const special = new RegExp("(?=.*[!@#$%^&*])");
-        
-            if (!lower.test(password)) {
-              // toast({
-              //   variant: "destructive",
-              //   title: "Password must contain at least one lowercase letter (asdfghjkl)",
-              //   description: "",
-                // });
-                toast.error('Password must contain at least one lowercase letter (asdfghjkl)');
-                setLoading(false);
-                return;
-            }
-        
-            if (!upper.test(password)) {
-              // toast({
-                // variant: "destructive",
-                // title: "Password must contain at least one highercase letter (ASDFGHJKL)",
-                // description: "",
-                // });
-                toast.error('Password must contain at least one highercase letter (ASDFGHJKL)');
-                setLoading(false);
-                return;
-            }
-        
-            if (!number.test(password)) {
-              // toast({
-              //   variant: "destructive",
-              //   title: "Password must contain at least one number (1234567890)",
-              //   description: "",
-              //   });
-                toast.error('Password must contain at least one number (1234567890)');
-                setLoading(false);
-                return;
-            }
-        
-            if (!special.test(password)) {
-              // toast({
-              //   variant: "destructive",
-              //   title: "Password must contain at least one special letter (!@#$%^&*)",
-              //   description: "",
-              //   });
-              toast.error('Password must contain at least one special letter (!@#$%^&*)');
-                setLoading(false);
-                return;
-            }
+    if (!englishOnly.test(password)) {
+      toast.error(
+        locale === "en"
+          ? "Password must contain only English letters"
+          : locale === "ar" && "يجب أن تحتوي كلمة السر على أحرف إنجليزية فقط"
+      );
+      setLoading(false);
+      return;
+    }
 
+    if (!lower.test(password)) {
+      // toast({
+      //   variant: "destructive",
+      //   title: "Password must contain at least one lowercase letter (asdfghjkl)",
+      //   description: "",
+      // });
+      toast.error(
+        locale === "en"
+          ? "Password must contain at least one lowercase letter (asdfghjkl)"
+          : "كلمة سر يجب أن تحتوي على الأقل على حرف صغير واحد (asdfghjkl)"
+      );
+      setLoading(false);
+      return;
+    }
 
+    if (!upper.test(password)) {
+      // toast({
+      // variant: "destructive",
+      // title: "Password must contain at least one highercase letter (ASDFGHJKL)",
+      // description: "",
+      // });
+      toast.error(
+        locale === "en"
+          ? "Password must contain at least one highercase letter (ASDFGHJKL)"
+          : "كلمة سر يجب أن تحتوي على الأقل على حرف كبير واحد (ASDFGHJKL)"
+      );
+      setLoading(false);
+      return;
+    }
 
+    if (!number.test(password)) {
+      // toast({
+      //   variant: "destructive",
+      //   title: "Password must contain at least one number (1234567890)",
+      //   description: "",
+      //   });
+      toast.error(
+        locale === "en"
+          ? "Password must contain at least one number (1234567890)"
+          : "كلمة سر يجب أن تحتوي على الأقل على رقم واحد (1234567890)"
+      );
+      setLoading(false);
+      return;
+    }
+
+    if (!special.test(password)) {
+      // toast({
+      //   variant: "destructive",
+      //   title: "Password must contain at least one special letter (!@#$%^&*)",
+      //   description: "",
+      //   });
+      toast.error(
+        locale === "en"
+          ? "Password must contain at least one special letter (!@#$%^&*)"
+          : "كلمة سر يجب أن تحتوي على الأقل على حرف مميز واحد (!@#$%^&*)"
+      );
+      setLoading(false);
+      return;
+    }
 
     setLoading(true);
 
@@ -198,6 +230,7 @@ const ResetForm = () => {
       const response = await axios.post("/api/reset-password", {
         token: params.token,
         password: password,
+        locale,
       });
 
       if (!response.data.success) {
@@ -234,11 +267,9 @@ const ResetForm = () => {
   // const formStyles = `text-md`;
   // const iconClass = `absolute right-4 top-2 text-gray-500 cursor-pointer`;
 
-
   useEffect(() => {
-      setStrength(passwordStrength(password).id as strength);
-    });
-
+    setStrength(passwordStrength(password).id as strength);
+  });
 
   /* useEffect(() => {
       if (session.status === "authenticated") {
@@ -246,56 +277,58 @@ const ResetForm = () => {
       }
     }, [session.status, router]); */
 
-
-    const resetPage = useTranslations('ResetPage');
-    const locale = useLocale();
-
+  const resetPage = useTranslations("ResetPage");
 
   return (
-    <Card className="flex flex-col justify-center items-start w-[400px] mx-auto
-    bg-zinc-200/55 shadow-md dark:bg-zinc-600 dark:shadow-md">
-        <CardHeader>
-          <CardTitle className="text-2xl">{resetPage('Reset Password')}</CardTitle>
-          <CardDescription className="text-gray-600"></CardDescription>
-        </CardHeader>
-        <CardContent className="w-full">
-          <form onSubmit={handleSubmit}>
-            <div className="grid w-full items-center gap-4">
-              <div className="flex flex-col relative">
-                <Input
-                  type={type}
-                  placeholder={resetPage('p-Password')}
-                  value={password}
-                  onChange={(e) => {
-                    setPassword(e.target.value);
-                    handleValidation(e.target.value);
-                  }}
-                  required
-                  className="placeholder-gray-700 dark:placeholder-gray-300
+    <Card
+      className="flex flex-col justify-center items-start
+    bg-zinc-200/55 shadow-md dark:bg-zinc-600 dark:shadow-md"
+      // w-[400px] mx-auto
+    >
+      <CardHeader>
+        <CardTitle className="text-2xl">
+          {resetPage("Reset Password")}
+        </CardTitle>
+        <CardDescription className="text-gray-600"></CardDescription>
+      </CardHeader>
+      <CardContent className="w-full">
+        <form onSubmit={handleSubmit}>
+          <div className="grid w-full items-center gap-4">
+            <div className="flex flex-col relative">
+              <Input
+                type={type}
+                placeholder={resetPage("p-Password")}
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  handleValidation(e.target.value);
+                }}
+                required
+                className="placeholder-gray-700 dark:placeholder-gray-300
                   dark:border-white"
-                />
+              />
 
-                {type === "password" && password ? (
+              {type === "password" && password ? (
+                <span
+                  className={`${locale === "en" ? "icon-class" : "icon-class-ar"}`}
+                  onClick={() => setType("text")}
+                >
+                  <EyeIcon className="w-5 h-5" />
+                </span>
+              ) : (
+                type === "text" &&
+                password && (
                   <span
                     className={`${locale === "en" ? "icon-class" : "icon-class-ar"}`}
-                    onClick={() => setType("text")}
+                    onClick={() => setType("password")}
                   >
-                    <EyeIcon className="w-5 h-5" />
+                    <EyeOffIcon className="w-5 h-5" />
                   </span>
-                ) : (
-                  type === "text" &&
-                  password && (
-                    <span
-                    className={`${locale === "en" ? "icon-class" : "icon-class-ar"}`}
-                      onClick={() => setType("password")}
-                    >
-                      <EyeOffIcon className="w-5 h-5" />
-                    </span>
-                  )
-                )}
-              </div>
+                )
+              )}
+            </div>
 
-              {/* <div
+            {/* <div
                 className={`${
                   validation || password === "" ? "hidden" : "flex"
                 } text-sm text-red-500`}
@@ -304,48 +337,52 @@ const ResetForm = () => {
                 special character <br /> (A-Z, a-z, 0-9 and !@#$%^&*)
               </div> */}
 
-              {password.trim() !== "" && (
-                <div className="-mt-[6px]">
-                  <ShowPassStrength strength={strength} />
-                </div>
-              )}
+            {password.trim() !== "" && (
+              <div className="-mt-[6px]">
+                <ShowPassStrength strength={strength} />
+              </div>
+            )}
 
-              <div className="flex flex-col space-y-1.5">
-                <Input
-                  type={type}
-                  placeholder={resetPage('p-Confirm Password')}
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  required
-                  className="placeholder-gray-700 dark:placeholder-gray-300
+            <div className="flex flex-col space-y-1.5">
+              <Input
+                type={type}
+                placeholder={resetPage("p-Confirm Password")}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+                className="placeholder-gray-700 dark:placeholder-gray-300
                   dark:border-white"
-                />
-              </div>
-
-              <div className="flex flex-row justify-between w-full px-1 mt-2">
-                <Button
-                  type="submit"
-                  className="bg-green-500 hover:bg-green-500/95 active:bg-green-500/90 text-white"
-                  disabled={error.length > 0}
-                >
-                  {loading ? <Loader2 className="animate-spin" /> : resetPage('Submit')}
-                </Button>
-
-                <Link
-                  href={`/${locale}/login`}
-                  className="text-sm hover:underline active:text-gray-600 mt-[11.5px]"
-                >
-                  {resetPage('Back to sign in')}
-                </Link>
-              </div>
+              />
             </div>
-          </form>
-        </CardContent>
-        <CardFooter className="flex flex-col items-center justify-center w-full">
-          {error && <p className="text-sm text-red-500 mt-4">{error}</p>}
-        </CardFooter>
-      </Card>
-  )
-}
 
-export default ResetForm
+            <div className="flex flex-row justify-between w-full px-1 mt-2">
+              <Button
+                type="submit"
+                className="bg-green-500 hover:bg-green-500/95 active:bg-green-500/90 text-white"
+                disabled={error.length > 0}
+              >
+                {loading ? (
+                  <Loader2 className="animate-spin" />
+                ) : (
+                  resetPage("Submit")
+                )}
+              </Button>
+
+              <Link
+                href={`/${locale}/login`}
+                className="text-sm hover:underline active:text-gray-600 mt-[11.5px]"
+              >
+                {resetPage("Back to sign in")}
+              </Link>
+            </div>
+          </div>
+        </form>
+      </CardContent>
+      <CardFooter className="flex flex-col items-center justify-center w-full">
+        {error && <p className="text-sm text-red-500 mt-4">{error}</p>}
+      </CardFooter>
+    </Card>
+  );
+};
+
+export default ResetForm;

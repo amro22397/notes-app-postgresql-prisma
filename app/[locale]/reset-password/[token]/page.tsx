@@ -1,4 +1,3 @@
-
 import React from "react";
 // import {
 //   Card,
@@ -27,20 +26,21 @@ import { redirect } from "next/navigation";
 // import ShowPassStrength from "@/components/ShowPassStrength";
 // import { passwordStrength } from "check-password-strength";
 import ResetForm from "../ResetForm";
-import { getSession, getUser } from "@/actions/getUser";
-
+import { getSession } from "@/actions/getUser";
+import { getLocale } from "next-intl/server";
 
 // type strength = 0 | 1 | 2 | 3;
 
 const page = async () => {
-
   const session = await getSession();
-  // const jUser = JSON.parse(JSON.stringify(session) || '{}')
+  // const jUser = JSON.parse(JSON.stringify(session) || "{}");
+
+  const locale = await getLocale();
 
   if (session?.user?.email) {
-    redirect('/');
+    redirect(`/${locale}/`);
   }
-  
+
   /* useEffect(() => {
       if (session.status === "authenticated") {
         router.push('/');
@@ -48,9 +48,11 @@ const page = async () => {
     }, [session.status, router]); */
 
   return (
-    <div className="min-h-[90vh] flex justify-center items-center">
-      <div className="w-full max-w-sm">
-      <ResetForm />
+    <div className="w-full min-h-[85vh] flex justify-center items-center md:px-0 px-1 md:p-10
+    overflow-hidden">
+      
+      <div className="w-full max:sm:w-[95vw] max-w-sm">
+        <ResetForm />
       </div>
     </div>
   );

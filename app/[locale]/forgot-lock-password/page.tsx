@@ -21,8 +21,9 @@ const page = async () => {
         
 
   return (
-    <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
-          <div className="w-full max-w-sm">
+    <div className="flex min-h-svh w-full items-center justify-center md:px-0 px-1 md:p-10
+    overflow-hidden">
+          <div className="w-full max:sm:w-[95vw] max-w-sm">
           <ForgetLockForm email={session?.user?.email} />
           </div>
         </div>

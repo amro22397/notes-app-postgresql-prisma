@@ -62,7 +62,8 @@ const Header = ({
         </Link>
       )}
 
-      <div className="flex flex-row justify-end items-center gap-2">
+      {sessionUser?.user?.email && (
+        <div className="flex flex-row justify-end items-center gap-2">
         <span className="">{email}</span>
 
         <Button
@@ -72,6 +73,7 @@ const Header = ({
           Log out
         </Button>
       </div>
+      )}
     </div>
   );
 };

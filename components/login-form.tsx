@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Image from "next/image";
 import { useState } from "react";
-import { signIn, useSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
 // import { CircularProgress } from "@mui/material"
 // import { UserAuth } from "@/context/AuthContext"
 // import { useRouter } from "next/navigation";
@@ -23,14 +23,31 @@ import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 import axios from "axios";
 import { toast } from "sonner";
+// import { Session } from "@/types/user";
+// import { useRouter } from "next/navigation";
 
 export function LoginForm({
   className,
+  redirectTo,
+  // session,
   ...props
-}: React.ComponentPropsWithoutRef<"div">) {
+}: React.ComponentPropsWithoutRef<"div"> & {
+  redirectTo: string | undefined | null;
+  // session: Session | null | undefined;
+}) {
   const [loading, setLoading] = useState(false);
   const [loadingGoogle, setLoadingGoogle] = useState(false);
   const [type, setType] = useState("password");
+
+  // const [sessionUser, setSessionUser] = useState<Session | null | undefined>(
+  //   null
+  // );
+
+  
+
+  // const router = useRouter()
+
+  // console.log(sessionUser, router)
 
   // const { user, googleSignIn, logOut } = UserAuth();
   // console.log(user);
@@ -56,7 +73,11 @@ export function LoginForm({
 
     setLoadingGoogle(true);
 
-    await signIn("google", { callbackUrl: `/${locale}/` });
+    // await signIn("google", { callbackUrl: `/${locale}/` });
+    await signIn("google", {
+      callbackUrl: redirectTo ? `${redirectTo}` : `/${locale}/`,
+    });
+
     setLoadingGoogle(false);
   };
 
@@ -66,24 +87,23 @@ export function LoginForm({
 
     const res = await axios.post("/api/login", { ...formData, locale });
 
-    console.log(res)
+    console.log(res);
 
     if (!res.data.success) {
       toast.error(`${res.data.message}`);
       setLoading(false);
-      return
+      return;
     }
 
     if (res.data.success) {
-      await signIn("credentials", { ...formData, callbackUrl: `/${locale}/` });
+      // await signIn("credentials", { ...formData, callbackUrl: `/${locale}/` });
+      await signIn("credentials", {
+        ...formData,
+        callbackUrl: redirectTo ? `${redirectTo}` : `/${locale}/`,
+      });
+
       setLoading(false);
     }
-
-    
-
-    
-
-    
   };
 
   /*    useEffect(() => {
@@ -99,16 +119,54 @@ export function LoginForm({
   const formStyles = `text-md`;
   // const iconClass = `absolute right-4 top-2 text-gray-500 cursor-pointer`;
 
-  const session = useSession();
-  console.log(session);
+  // const session = useSession();
+  // console.log(session);
 
   const loginPage = useTranslations("LoginPage");
-  
+
+
+
+  // const getSessionUser = async () => {
+    
+  //   const res = await axios.get(`/api/get-session-user?email=${session?.user?.email}&locale=${locale}`, {
+  //     params: {
+  //       session: JSON.stringify(session),
+  //     }
+  //   });
+
+  //   // setRes(res)
+
+  //   setSessionUser(res.data.data);
+
+  // }
+
+
+  // useEffect(() => {
+  //     getSessionUser();
+  //   }, []);
+
+
+    // useEffect(() => {
+      
+    //   if (sessionUser && sessionUser?.user?.email) {
+
+    //     if (redirectTo) {
+    //       return router.push(`${redirectTo}`)
+    //       // we must guarantee that for example that it will start with (/)
+    //       // ex. redirectTo = "/en/any-page"
+    //     }
+
+    //     router.push(`/${locale}/`);
+    //   }
+
+    // }, [sessionUser]);
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Card className="bg-zinc-200/55 shadow-md
-      dark:bg-zinc-600 dark:shadow-md">
+      <Card
+        className="bg-zinc-200/55 shadow-md
+      dark:bg-zinc-600 dark:shadow-md"
+      >
         <CardHeader>
           <CardTitle className="text-2xl">{loginPage("Login")}</CardTitle>
           <CardDescription className="text-gray-600 dark:text-gray-200">
@@ -139,7 +197,7 @@ export function LoginForm({
                     {loginPage("Password")}
                   </Label>
                   <Link
-                    href={`/${locale}/forgot-password`}
+                    href={`/${locale}/forgot-password?${redirectTo ? `redirectTo=${redirectTo}` : ""}`}
                     className="mx-2 inline-block text-sm underline-offset-4 hover:underline"
                   >
                     {loginPage("Forgot your password?")}
@@ -158,7 +216,7 @@ export function LoginForm({
 
                   {type === "password" && formData.password ? (
                     <span
-                    className={`${locale === "en" ? "icon-class" : "icon-class"}`}
+                      className={`${locale === "en" ? "icon-class" : "icon-class"}`}
                       onClick={() => setType("text")}
                     >
                       <EyeIcon className="w-5 h-5" />
@@ -167,7 +225,7 @@ export function LoginForm({
                     type === "text" &&
                     formData.password && (
                       <span
-                      className={`${locale === "en" ? "icon-class" : "icon-class"}`}
+                        className={`${locale === "en" ? "icon-class" : "icon-class"}`}
                         onClick={() => setType("password")}
                       >
                         <EyeOffIcon className="w-5 h-5" />
@@ -182,7 +240,11 @@ export function LoginForm({
                   type="submit"
                   className="w-full bg-green-500 hover:bg-green-500/95 active:bg-green-500/90 text-white "
                 >
-                  {loading ? <Loader2 className="animate-spin" /> : loginPage("LoginButton")}
+                  {loading ? (
+                    <Loader2 className="animate-spin" />
+                  ) : (
+                    loginPage("LoginButton")
+                  )}
                 </Button>
                 <Button
                   variant="outline"
@@ -209,7 +271,8 @@ export function LoginForm({
               <div className="mt-0 text-center text-sm">
                 {loginPage("Don't have an account?")}
                 <Link
-                  href={`/${locale}/register`}
+                  // href={`/${locale}/register`}
+                  href={`/${locale}/register${redirectTo ? `?redirectTo=${redirectTo}` : ""}`}
                   className="hover:underline active:text-gray-800 underline-offset-4 mx-1"
                 >
                   {loginPage("Register")}

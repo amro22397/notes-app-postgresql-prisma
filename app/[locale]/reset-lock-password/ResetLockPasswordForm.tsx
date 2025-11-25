@@ -186,8 +186,10 @@ const ResetLockPasswordForm = () => {
 
 
   return (
-    <Card className="flex flex-col justify-center items-start w-[400px] mx-auto
-    bg-zinc-200/55 shadow-md dark:bg-zinc-600 dark:shadow-md">
+    <Card className="flex flex-col justify-center items-start
+    bg-zinc-200/55 shadow-md dark:bg-zinc-600 dark:shadow-md"
+    // w-[400px] mx-auto
+    >
       {/* {redirectTo} */}
         <CardHeader>
           <CardTitle className="text-2xl">Reset Lock OTP</CardTitle>

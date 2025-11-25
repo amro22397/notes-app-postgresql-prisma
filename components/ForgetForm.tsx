@@ -20,8 +20,13 @@ import { Loader2, LoaderCircle } from "lucide-react";
 // import { useRouter } from "next/navigation";
 
 import { useLocale, useTranslations } from "next-intl";
+// import { Session } from "@/types/user";
+// import { useRouter } from "next/navigation";
 
-const ForgetForm = () => {
+const ForgetForm = ({ redirectTo, /* session */ }: {
+  redirectTo: string | undefined | null,
+  // session: Session | null | undefined
+}) => {
   const [email, setEmail] = useState("");
   const [emailIfyouDidnt, setEmailIfyouDidnt] = useState("");
   const [message, setMessage] = useState("");
@@ -30,9 +35,15 @@ const ForgetForm = () => {
 
   const [ifYouDidntLoading, setIfYouDidntLoading] = useState(false);
 
+      // const [sessionUser, setSessionUser] = useState<Session | null | undefined>(null);
+  
+
   // const router = useRouter();
+  console.log(redirectTo)
 
   const locale = useLocale();
+  // const router = useRouter();
+
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -58,7 +69,7 @@ const ForgetForm = () => {
         try {
           const forgetEmailRes = await axios.post("/api/send-forget-email", {
             email: email,
-            subject: "Reset Password",
+            subject: locale === "en" ? "Reset Password" : "إعادة تعيين كلمة السر",
             locale: locale,
             // message: VerifyEmailTemplate(),
           });
@@ -69,20 +80,30 @@ const ForgetForm = () => {
 
           if (!forgetEmailRes.data.success) {
             toast.error(
-              `Sending forget email error: ${forgetEmailRes.data.message}`
+              locale === "en" 
+              ? `Sending reset email error: ${forgetEmailRes.data.message}`
+              : `خلل في إرسال رسالة إعادة تعيين كلمة السر: ${forgetEmailRes.data.message}`
             );
             setLoading(false);
             return;
           }
         } catch (error: any) {
-          console.log(`Error sending forget email: ${error.message}`);
+          console.log(
+            locale === "en" 
+              ? `Client error in sending reset email: ${error.message}`
+              : `خلل من الواجهة الأمامية في إرسال رسالة إعادة تعيين كلمة السر: ${error.message}`
+          );
 
           setLoading(false);
 
           // toast({
           //   title: `Error sending verification email: ${error.message}`,
           // })
-          toast.error(`Error sending verification email: ${error.message}`);
+          toast.error(
+            locale === "en" 
+              ? `Client error in sending reset email: ${error.message}`
+              : `خلل من الواجهة الأمامية في إرسال رسالة إعادة تعيين كلمة السر: ${error.message}`
+          );
           return;
         }
       }
@@ -114,13 +135,12 @@ const ForgetForm = () => {
   const forgetPage = useTranslations("ForgetPage");
 
   const ResendForgetEmail = async () => {
-
     setIfYouDidntLoading(true);
 
     try {
       const res = await axios.post("/api/sendEmailForgetGmail", {
         email: emailIfyouDidnt,
-        subject: "Reset Password",
+        subject: locale === "en" ? "Reset Password" : "إعادة تعيين كلمة السر",
         locale: locale,
       });
 
@@ -134,18 +154,63 @@ const ForgetForm = () => {
         setIfYouDidntLoading(false);
       }
     } catch (error: any) {
-      console.log(`Sending reset password email client error: ${error.message}`);
-      toast.error(`Sending reset password email client error: ${error.message}`)
+      console.log(
+        locale === "en"
+        ? `Sending reset password email client error: ${error.message}`
+        : `خلل من الواجهة الأمامية في إرسالة رسالة إعادة تعيين كلمة السر: ${error.message}`
+      );
+      toast.error(
+        locale === "en"
+        ? `Sending reset password email client error: ${error.message}`
+        : `خلل من الواجهة الأمامية في إرسالة رسالة إعادة تعيين كلمة السر: ${error.message}`
+      );
       setIfYouDidntLoading(false);
     }
   };
+
+
+
+
+  // const getSessionUser = async () => {
+    
+  //   const res = await axios.get(`/api/get-session-user?email=${session?.user?.email}&locale=${locale}`, {
+  //     params: {
+  //       session: JSON.stringify(session),
+  //     }
+  //   });
+
+  //   // setRes(res)
+
+  //   setSessionUser(res.data.data);
+
+  // }
+
+
+  // useEffect(() => {
+  //     getSessionUser();
+  //   }, []);
+
+
+  //   useEffect(() => {
+  //     if (sessionUser && sessionUser?.user?.email) {
+
+  //   if (redirectTo) {
+  //     return router.push(`${redirectTo}`);
+  //     // we must guarantee that "redirectTo" for example that it will start with (/)
+  // //     // ex. redirectTo = "/en/any-page"
+  //   }
+
+  //   router.push(`/${locale}/`);
+  // }
+  //   }, [sessionUser]);
 
   //
 
   return (
     <Card
-      className="flex flex-col justify-center items-start w-[400px] mx-auto
+      className="flex flex-col justify-center items-start
     bg-zinc-200/55 shadow-md dark:bg-zinc-600 dark:shadow-md"
+      // w-[350px] mx-auto
     >
       <CardHeader>
         <CardTitle className="text-2xl dark:text-white">
@@ -187,20 +252,23 @@ const ForgetForm = () => {
         </form>
 
         {ifYouDidnt && (
-          <div className={`mt-3 text-sm text-orange-600 dark:text-yellow-400
-          w-full ${ifYouDidntLoading && 'flex flex-row items-center justify-center'}`}>
-            {forgetPage("IfYouDidntRecieve")}
-            {ifYouDidntLoading ? <LoaderCircle className='animate-spin' size={35} /> : (
-            <span
-              className={`ml-1 text-indigo-600 dark:text-indigo-200
+          <div
+            className={`mt-3 text-sm text-orange-600 dark:text-yellow-400
+          w-full ${ifYouDidntLoading && "flex flex-row items-center justify-center"}`}
+          >
+            <span className="">{forgetPage("IfYouDidntRecieve")}</span>
+            {ifYouDidntLoading ? (
+              <LoaderCircle className="animate-spin" size={35} />
+            ) : (
+              <span
+                className={`ml-1 text-indigo-600 dark:text-indigo-200
       hover:underline active:text-indigo-700 dark:active:text-indigo-300 cursor-pointer
       ${locale === "ar" && "mr-1"}`}
-              onClick={ResendForgetEmail}
-            >
-              {forgetPage("click here")}
-            </span>
-            )
-          }
+                onClick={ResendForgetEmail}
+              >
+                {forgetPage("click here")}
+              </span>
+            )}
           </div>
         )}
 

@@ -150,8 +150,9 @@ const ForgetLockForm = ({ email }: { email?: string | null | undefined }) => {
 
   return (
     <Card
-      className="flex flex-col justify-center items-start w-[400px] mx-auto
+      className="flex flex-col justify-center items-start
     bg-zinc-200/55 shadow-md dark:bg-zinc-600 dark:shadow-md"
+    // w-[400px] mx-auto
     >
       {/* {redirectTo} */}
       <CardHeader>

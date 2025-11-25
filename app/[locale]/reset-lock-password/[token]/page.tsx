@@ -49,8 +49,9 @@ const page = async () => {
     }, [session.status, router]); */
 
   return (
-    <div className="min-h-svh flex justify-center items-center">
-      <div className="w-full max-w-sm">
+    <div className="w-full min-h-svh flex justify-center items-center md:px-0 px-1 md:p-10
+    overflow-hidden">
+      <div className="w-full max:sm:w-[95vw] max-w-sm">
         <ResetLockPasswordForm />
       </div>
     </div>
