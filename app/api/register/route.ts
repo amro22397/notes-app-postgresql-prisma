@@ -13,34 +13,34 @@ export async function POST(req: Request) {
 
     // const isUserExist = await User.findOne({ name: name });
 
-    const isUserExist = await prisma.user.findUnique({
-        where: { name: name },
-    })
+    // const isUserExist = await prisma.user.findUnique({
+    //     where: { name: name },
+    // })
 
-    if (isUserExist) {
+    // if (isUserExist) {
 
-        return Response.json({
-            success: false,
-            message: "User name already exists",
-            data: isUserExist
-        })
+    //     return Response.json({
+    //         success: false,
+    //         message: "User name already exists",
+    //         data: isUserExist
+    //     })
 
-        // if (isUserExist.hashedPassword) {
+    //     // if (isUserExist.hashedPassword) {
 
-        // } else {
-        // const updateUser = await User.updateOne({ name: name }, {
-        //     $set: {
-        //         name: name,
-        //         hashedPassword: hashedPassword,
-        //     }
-        // })
+    //     // } else {
+    //     // const updateUser = await User.updateOne({ name: name }, {
+    //     //     $set: {
+    //     //         name: name,
+    //     //         hashedPassword: hashedPassword,
+    //     //     }
+    //     // })
 
-        // return Response.json({
-        //     success: true,
-        //     message: "User created successfully",
-        //     user: updateUser,
-        // })
-    }
+    //     // return Response.json({
+    //     //     success: true,
+    //     //     message: "User created successfully",
+    //     //     user: updateUser,
+    //     // })
+    // }
 
 
 
