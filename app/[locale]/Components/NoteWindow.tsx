@@ -232,7 +232,7 @@ useEffect(() => {
     if (!hasChanged) return;
 
   if (autoSaveTimer) clearTimeout(autoSaveTimer);
-  
+
     const timer = setTimeout(() => {
     handleAutoSave();
   }, 2000);
@@ -240,6 +240,7 @@ useEffect(() => {
   setAutoSaveTimer(timer);
 
   return () => clearTimeout(timer);
+
   } // 2 seconds after user stops typing
 
   
@@ -260,7 +261,12 @@ useEffect(() => {
     >
       {/* {params.id} */}
       {/* Modal Header */}
-      <div className="flex flex-row poppins-bold justify-between items-center w-full px-5">
+      <div className="flex flex-row poppins-bold justify-between items-center md:w-[676px] sm:w-[92vw] w-[95vw] px-5
+      h-[60px] fixed top-18 left-1/2 -translate-x-1/2 bg-white z-[70]"
+      // style={{ width: "inherit" }}
+      // border-b border-gray-200
+      // 
+      >
         {/* <div className="text-xl text-black">{`${
           noteSelected ? 'Edit' : 'Add'
         } a note`}</div> */}
@@ -339,7 +345,9 @@ useEffect(() => {
       </div> */}
 
       {/* Content area */}
-      <div className="mt-3 h-[calc(100vh-220px)] px-[6px]">
+      <div className="mt-3 sm:pt-[35px] pt-[40px] h-[calc(100vh-220px)] px-[6px]"
+      // overflow-y-auto
+      >
         {/* <label className="block text-[13px] font-medium text-gray-700">
           Note Content
         </label> */}
@@ -349,7 +357,7 @@ useEffect(() => {
           value={textInputs.noteContent || ""}
           onChange={updateTextInputs}
           className="px-3 py-4 outline-none rounded-md w-full resize-none text-[19px]
-          tracking-wider overflow-y-auto h-[66.5vh]
+          tracking-wider hover:overflow-y-auto max-sm:overflow-y-auto h-[66.5vh]
           text-black"
           style={{ fontFamily: "Arial" }}
         ></textarea>
