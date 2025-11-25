@@ -16,7 +16,13 @@ import { Loader2 } from "lucide-react";
 // import { useRouter } from "next/navigation";
 // import { SingleNoteType } from "@/types/singleNote";
 
-const NoteWindow = ({ singleNote, email }: { singleNote: any, email: string | null | undefined }) => {
+const NoteWindow = ({
+  singleNote,
+  email,
+}: {
+  singleNote: any;
+  email: string | null | undefined;
+}) => {
   // const router = useRouter();
 
   // console.log(email);
@@ -32,7 +38,7 @@ const NoteWindow = ({ singleNote, email }: { singleNote: any, email: string | nu
 
   // console.log(singleNote)
 
-  console.log(email)
+  console.log(email);
 
   const params = useParams() as any;
 
@@ -52,7 +58,9 @@ const NoteWindow = ({ singleNote, email }: { singleNote: any, email: string | nu
     submitSaveBtn,
     setTextInputs,
     textInputs,
-    isLoading
+    isLoading,
+    hasChanged,
+    setHasChanged
   } = useContext(AppContext) as AppContextType;
 
   // const { allNotes, setAllNotes } = notesObject;
@@ -62,6 +70,10 @@ const NoteWindow = ({ singleNote, email }: { singleNote: any, email: string | nu
   const { setDropDownPositions } = dropDownPositionsObject;
 
   const [tags, setTags] = useState(["study", "projects"]);
+
+  const [autoSaveTimer, setAutoSaveTimer] = useState<any>(null);
+
+
 
   // const [isLoading, setIsLoading] = useState(false);
 
@@ -74,9 +86,8 @@ const NoteWindow = ({ singleNote, email }: { singleNote: any, email: string | nu
   //   noteContent: "",
   // });
 
-  console.log(noteSelected)
-  console.log(textInputs.noteContent)
-
+  console.log(noteSelected);
+  console.log(textInputs.noteContent);
 
   useEffect(() => {
     // if (openWindowNote) {
@@ -95,8 +106,9 @@ const NoteWindow = ({ singleNote, email }: { singleNote: any, email: string | nu
       } else {
         setTextInputs({
           noteTitle: singleNote?.noteName,
-          noteContent: singleNote.noteContent,
+          noteContent: singleNote?.noteContent,
         });
+        setHasChanged(false);
         // setTags(noteSelected.categories);
       }
     }
@@ -104,9 +116,6 @@ const NoteWindow = ({ singleNote, email }: { singleNote: any, email: string | nu
     // console.log(textInputs.noteContent)
     // console.log(noteSelected)
   }, [openWindowNote]);
-
-
-  
 
   // const findNoteById = async (id: string | null) => {
   //   try {
@@ -143,19 +152,55 @@ const NoteWindow = ({ singleNote, email }: { singleNote: any, email: string | nu
 
   //   }, [singleNote]);
 
-  
   function updateTextInputs(event: any) {
-    
     event.preventDefault();
-    
+
     const inputName = event.target.name;
     const inputValue = event.target.value;
 
-    setTextInputs((prevState: any) => ({
-      ...prevState,
-      [inputName]: inputValue,
-    }));
+    setTextInputs((prevState: any) => {
+      const updated = {
+        ...prevState,
+        [inputName]: inputValue,
+      };
+
+      if (noteSelected === null) {
+        setHasChanged(true);
+      } else {
+        const originalTitle = singleNote?.noteName || "";
+        const originalContent = singleNote?.noteContent || "";
+
+        const isDifferent =
+          updated.noteTitle !== originalTitle ||
+          updated.noteContent !== originalContent;
+
+        setHasChanged(isDifferent);
+      }
+
+      return updated;
+
+      // ...prevState,
+      // [inputName]: inputValue,
+    });
+
+  //   if (autoSaveTimer) clearTimeout(autoSaveTimer);
+
+  //   const newTimer = setTimeout(() => {
+  //   handleAutoSave();
+  // }, 2000);
+
+  // setAutoSaveTimer(newTimer);
   }
+
+
+  const handleAutoSave = () => {
+  if (!hasChanged) return; // no change → no autosave
+
+  submitSaveBtn(singleNote?.id, params.id);
+
+  // After saving, hide the save button again
+  setHasChanged(false);
+};
 
   // console.log(textInputs.noteContent);
 
@@ -172,6 +217,35 @@ const NoteWindow = ({ singleNote, email }: { singleNote: any, email: string | nu
   }
 
 
+  useEffect(() => {
+  if (!openWindowNote) {
+    if (autoSaveTimer) clearTimeout(autoSaveTimer);
+  }
+}, [openWindowNote]);
+
+
+
+
+useEffect(() => {
+
+  if (noteSelected !== null) {
+    if (!hasChanged) return;
+
+  if (autoSaveTimer) clearTimeout(autoSaveTimer);
+  
+    const timer = setTimeout(() => {
+    handleAutoSave();
+  }, 2000);
+  
+  setAutoSaveTimer(timer);
+
+  return () => clearTimeout(timer);
+  } // 2 seconds after user stops typing
+
+  
+
+  
+}, [textInputs]);  
 
   // console.log(noteSelected)
   // console.log(singleNote?.noteContent)
@@ -180,13 +254,13 @@ const NoteWindow = ({ singleNote, email }: { singleNote: any, email: string | nu
 
   return (
     <div
-      className={`poppins px-8 py-[19px] md:w-[700px] w-[95vw] h-[700px] bg-white absolute left-0 top-0 z-50  rounded-md transition-all overflow-x-hidden ${
+      className={`poppins py-[19px] md:w-[700px] sm:w-[95vw] w-[100vw] h-[700px] bg-white absolute left-0 top-0 z-50  rounded-md transition-all overflow-x-hidden ${
         openWindowNote ? "visible opacity-100" : "invisible opacity-0 "
       }`}
     >
       {/* {params.id} */}
       {/* Modal Header */}
-      <div className="flex flex-row poppins-bold justify-between items-center w-full">
+      <div className="flex flex-row poppins-bold justify-between items-center w-full px-5">
         {/* <div className="text-xl text-black">{`${
           noteSelected ? 'Edit' : 'Add'
         } a note`}</div> */}
@@ -221,28 +295,30 @@ const NoteWindow = ({ singleNote, email }: { singleNote: any, email: string | nu
         <div className="flex flex-row items-center justify-center gap-3">
           {noteSelected !== null && (
             <div
-            onClick={(event) => {
-              openDropDownFx(event, singleNote);
-            }}
-            className="mt-[5.5px]"
-          >
-            <FontAwesomeIcon
-              className="text-gray-500 select-none cursor-pointer
+              onClick={(event) => {
+                openDropDownFx(event, singleNote);
+              }}
+              className="mt-[5.5px]"
+            >
+              <FontAwesomeIcon
+                className="text-gray-500 select-none cursor-pointer
             text-2xl"
-              icon={faEllipsis}
-            />
-          </div>
+                icon={faEllipsis}
+              />
+            </div>
           )}
 
-          <div className="">
-            <button
-              onClick={() => submitSaveBtn(singleNote?.id, params.id)}
-              className="rounded text-[18px] tracking-wide
+          {hasChanged && (
+            <div className="">
+              <button
+                onClick={() => submitSaveBtn(singleNote?.id, params.id)}
+                className="rounded text-[18px] tracking-wide
               text-orange-600 active:scale-95 cursor-pointer hover:text-orange-600/95"
-            >
-              {isLoading ? <Loader2 className='animate-spin mt-1' /> : "Save"}
-            </button>
-          </div>
+              >
+                {isLoading ? <Loader2 className="animate-spin mt-1" /> : "Save"}
+              </button>
+            </div>
+          )}
         </div>
       </div>
       {/* Note input */}
@@ -263,7 +339,7 @@ const NoteWindow = ({ singleNote, email }: { singleNote: any, email: string | nu
       </div> */}
 
       {/* Content area */}
-      <div className="mt-3 h-[calc(100vh-220px)]">
+      <div className="mt-3 h-[calc(100vh-220px)] px-[6px]">
         {/* <label className="block text-[13px] font-medium text-gray-700">
           Note Content
         </label> */}

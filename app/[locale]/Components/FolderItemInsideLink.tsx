@@ -12,7 +12,7 @@ const FolderItemInsideLink = ({ folder , folderNotesLength }: {
           <div className="folder-style-firts-div">
             <IoFolder size={40} className="text-yellow-500" />
 
-            <span className="text-lg tracking-wide text-black">
+            <span className="text-lg tracking-wide text-black max-sm:w-[175px]">
               {folder.name}
             </span>
           </div>

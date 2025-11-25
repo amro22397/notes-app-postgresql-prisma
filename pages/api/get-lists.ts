@@ -60,7 +60,7 @@ export default async function handler(req: any, res: any) {
                     ]
                 },
                 orderBy: [
-                    { createdAt: "asc" },
+                    { name: "asc" },
                 ],
 
             })

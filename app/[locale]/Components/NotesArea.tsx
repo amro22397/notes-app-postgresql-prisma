@@ -91,6 +91,8 @@ const NotesArea = ({ email }: {
               <div 
               key={index}
               className="flex flex-col items-center justify-center gap-y-[11px] ">
+
+                {/* <pre className="">{JSON.stringify(singleNote.isLocked, null, 2)}</pre> */}
                 <SingleNote
                 
                   singleNote={singleNote}
@@ -98,8 +100,8 @@ const NotesArea = ({ email }: {
                   // openedNote={openedNote}
                 />
 
-                <span className="single-note-title
-                ">
+                <span className={`single-note-title ${singleNote.isLocked ? "line-clamp-1" : "line-clamp-2"}
+                `}>
               {/* {stringTruncation(singleNote.noteContent, 20)} */}
               {singleNote.noteContent}
               </span>
@@ -112,7 +114,7 @@ const NotesArea = ({ email }: {
       <div
         className="notes"
       >
-        {allNotes.map((singleNote: any, index: number) => {
+        {allNotes.map((singleNote: SingleNoteType, index: number) => {
           console.log(singleNote.id);
           return (
             <div 
@@ -123,7 +125,7 @@ const NotesArea = ({ email }: {
                 setOpenedNote={setOpenedNote}
                 // openedNote={openedNote}
               />
-              <span className="single-note-title">
+              <span className={`single-note-title ${singleNote.isLocked ? "line-clamp-1" : "line-clamp-2"}`}>
               {/* {stringTruncation(singleNote.noteContent, 20)} */}
               {singleNote.noteContent}
               </span>

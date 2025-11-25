@@ -74,7 +74,7 @@ const App = ({ email, /* user */ session }: {
       
 
       {/* {params.id} */}
-      {/* <pre className="">{JSON.stringify(folderById, null, 2)}</pre> */}
+      {/* <pre className="">{JSON.stringify(session, null, 2)}</pre> */}
 
       <Title email={email} 
       folderName={folderById?.name}

@@ -52,6 +52,8 @@ export type AppContextType = {
     setTextInputs: (value: any) => void,
     textInputs: textInputs,
     isLoading: boolean,
+    hasChanged: boolean,
+    setHasChanged: (value: boolean) => void,
 };
 
 export const AppContext = createContext<AppContextType | null>(null);
@@ -75,11 +77,15 @@ const AppContextProvider = (props: Props) => {
   const [clickedCategory, setClickedCategory] = useState<any>(null);
 
     const [isLoading, setIsLoading] = useState(false);
+
       const [textInputs, setTextInputs] = useState({
         noteTitle: "",
         noteContent: "",
       });
         const [tags, setTags] = useState(["study", "projects"]);
+
+  const [hasChanged, setHasChanged] = useState(false);
+
       
   
 
@@ -120,6 +126,7 @@ const AppContextProvider = (props: Props) => {
           toast.error(`Error: ${error.message}`);
         } finally {
           setIsLoading(false);
+          setHasChanged(false)
         }
     
         if (isLoading === false) {
@@ -176,16 +183,18 @@ const AppContextProvider = (props: Props) => {
           getNotesFromMongoDB();
           getPinnedNotesFromMongoDB();
     
-          toast.success("The note has been updated successfully");
+          // toast.success("The note has been updated successfully");
         } catch (error) {
           console.log(error);
+          alert(`Error updating note: ${error}`);
         } finally {
           setIsLoading(false);
+          setHasChanged(false)
         }
     
-        if (isLoading === false) {
-          setOpenWindowNote(false);
-        }
+        // if (isLoading === false) {
+        //   setOpenWindowNote(false);
+        // }
       }
 
 
@@ -212,6 +221,7 @@ const AppContextProvider = (props: Props) => {
     
         if (noteSelected === null) {
           addNewNoteToDB(listId);
+          // setHasChanged(false)
           //   setAllNotes([...allNotes, newNote]);
           //   setInitialAllNotes([...initialAllNotes, newNote]);
     
@@ -219,6 +229,7 @@ const AppContextProvider = (props: Props) => {
           // setOpenWindowNote(false);
         } else {
           updateNoteToDB(id);
+          // setHasChanged(false)
           // setAllNotes((prevState: any) => {
           //   const tempArray = [...prevState];
           //   const findSelectedItemIndex = tempArray.findIndex(
@@ -320,7 +331,9 @@ const AppContextProvider = (props: Props) => {
     submitSaveBtn,
     setTextInputs,
     textInputs,
-    isLoading
+    isLoading,
+    hasChanged,
+    setHasChanged
   };
 
   return (

@@ -90,11 +90,13 @@ export async function PUT(req: any) {
             success: true
         })
 
-    } catch (error: any) {
+    } catch (error) {
+
+        console.log(`Server error: ${error}`)
         
         return NextResponse.json({
             success: false,
-            message: "API Error: " + error.message,
+            message: `Server error: ${error}`
         })
 
     }

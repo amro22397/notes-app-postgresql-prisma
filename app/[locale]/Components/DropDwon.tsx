@@ -192,11 +192,12 @@ const DropDwon = ({ user, folderId }: {
       }
 
       if (!res.data.success) {
+        console.log(res.data.message)
         toast.error(res.data.message);
       }
-    } catch (error: any) {
-      toast.error(error.message);
-      console.log(error.message);
+    } catch (error) {
+      console.log(`Client error: ${error}`);
+      toast.error(`Client error: ${error}`);
     }
   };
 
@@ -340,6 +341,7 @@ const DropDwon = ({ user, folderId }: {
 
   return (
     <>
+    {/* <pre className="">{JSON.stringify(user, null, 2)}</pre> */}
       {openDropDown && (
         <div
           ref={dropDownRef}

@@ -102,12 +102,12 @@ body {
 }
 
 .app-app-style {
-  @apply relative md:w-[700px] w-[95vw] max-h-[700px] rounded-md shadow-md sm:px-7 px-3 py-7 flex flex-col gap-6
+  @apply relative md:w-[700px] sm:w-[95vw] w-[100vw] max-h-[700px] rounded-md shadow-md sm:px-7 px-3 py-7 flex flex-col gap-6
     bg-zinc-200/75
 }
 
 .single-note-title {
-  @apply font-semibold text-[17px] text-center w-full line-clamp-2;
+  @apply font-semibold text-[17px] text-center w-full;
 }
 
 @layer utilities {

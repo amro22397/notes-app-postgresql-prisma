@@ -29,6 +29,9 @@ const AppAppLists = ({ email, /* user */ session }: {
 
     console.log(sessionUser)
 
+
+
+
     const getAllNotes = async () => {
 
       const res = await axios.get(`/api/get-all-notes`);
@@ -37,9 +40,15 @@ const AppAppLists = ({ email, /* user */ session }: {
 
     }
 
+
+
+
     const searchParams = useSearchParams() as any;
 
     const searchTerm = searchParams.get("searchTerm")
+
+
+
 
     const getFolders = async () => {
       
@@ -49,6 +58,9 @@ const AppAppLists = ({ email, /* user */ session }: {
 
 
     }
+
+
+    
 
 
     useEffect(() => {
@@ -84,7 +96,7 @@ const AppAppLists = ({ email, /* user */ session }: {
 
     
   return (
-    <div className="relative md:w-[700px] w-[95vw] max-h-[700px] rounded-md shadow-md sm:px-7 p-0 py-7 flex flex-col gap-6
+    <div className="relative md:w-[700px] sm:w-[95vw] w-[100vw] max-h-[700px] sm:rounded-md rounded-none shadow-md sm:px-7 p-0 py-7 flex flex-col gap-6
     bg-zinc-200/75">
       
       {/* <pre className="">{JSON.stringify(allNotes, null, 2)}</pre> */}
@@ -93,8 +105,9 @@ const AppAppLists = ({ email, /* user */ session }: {
       
       <SearchBar isAddList={true} />
 
-      <div className={`flex flex-col items-center justify-center
-      sm:rounded-md rounded-md py-[8px] sm:w-[80%] w-[97.5%] mx-auto ${folders.length > 0 && 'bg-white/50 '}`}>
+      <div className={`flex flex-col items-center justify-start
+      sm:rounded-md rounded-md py-[2px] sm:w-[80%] w-[95%] mx-auto ${folders.length > 0 && 'bg-white/50 '}
+      sm:h-[475px] h-[500px] overflow-y-hidden hover:overflow-y-auto max-sm:overflow-y-auto`}>
         {/* <pre className="">{JSON.stringify(folders, null, 2)}</pre> */}
 
         <>

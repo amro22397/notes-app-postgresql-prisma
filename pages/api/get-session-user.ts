@@ -33,6 +33,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const { locale, session } = req.query as any;
 
+    console.log(`credentials:`, locale, session)
+
     if (req.method !== "GET") {
         return res.status(200).json({
             success: false,
