@@ -44,3 +44,7 @@ next-env.d.ts
 .vercel
 
 /lib/generated/prisma
+
+.flaskenv*
+!.env.project
+!.env.vault

@@ -4,7 +4,7 @@ import React, { useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import { AppContext, AppContextType } from "@/context/AppContext";
-import { useRouter, useSearchParams } from "next/navigation";
+// import { useRouter, useSearchParams } from "next/navigation";
 import { Lock, Pin } from "lucide-react";
 // import { SingleNoteType } from "@/types/singleNote";
 // import { useGlobalProvider } from '../ContextApi';
@@ -144,7 +144,7 @@ const SingleNote = ({
             {singleNote.isPinned && <Pin size={21} className="text-black" />}
           </div>
 
-          <span className="text-white">s</span>
+          {/* <span className="text-white">{" "}</span> */}
         </div>
 
         {!singleNote.isLocked && (
@@ -170,10 +170,10 @@ const SingleNote = ({
                 <Lock size={22} />
               </div>
 
-              <span className="text-white text-[0.1px]">s</span>
+              {/* <span className="text-white text-[0.1px]">s</span> */}
             </>
           ) : (
-            <span className="text-white text-[0.1px]">s</span>
+            <span className="text-white text-[0.1px]">{" "}</span>
           )}
 
           {/* the note itself */}
