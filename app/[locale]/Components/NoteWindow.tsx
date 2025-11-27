@@ -60,7 +60,7 @@ const NoteWindow = ({
     textInputs,
     isLoading,
     hasChanged,
-    setHasChanged
+    setHasChanged,
   } = useContext(AppContext) as AppContextType;
 
   // const { allNotes, setAllNotes } = notesObject;
@@ -72,8 +72,6 @@ const NoteWindow = ({
   const [tags, setTags] = useState(["study", "projects"]);
 
   const [autoSaveTimer, setAutoSaveTimer] = useState<any>(null);
-
-
 
   // const [isLoading, setIsLoading] = useState(false);
 
@@ -183,24 +181,23 @@ const NoteWindow = ({
       // [inputName]: inputValue,
     });
 
-  //   if (autoSaveTimer) clearTimeout(autoSaveTimer);
+    //   if (autoSaveTimer) clearTimeout(autoSaveTimer);
 
-  //   const newTimer = setTimeout(() => {
-  //   handleAutoSave();
-  // }, 2000);
+    //   const newTimer = setTimeout(() => {
+    //   handleAutoSave();
+    // }, 2000);
 
-  // setAutoSaveTimer(newTimer);
+    // setAutoSaveTimer(newTimer);
   }
 
-
   const handleAutoSave = () => {
-  if (!hasChanged) return; // no change → no autosave
+    if (!hasChanged) return; // no change → no autosave
 
-  submitSaveBtn(singleNote?.id, params.id);
+    submitSaveBtn(singleNote?.id, params.id);
 
-  // After saving, hide the save button again
-  setHasChanged(false);
-};
+    // After saving, hide the save button again
+    setHasChanged(false);
+  };
 
   // console.log(textInputs.noteContent);
 
@@ -216,37 +213,27 @@ const NoteWindow = ({
     setNoteSelected(noteClicked);
   }
 
+  useEffect(() => {
+    if (!openWindowNote) {
+      if (autoSaveTimer) clearTimeout(autoSaveTimer);
+    }
+  }, [openWindowNote]);
 
   useEffect(() => {
-  if (!openWindowNote) {
-    if (autoSaveTimer) clearTimeout(autoSaveTimer);
-  }
-}, [openWindowNote]);
+    if (noteSelected !== null) {
+      if (!hasChanged) return;
 
+      if (autoSaveTimer) clearTimeout(autoSaveTimer);
 
+      const timer = setTimeout(() => {
+        handleAutoSave();
+      }, 2000);
 
+      setAutoSaveTimer(timer);
 
-useEffect(() => {
-
-  if (noteSelected !== null) {
-    if (!hasChanged) return;
-
-  if (autoSaveTimer) clearTimeout(autoSaveTimer);
-
-    const timer = setTimeout(() => {
-    handleAutoSave();
-  }, 2000);
-  
-  setAutoSaveTimer(timer);
-
-  return () => clearTimeout(timer);
-
-  } // 2 seconds after user stops typing
-
-  
-
-  
-}, [textInputs]);  
+      return () => clearTimeout(timer);
+    } // 2 seconds after user stops typing
+  }, [textInputs]);
 
   // console.log(noteSelected)
   // console.log(singleNote?.noteContent)
@@ -261,12 +248,13 @@ useEffect(() => {
     >
       {/* {params.id} */}
       {/* Modal Header */}
-      <div className="flex flex-row poppins-bold justify-between items-center md:w-[700px] sm:w-[95vw] w-[100vw] px-5
+      <div
+        className="flex flex-row poppins-bold justify-between items-center md:w-[700px] sm:w-[95vw] w-[100vw] px-5
       "
-      // style={{ width: "inherit" }}
-      // border-b border-gray-200
-      // h-[60px] fixed top-18 left-1/2 -translate-x-1/2 bg-white z-[70]
-      // 
+        // style={{ width: "inherit" }}
+        // border-b border-gray-200
+        // h-[60px] fixed top-18 left-1/2 -translate-x-1/2 bg-white z-[70]
+        //
       >
         {/* <div className="text-xl text-black">{`${
           noteSelected ? 'Edit' : 'Add'
@@ -346,13 +334,15 @@ useEffect(() => {
       </div> */}
 
       {/* Content area */}
-      <div className="mt-3 h-[calc(100vh-220px)] px-[6px]"
-      // overflow-y-auto sm:pt-[35px] pt-[40px]
+      <div
+        className="mt-3 h-[calc(100vh-220px)] px-[6px]"
+        // overflow-y-auto sm:pt-[35px] pt-[40px]
       >
         {/* <label className="block text-[13px] font-medium text-gray-700">
           Note Content
         </label> */}
         <textarea
+          dir="auto"
           placeholder="Add Your Content Here..."
           name="noteContent"
           value={textInputs.noteContent || ""}
