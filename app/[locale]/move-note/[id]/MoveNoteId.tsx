@@ -145,6 +145,7 @@ const MoveNoteId = ({
                     folderNotesLength={notesByListId.length}
                     isMoveNoteId={true}
                     noteListId={selectedNote?.listId}
+                    folderId={folderId}
                   />
                 )}
               </>

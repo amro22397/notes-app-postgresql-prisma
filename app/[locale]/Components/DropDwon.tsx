@@ -11,8 +11,7 @@ import toast from "react-hot-toast";
 
 import { Lock, Pin, PinOff, Unlock } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button"
-
+import { Button } from "@/components/ui/button";
 
 import {
   Dialog,
@@ -34,11 +33,12 @@ import { MdDriveFileMoveRtl } from "react-icons/md";
 import { useLocale } from "next-intl";
 import { Session } from "@/types/user";
 
-
-
-const DropDwon = ({ user, folderId }: {
-  user: Session | null | undefined,
-  folderId?: string | null | undefined
+const DropDwon = ({
+  user,
+  folderId,
+}: {
+  user: Session | null | undefined;
+  folderId?: string | null | undefined;
 }) => {
   const pathname = usePathname();
   console.log(pathname);
@@ -69,7 +69,7 @@ const DropDwon = ({ user, folderId }: {
   const [isLockPasswordCard, setIsLockPasswordCard] = useState(false);
   const [lockPasswordOTPvalue, setLockPasswordOTPvalue] = useState("");
 
-  console.log(lockPasswordOTPvalue)
+  console.log(lockPasswordOTPvalue);
 
   const dropDownRef = useRef<any>(null);
 
@@ -94,7 +94,7 @@ const DropDwon = ({ user, folderId }: {
     },
   ];
 
-  console.log(menuItems)
+  console.log(menuItems);
 
   //ss
 
@@ -103,7 +103,6 @@ const DropDwon = ({ user, folderId }: {
       const res = await axios.delete(`/api/notes?id=${noteSelected.id}`);
 
       if (res.data.success) {
-
         toast.success("The note has been deleted successfully");
 
         getNotesFromMongoDB();
@@ -123,7 +122,7 @@ const DropDwon = ({ user, folderId }: {
         if (filterAllNotes.length === 0) {
           setClickedCategory(null);
         }
-        
+
         setNoteSelected(null);
         setOpenWindowNote(false);
       }
@@ -174,7 +173,6 @@ const DropDwon = ({ user, folderId }: {
   };
 
   const LockNoteFx = async () => {
-
     try {
       const res = await axios.put(`/api/user/lock-note?id=${noteSelected.id}`, {
         lockedPassword: lockPasswordOTPvalue,
@@ -192,7 +190,7 @@ const DropDwon = ({ user, folderId }: {
       }
 
       if (!res.data.success) {
-        console.log(res.data.message)
+        console.log(res.data.message);
         toast.error(res.data.message);
       }
     } catch (error) {
@@ -201,62 +199,58 @@ const DropDwon = ({ user, folderId }: {
     }
   };
 
-  console.log(lockPasswordOTPvalue)
+  console.log(lockPasswordOTPvalue);
 
-  console.log(user)
-
+  console.log(user);
 
   const handleChangleLockPassword = async () => {
-    
     try {
+      console.log(lockPasswordOTPvalue);
 
-      console.log(lockPasswordOTPvalue)
-      
       if (!user?.user?.lockedPassword) {
-        const res = await axios.put(`/api/user/lock-note?id=${noteSelected.id}`, {
-          lockedPassword: lockPasswordOTPvalue,
-          email: user?.user?.email,
-        })
+        const res = await axios.put(
+          `/api/user/lock-note?id=${noteSelected.id}`,
+          {
+            lockedPassword: lockPasswordOTPvalue,
+            email: user?.user?.email,
+          }
+        );
 
         getNotesFromMongoDB();
-      getPinnedNotesFromMongoDB();
-      // window.location.reload();
+        getPinnedNotesFromMongoDB();
+        // window.location.reload();
 
         if (res.data.success) {
-          toast.success(res.data.message)
-        }
-  
-        if (!res.data.success) {
-          toast.error(res.data.message)
+          toast.success(res.data.message);
         }
 
+        if (!res.data.success) {
+          toast.error(res.data.message);
+        }
       } else {
-
-        const res = await axios.post(`/api/user/lock-note?id=${noteSelected.id}`, {
-          lockedPassword: lockPasswordOTPvalue,
-          email: user?.user?.email,
-        })
+        const res = await axios.post(
+          `/api/user/lock-note?id=${noteSelected.id}`,
+          {
+            lockedPassword: lockPasswordOTPvalue,
+            email: user?.user?.email,
+          }
+        );
 
         getNotesFromMongoDB();
-      getPinnedNotesFromMongoDB();
+        getPinnedNotesFromMongoDB();
 
         if (res.data.success) {
-          toast.success(res.data.message)
+          toast.success(res.data.message);
         }
-  
+
         if (!res.data.success) {
-          toast.error(res.data.message)
+          toast.error(res.data.message);
         }
-
       }
-
-      
-
     } catch (error: any) {
-      toast.error(`ClientError: ${error.message}`)
+      toast.error(`ClientError: ${error.message}`);
     }
-
-  }
+  };
 
   function handleDeleteClicked() {
     setOpenDropDown(false);
@@ -307,18 +301,13 @@ const DropDwon = ({ user, folderId }: {
     // }
   }
 
-
-
   const handleMoveNoteFx = async () => {
-    
     setOpenDropDown(false);
 
-    router.push(`/${locale}/move-note/${noteSelected?.id}?folderId=${folderId}`);
-
-    
-  }
-
-
+    router.push(
+      `/${locale}/move-note/${noteSelected?.id}?folderId=${folderId}`
+    );
+  };
 
   useEffect(() => {
     function handleOutsideClick(event: any) {
@@ -341,7 +330,7 @@ const DropDwon = ({ user, folderId }: {
 
   return (
     <>
-    {/* <pre className="">{JSON.stringify(user, null, 2)}</pre> */}
+      {/* <pre className="">{JSON.stringify(user, null, 2)}</pre> */}
       {openDropDown && (
         <div
           ref={dropDownRef}
@@ -358,8 +347,8 @@ ${
 }
  `}
         >
-
           {/* <pre className="">{JSON.stringify(noteSelected, null, 2)}</pre> */}
+          {/* {folderId} */}
           <div
             className={`flex gap-2 items-center
 select-none cursor-pointer hover:text-gray-900 text-[15px] border-b border-gray-400/95 pb-[6px]
@@ -373,7 +362,6 @@ ${/* index === menuItems.length - 1 && "border-none" */ ""}
             <div className=" ">Delete</div>
           </div>
 
-
           <div
             className={`flex gap-2 items-center
 select-none cursor-pointer hover:text-gray-900 text-[15px] border-b
@@ -382,15 +370,13 @@ ${/* index === menuItems.length - 1 && "border-none" */ ""}
 `}
             onClick={() => {
               // handleDeleteClicked();
-              handleMoveNoteFx()
+              handleMoveNoteFx();
             }}
           >
             <MdDriveFileMoveRtl size={20} />
 
             <div className=" ">Move Note</div>
           </div>
-
-
 
           {!noteSelected?.isPinned && (
             <div
@@ -437,7 +423,7 @@ ${/* index === menuItems.length - 1 && "border-none" */ ""}
 
                 if (!user?.user?.lockedPassword) {
                   setIsLockPasswordCard(true);
-            
+
                   return;
                 }
 
@@ -463,10 +449,9 @@ border-none
 
                 if (user?.user?.lockedPassword) {
                   setIsLockPasswordCard(true);
-            
+
                   return;
                 }
-
               }}
             >
               <Unlock size={19} />
@@ -477,20 +462,24 @@ border-none
       )}
 
       {/* setIsLockPassword */}
-      <Dialog open={isLockPasswordCard} onOpenChange={() => setIsLockPasswordCard(!isLockPasswordCard)}>
+      <Dialog
+        open={isLockPasswordCard}
+        onOpenChange={() => setIsLockPasswordCard(!isLockPasswordCard)}
+      >
         {/* <DialogTrigger>Open</DialogTrigger> */}
         <DialogContent>
           <DialogHeader className="flex flex-col gap-5">
             <DialogTitle>
-              {!user?.user?.lockedPassword ? 'Set Lock OTP' : 'Enter Lock OTP'}
+              {!user?.user?.lockedPassword ? "Set Lock OTP" : "Enter Lock OTP"}
             </DialogTitle>
             <DialogDescription>
-
-
-              <InputOTP maxLength={6} onChange={(e) => {
-                setLockPasswordOTPvalue(e);
-                console.log(lockPasswordOTPvalue)
-              }}>
+              <InputOTP
+                maxLength={6}
+                onChange={(e) => {
+                  setLockPasswordOTPvalue(e);
+                  console.log(lockPasswordOTPvalue);
+                }}
+              >
                 <InputOTPGroup className="bg-gray-300/95 rounded-md">
                   <InputOTPSlot index={0} />
                   <InputOTPSlot index={1} />
@@ -500,29 +489,28 @@ border-none
                 <InputOTPGroup className="bg-gray-300/95 rounded-md">
                   <InputOTPSlot index={3} />
                   <InputOTPSlot index={4} />
-                  <InputOTPSlot index={5}
-                  // onval={() => {
-                  //   setIsLockPasswordCard(false);
-                  //   handleChangleLockPassword();
-                  // }} 
+                  <InputOTPSlot
+                    index={5}
+                    // onval={() => {
+                    //   setIsLockPasswordCard(false);
+                    //   handleChangleLockPassword();
+                    // }}
                   />
                 </InputOTPGroup>
               </InputOTP>
 
+              <DialogFooter>
+                <Button
+                  onClick={() => {
+                    setIsLockPasswordCard(false);
+                    handleChangleLockPassword();
 
-              <DialogFooter >
-                <Button 
-                onClick={() => {
-                  setIsLockPasswordCard(false);
-                  handleChangleLockPassword();
-
-                  // LockNoteFx();
-                }}
+                    // LockNoteFx();
+                  }}
                 >
-                  {!user?.user?.lockedPassword ? 'Save' : 'Enter'}
+                  {!user?.user?.lockedPassword ? "Save" : "Enter"}
                 </Button>
               </DialogFooter>
-
             </DialogDescription>
           </DialogHeader>
         </DialogContent>

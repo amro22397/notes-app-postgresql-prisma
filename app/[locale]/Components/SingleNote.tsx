@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons";
 import { AppContext, AppContextType } from "@/context/AppContext";
@@ -8,6 +8,11 @@ import { AppContext, AppContextType } from "@/context/AppContext";
 import { Lock, Pin } from "lucide-react";
 // import { SingleNoteType } from "@/types/singleNote";
 // import { useGlobalProvider } from '../ContextApi';
+
+import EnterOtpDialog from "@/components/EnterOtpDialog";
+import axios from "axios";
+import { useLocale } from "next-intl";
+// import { user } from "@nextui-org/react";
 
 function formatDate(date: Date) {
   const options = { day: "numeric", month: "long", year: "numeric" };
@@ -24,9 +29,11 @@ function formatDate(date: Date) {
 const SingleNote = ({
   singleNote,
   setOpenedNote,
+  email,
 }: {
   singleNote: any;
   setOpenedNote: (value: boolean) => void;
+  email: string | null | undefined;
   // openedNote: SingleNoteType,
 }) => {
   // const router = useRouter();
@@ -42,6 +49,12 @@ const SingleNote = ({
   // }
   // console.log(keyA)
 
+  const locale = useLocale();
+
+  const [user, setUser] = useState(null);
+
+  const [openOTPDialog, setOpenOTPDialog] = useState();
+
   const {
     dropDownToogle,
     dropDownPositionsObject,
@@ -52,7 +65,7 @@ const SingleNote = ({
 
   const { openDropDown, setOpenDropDown } = dropDownToogle;
   const { setDropDownPositions } = dropDownPositionsObject;
-  const { setNoteSelected } = noteSelectedObject;
+  const { setNoteSelected, noteSelected } = noteSelectedObject;
 
   console.log(openDropDown);
 
@@ -67,6 +80,18 @@ const SingleNote = ({
     setOpenDropDown(true);
     setNoteSelected(noteClicked);
   }
+
+  const getUser = async () => {
+    const res = await axios.get(
+      `/api/get-user?email=${email}&locale=${locale}`
+    );
+
+    setUser(res.data.data);
+  };
+
+  useEffect(() => {
+    getUser();
+  }, [email]);
 
   // useEffect(() => {
   //   setOpenedNote(singleNote);
@@ -121,6 +146,12 @@ const SingleNote = ({
          singleNote?.isLocked && "hover:shadow-none"
          // singleNote?.isLocked && 'blur-[12px]'
        }`}
+        onClick={() => {
+          if (singleNote.isLocked) {
+            setNoteSelected(singleNote);
+            setOpenOTPDialog(true);
+          }
+        }}
       >
         <div className="flex justify-between items-center relative">
           {/* Header's note */}
@@ -173,7 +204,7 @@ const SingleNote = ({
               {/* <span className="text-white text-[0.1px]">s</span> */}
             </>
           ) : (
-            <span className="text-white text-[0.1px]">{" "}</span>
+            <span className="text-white text-[0.1px]"> </span>
           )}
 
           {/* the note itself */}
@@ -198,6 +229,14 @@ const SingleNote = ({
           </div>
         </div>
       </div>
+
+      <EnterOtpDialog
+        openOTPDialog={openOTPDialog}
+        setOpenOTPDialog={setOpenOTPDialog}
+        user={user}
+        noteSelected={noteSelected}
+        singleNote={singleNote}
+      />
     </div>
   );
 };

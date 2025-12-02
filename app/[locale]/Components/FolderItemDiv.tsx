@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import FolderItemInsideLink from "./FolderItemInsideLink";
 import { Folder } from "@/types/folder";
 import FolderItemBorderBottom from "./FolderItemBorderBottom";
@@ -15,15 +15,17 @@ const FolderItemDiv = ({
   index,
   folders,
   folderNotesLength,
-  isMoveNoteId,
-  noteListId
+  // isMoveNoteId,
+  noteListId,
+  folderId
 }: {
   folder: Folder;
   index: number;
   folders: Folder[];
   folderNotesLength: number;
   isMoveNoteId?: boolean;
-  noteListId?: string | null | undefined
+  noteListId?: string | null | undefined,
+  folderId: string | null | undefined
 }) => {
   const params = useParams() as any;
   const router = useRouter();
@@ -50,7 +52,7 @@ const FolderItemDiv = ({
 
       if (res.data.success) {
         toast.success(res.data.message);
-        router.push(`/${locale}/`)
+        router.push(`/${locale}/${folderId}`)
       }
 
       setNoteMovingLoad(false);
@@ -66,11 +68,11 @@ const FolderItemDiv = ({
   };
 
 
-  const allFolderWithoutHidden = folders.filter((item: Folder) => item.id !== noteListId);
+  // const allFolderWithoutHidden = folders.filter((item: Folder) => item.id !== noteListId);
 
-  const folderIndex = allFolderWithoutHidden.findIndex((item: Folder) => item.id === folder.id )
+  // const folderIndex = allFolderWithoutHidden.findIndex((item: Folder) => item.id === folder.id )
 
-  const length = allFolderWithoutHidden.length;
+  // const length = allFolderWithoutHidden.length;
 
   const hiddenFolderIndex = folders.findIndex((item: Folder) => item.id === noteListId)
 

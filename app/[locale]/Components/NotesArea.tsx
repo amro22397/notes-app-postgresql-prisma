@@ -97,6 +97,7 @@ const NotesArea = ({ email }: {
                 
                   singleNote={singleNote}
                   setOpenedNote={setOpenedNote}
+                  email={email}
                   // openedNote={openedNote}
                 />
 
@@ -124,6 +125,7 @@ const NotesArea = ({ email }: {
                 singleNote={singleNote}
                 setOpenedNote={setOpenedNote}
                 // openedNote={openedNote}
+                email={email}
               />
               <span className={`single-note-title ${singleNote.isLocked ? "line-clamp-1" : "line-clamp-2"}`}>
               {/* {stringTruncation(singleNote.noteContent, 20)} */}
