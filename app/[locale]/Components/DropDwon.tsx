@@ -608,7 +608,7 @@ border-none
                 </InputOTPGroup>
               </InputOTP>
 
-              <DialogFooter>
+              <DialogFooter className="dialog-footer">
                 <Button
                   onClick={() => {
                     handleChangleLockPassword();

@@ -110,6 +110,10 @@ body {
   @apply font-semibold text-[17px] text-center w-full;
 }
 
+.dialog-footer {
+  @apply my-4;
+}
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;

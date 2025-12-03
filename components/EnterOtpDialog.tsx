@@ -287,7 +287,7 @@ const EnterOtpDialog = ({
               </InputOTPGroup>
             </InputOTP>
 
-            <DialogFooter>
+            <DialogFooter className="dialog-footer">
               <Button
                 onClick={(e: any) => {
                   //   setOpenOTPDialog(false);
