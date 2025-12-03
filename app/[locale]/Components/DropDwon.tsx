@@ -9,7 +9,7 @@ import axios from "axios";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 
-import { Lock, Pin, PinOff, Unlock } from "lucide-react";
+import { Loader2, Lock, Pin, PinOff, Unlock } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 
@@ -42,6 +42,16 @@ const DropDwon = ({
 }) => {
   const pathname = usePathname();
   console.log(pathname);
+
+  const [changeLockPasswordLoading, setChangeLockPasswordLoading] =
+    useState(false);
+
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [pinNoteLoading, setPinNoteLoading] = useState(false);
+  const [unPinNoteLoading, setUnPinNoteLoading] = useState(false);
+
+  const [lockNoteLoading, setLockNoteLoading] = useState(false);
+  const [unLockNoteLoading, setUnLockNoteLoading] = useState(false);
 
   const {
     dropDownToogle,
@@ -98,7 +108,9 @@ const DropDwon = ({
 
   //ss
 
-  async function deleteNoteFx() {
+  async function deleteNoteFx(t: any) {
+    setDeleteLoading(true);
+
     try {
       const res = await axios.delete(`/api/notes?id=${noteSelected.id}`);
 
@@ -124,10 +136,15 @@ const DropDwon = ({
         }
 
         setNoteSelected(null);
+        setDeleteLoading(false);
         setOpenWindowNote(false);
       }
     } catch (error: any) {
-      toast.error("Error: " + error.message);
+      toast.error(`Error deleting note: ${error}`);
+
+      console.log(`Error deleting note: ${error}`);
+
+      setDeleteLoading(false);
     }
     // const filterAllNotes = allNotes.filter(
     //     (note: any) => note.id !== noteSelected.id,
@@ -149,6 +166,14 @@ const DropDwon = ({
   }
 
   const updatePinNoteFx = async () => {
+    if (noteSelected.isPinned) {
+      setUnPinNoteLoading(true);
+    }
+
+    if (!noteSelected.isPinned) {
+      setPinNoteLoading(true);
+    }
+
     try {
       const res = await axios.put(
         `/api/notes/pin-note?id=${noteSelected.id}&noteSelected=${noteSelected}`
@@ -166,13 +191,41 @@ const DropDwon = ({
       if (!res.data.success) {
         toast.error(res.data.message);
       }
-    } catch (error: any) {
-      toast.error(error.message);
-      console.log(error.message);
+
+      if (noteSelected.isPinned) {
+        setUnPinNoteLoading(false);
+      }
+
+      if (!noteSelected.isPinned) {
+        setPinNoteLoading(false);
+      }
+
+      setOpenDropDown(false);
+    } catch (error) {
+      toast.error(`Client Error: ${error}`);
+      console.log(`Client Error: ${error}`);
+
+      if (noteSelected.isPinned) {
+        setUnPinNoteLoading(false);
+      }
+
+      if (!noteSelected.isPinned) {
+        setPinNoteLoading(false);
+      }
+
+      setOpenDropDown(false);
     }
   };
 
   const LockNoteFx = async () => {
+    if (!noteSelected.isLocked) {
+      setLockNoteLoading(true);
+    }
+
+    if (noteSelected.isLocked) {
+      setUnLockNoteLoading(true);
+    }
+
     try {
       const res = await axios.put(`/api/user/lock-note?id=${noteSelected.id}`, {
         lockedPassword: lockPasswordOTPvalue,
@@ -193,9 +246,29 @@ const DropDwon = ({
         console.log(res.data.message);
         toast.error(res.data.message);
       }
+
+      if (!noteSelected.isLocked) {
+        setLockNoteLoading(false);
+      }
+
+      if (noteSelected.isLocked) {
+        setUnLockNoteLoading(false);
+      }
+
+      setOpenDropDown(false);
     } catch (error) {
       console.log(`Client error: ${error}`);
       toast.error(`Client error: ${error}`);
+
+      if (!noteSelected.isLocked) {
+        setLockNoteLoading(false);
+      }
+
+      if (noteSelected.isLocked) {
+        setUnLockNoteLoading(false);
+      }
+
+      setOpenDropDown(false);
     }
   };
 
@@ -204,6 +277,8 @@ const DropDwon = ({
   console.log(user);
 
   const handleChangleLockPassword = async () => {
+    setChangeLockPasswordLoading(true);
+
     try {
       console.log(lockPasswordOTPvalue);
 
@@ -227,6 +302,9 @@ const DropDwon = ({
         if (!res.data.success) {
           toast.error(res.data.message);
         }
+
+        setChangeLockPasswordLoading(false);
+        setIsLockPasswordCard(false);
       } else {
         const res = await axios.post(
           `/api/user/lock-note?id=${noteSelected.id}`,
@@ -246,16 +324,24 @@ const DropDwon = ({
         if (!res.data.success) {
           toast.error(res.data.message);
         }
+
+        setChangeLockPasswordLoading(false);
+        setIsLockPasswordCard(false);
       }
-    } catch (error: any) {
-      toast.error(`ClientError: ${error.message}`);
+    } catch (error) {
+      toast.error(`ClientError: ${error}`);
+
+      console.log(`Client Error: ${error}`);
+
+      setChangeLockPasswordLoading(false);
+      setIsLockPasswordCard(false);
     }
   };
 
   function handleDeleteClicked() {
-    setOpenDropDown(false);
+    // setOpenDropDown(false);
     toast(
-      (t) => (
+      (t: any) => (
         <div className="flex flex-col gap-4 w-full">
           <div className="text-[22px] font-semibold">
             Do you really want to delete this note?
@@ -263,7 +349,7 @@ const DropDwon = ({
           <div className="w-full flex gap-3 justify-center">
             <button
               onClick={() => {
-                deleteNoteFx();
+                deleteNoteFx(t);
                 toast.dismiss(t.id);
               }}
               className="bg-red-600 text-white  p-1 w-[100px] rounded-md
@@ -302,7 +388,7 @@ const DropDwon = ({
   }
 
   const handleMoveNoteFx = async () => {
-    setOpenDropDown(false);
+    // setOpenDropDown(false);
 
     router.push(
       `/${locale}/move-note/${noteSelected?.id}?folderId=${folderId}`
@@ -317,7 +403,7 @@ const DropDwon = ({
         !dropDownRef.current.contains(event.target)
       ) {
         setNoteSelected(null);
-        setOpenDropDown(false);
+        // setOpenDropDown(false);
       }
     }
 
@@ -385,13 +471,17 @@ select-none cursor-pointer hover:text-gray-900 text-[15px] border-b border-gray-
 ${/* index === menuItems.length - 1 && "border-none" */ ""}
 `}
               onClick={() => {
-                setOpenDropDown(false);
-
                 updatePinNoteFx();
               }}
             >
-              <Pin size={19} />
-              <div className=" ">Pin Note</div>
+              {pinNoteLoading ? (
+                <Loader2 className="animate-spin self-center w-full" />
+              ) : (
+                <>
+                  <Pin size={19} />
+                  <div className=" ">Pin Note</div>
+                </>
+              )}
             </div>
           )}
 
@@ -401,13 +491,17 @@ ${/* index === menuItems.length - 1 && "border-none" */ ""}
 select-none cursor-pointer hover:text-gray-900 text-[15px] border-b border-gray-400/95 pb-[6px]
 `}
               onClick={() => {
-                setOpenDropDown(false);
-
                 updatePinNoteFx();
               }}
             >
-              <PinOff size={19} />
-              <div className=" ">Unpin Note</div>
+              {unPinNoteLoading ? (
+                <Loader2 className="animate-spin self-center w-full" />
+              ) : (
+                <>
+                  <PinOff size={19} />
+                  <div className=" ">Unpin Note</div>
+                </>
+              )}
             </div>
           )}
 
@@ -419,9 +513,10 @@ border-none
 ${/* index === menuItems.length - 1 && "border-none" */ ""}
 `}
               onClick={() => {
-                setOpenDropDown(false);
+                // setOpenDropDown(false);
 
                 if (!user?.user?.lockedPassword) {
+                  setOpenDropDown(false)
                   setIsLockPasswordCard(true);
 
                   return;
@@ -432,8 +527,14 @@ ${/* index === menuItems.length - 1 && "border-none" */ ""}
                 }
               }}
             >
-              <Lock size={19} />
-              <div className=" ">Lock Note</div>
+              {lockNoteLoading ? (
+                <Loader2 className="animate-spin self-center w-full" />
+              ) : (
+                <>
+                  <Lock size={19} />
+                  <div className=" ">Lock Note</div>
+                </>
+              )}
               {/* {JSON.stringify(user, null, 2)} */}
             </div>
           )}
@@ -445,9 +546,11 @@ select-none cursor-pointer hover:text-gray-900 text-[15px] border-b border-gray-
 border-none
 `}
               onClick={() => {
-                setOpenDropDown(false);
+                // setOpenDropDown(false);
 
                 if (user?.user?.lockedPassword) {
+                  setOpenDropDown(false)
+                  
                   setIsLockPasswordCard(true);
 
                   return;
@@ -464,7 +567,10 @@ border-none
       {/* setIsLockPassword */}
       <Dialog
         open={isLockPasswordCard}
-        onOpenChange={() => setIsLockPasswordCard(!isLockPasswordCard)}
+        onOpenChange={() => {
+          setIsLockPasswordCard(!isLockPasswordCard);
+          setLockPasswordOTPvalue("");
+        }}
       >
         {/* <DialogTrigger>Open</DialogTrigger> */}
         <DialogContent>
@@ -502,13 +608,19 @@ border-none
               <DialogFooter>
                 <Button
                   onClick={() => {
-                    setIsLockPasswordCard(false);
                     handleChangleLockPassword();
 
                     // LockNoteFx();
                   }}
                 >
-                  {!user?.user?.lockedPassword ? "Save" : "Enter"}
+                  {changeLockPasswordLoading ? (
+                    <Loader2 className="animate-spin" />
+                  ) : !user?.user?.lockedPassword ? (
+                    "Save"
+                  ) : (
+                    "Enter"
+                  )}
+                  {/* {!user?.user?.lockedPassword && !changeLockPasswordLoading ? "Save" : "Enter"} */}
                 </Button>
               </DialogFooter>
             </DialogDescription>

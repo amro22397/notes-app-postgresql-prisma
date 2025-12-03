@@ -24,6 +24,7 @@ import axios from "axios";
 import { SingleNoteType } from "@/types/singleNote";
 import { AppContext, AppContextType } from "@/context/AppContext";
 import toast from "react-hot-toast";
+import { Loader2 } from "lucide-react";
 
 const EnterOtpDialog = ({
   openOTPDialog,
@@ -40,11 +41,16 @@ const EnterOtpDialog = ({
 }) => {
   const [lockPasswordOTPvalue, setLockPasswordOTPvalue] = useState("");
 
+  const [unLockingNoteLoading, setUnLockingNoteLoading] = useState(false);
+
   const { getNotesFromMongoDB, getPinnedNotesFromMongoDB } = useContext(
     AppContext
   ) as AppContextType;
 
   const handleOpenLockedNote = async () => {
+
+    setUnLockingNoteLoading(true);
+
     try {
       console.log(lockPasswordOTPvalue);
 
@@ -68,6 +74,9 @@ const EnterOtpDialog = ({
         if (!res.data.success) {
           toast.error(res.data.message);
         }
+
+        setUnLockingNoteLoading(false);
+        setOpenOTPDialog(false);
       } else {
         const res = await axios.post(
           `/api/user/lock-note?id=${noteSelected.id}`,
@@ -87,11 +96,17 @@ const EnterOtpDialog = ({
         if (!res.data.success) {
           toast.error(res.data.message);
         }
+
+        setUnLockingNoteLoading(false);
+        setOpenOTPDialog(false);
       }
     } catch (error) {
       toast.error(`Client Error open locked note: ${error}`);
 
       console.log(`Client Error open locked note: ${error}`);
+
+      setUnLockingNoteLoading(false);
+      setOpenOTPDialog(false);
     }
   };
 
@@ -107,7 +122,7 @@ const EnterOtpDialog = ({
     setTimeout(
       async () => {
 
-        if (singleNote.isLocked === false) {
+        // if (singleNote.isLocked === false) {
 
             try {
           const res = await axios.put(
@@ -134,10 +149,10 @@ const EnterOtpDialog = ({
           console.log(`Client Error locking locked note: ${error}`);
         }
 
-        }
+        // }
         
       },
-      60 * 60 * 1000
+      1 * 60 * 1000
     );
   };
 
@@ -231,7 +246,7 @@ const EnterOtpDialog = ({
             <DialogFooter>
               <Button
                 onClick={(e: any) => {
-                  setOpenOTPDialog(false);
+                //   setOpenOTPDialog(false);
                   handleOpenLockedNote();
                 //   if (!noteSelected) {
                     
@@ -241,7 +256,8 @@ const EnterOtpDialog = ({
                   // LockNoteFx();
                 }}
               >
-                Enter
+                {unLockingNoteLoading ? <Loader2 className='animate-spin' /> : "Enter"}
+
               </Button>
             </DialogFooter>
           </DialogDescription>
