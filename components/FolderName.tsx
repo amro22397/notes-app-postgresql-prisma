@@ -12,7 +12,7 @@ const FolderName = ({ folderName, folderId, getFolderById, paramsId }: {
     <div className={`flex flex-row items-center gap-4  ${paramsId ? "md:hidden" : "max-md:hidden"}`}>
 
           <span className={`text-black text-lg tracking-wide
-          ${folderName?.split(" ")?.length >= 3 && "w-[175px]"}`}>{folderName}</span>
+          ${folderName?.split(" ")?.length >= 3 && "max-md:w-[175px]"}`}>{folderName}</span>
 
 
           <div className="flex flex-row items-center gap-1">

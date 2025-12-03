@@ -339,7 +339,7 @@ const DropDwon = ({
   };
 
   function handleDeleteClicked() {
-    // setOpenDropDown(false);
+    setOpenDropDown(false);
     toast(
       (t: any) => (
         <div className="flex flex-col gap-4 w-full">
@@ -388,7 +388,7 @@ const DropDwon = ({
   }
 
   const handleMoveNoteFx = async () => {
-    // setOpenDropDown(false);
+    setOpenDropDown(false);
 
     router.push(
       `/${locale}/move-note/${noteSelected?.id}?folderId=${folderId}`
@@ -429,7 +429,7 @@ const DropDwon = ({
 poppins poppins-light text-[10px] ${!openWindowNote && "fixed z-40"}
 ${
   // openDropDown ? 'visible opacity-100' : 'invisible'
-  openWindowNote && "absolute right-8 top-12 z-50"
+  openWindowNote && "fixed right-8 top-12 z-50"
 }
  `}
         >
@@ -550,7 +550,7 @@ border-none
 
                 if (user?.user?.lockedPassword) {
                   setOpenDropDown(false)
-                  
+
                   setIsLockPasswordCard(true);
 
                   return;

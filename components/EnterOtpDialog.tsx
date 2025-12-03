@@ -31,7 +31,7 @@ const EnterOtpDialog = ({
   setOpenOTPDialog,
   user,
   noteSelected,
-  singleNote
+  singleNote,
 }: {
   openOTPDialog: boolean | undefined;
   setOpenOTPDialog: ((value: boolean) => void) | undefined | null | any;
@@ -48,7 +48,6 @@ const EnterOtpDialog = ({
   ) as AppContextType;
 
   const handleOpenLockedNote = async () => {
-
     setUnLockingNoteLoading(true);
 
     try {
@@ -110,57 +109,14 @@ const EnterOtpDialog = ({
     }
   };
 
-
-
-
-  const handleTimeOutToClose = async (e : any) => {
+  const handleTimeOutToClose = async (e: any) => {
     e.preventDefault();
 
     localStorage.setItem("startTime", Date.now().toString());
 
-
     setTimeout(
       async () => {
-
         // if (singleNote.isLocked === false) {
-
-            try {
-          const res = await axios.put(
-            `/api/user/lock-note-timeout?id=${noteSelected.id}`,
-            {
-              lockedPassword: lockPasswordOTPvalue,
-              email: user?.email,
-            }
-          );
-
-          getNotesFromMongoDB();
-          getPinnedNotesFromMongoDB();
-
-          // if (res.data.success) {
-          //     toast.success
-          // }
-
-          if (!res.data.success) {
-            toast.error(res.data.message);
-          }
-        } catch (error) {
-          toast.error(`Client Error locking locked note: ${error}`);
-
-          console.log(`Client Error locking locked note: ${error}`);
-        }
-
-        // }
-        
-      },
-      1 * 60 * 1000
-    );
-  };
-
-  const handleTimeOutToCloseOnEveryMount = async () => {
-    
-    // e.preventDefault();
-
-    if (singleNote.isLocked === false) {
 
         try {
           const res = await axios.put(
@@ -187,18 +143,52 @@ const EnterOtpDialog = ({
           console.log(`Client Error locking locked note: ${error}`);
         }
 
+        // }
+      },
+      1 * 60 * 1000
+    );
+  };
+
+  const handleTimeOutToCloseOnEveryMount = async () => {
+    // e.preventDefault();
+
+    if (singleNote.isLocked === false) {
+      try {
+        const res = await axios.put(
+          `/api/user/lock-note-timeout?id=${noteSelected.id}`,
+          {
+            lockedPassword: lockPasswordOTPvalue,
+            email: user?.email,
+          }
+        );
+
+        getNotesFromMongoDB();
+        getPinnedNotesFromMongoDB();
+
+        // if (res.data.success) {
+        //     toast.success
+        // }
+
+        if (!res.data.success) {
+          toast.error(res.data.message);
+        }
+      } catch (error) {
+        toast.error(`Client Error locking locked note: ${error}`);
+
+        console.log(`Client Error locking locked note: ${error}`);
+      }
     }
-    
+  };
 
-  }
-
+//   const tamer = "ali";
 
   useEffect(() => {
-    const start = Number(localStorage.getItem("startTime"));
+    if (lockPasswordOTPvalue === "ahmed") {
+      const start = Number(localStorage.getItem("startTime"));
 
-    if (Date.now() - start >= 60 * 60 * 1000) {
-    handleTimeOutToCloseOnEveryMount();
-        
+      if (Date.now() - start >= 60 * 60 * 1000) {
+        handleTimeOutToCloseOnEveryMount();
+      }
     }
   }, []);
 
@@ -246,18 +236,21 @@ const EnterOtpDialog = ({
             <DialogFooter>
               <Button
                 onClick={(e: any) => {
-                //   setOpenOTPDialog(false);
+                  //   setOpenOTPDialog(false);
                   handleOpenLockedNote();
-                //   if (!noteSelected) {
-                    
-                //   }
+                  //   if (!noteSelected) {
+
+                  //   }
 
                   handleTimeOutToClose(e);
                   // LockNoteFx();
                 }}
               >
-                {unLockingNoteLoading ? <Loader2 className='animate-spin' /> : "Enter"}
-
+                {unLockingNoteLoading ? (
+                  <Loader2 className="animate-spin" />
+                ) : (
+                  "Enter"
+                )}
               </Button>
             </DialogFooter>
           </DialogDescription>
