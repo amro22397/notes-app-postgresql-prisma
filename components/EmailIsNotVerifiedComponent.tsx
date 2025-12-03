@@ -47,11 +47,14 @@ const EmailIsNotVerifiedComponent = ({
     {/* <pre className="">{JSON.stringify(sessionUser, null, 2)}</pre> */}
 
       {!sessionUser?.user?.isVerified && sessionUser !== null && sessionUser !== undefined && (
-        <div className="flex flex-col">
+        <div className="flex flex-col justify-center items-center md:w-[700px] sm:w-[95vw] w-[100vw]
+        ">
           <div
             className="bg-red-500 text-white w-full
     lg:flex justify-center text-lg hidden
-    flex-col items-center gap-0"
+    flex-col items-center gap-0 text-center
+    "
+    // sm:py-0 py-10
           >
             <span className="">
               {emailIsNotVerified("Your account")}

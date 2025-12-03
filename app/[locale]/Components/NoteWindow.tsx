@@ -66,7 +66,7 @@ const NoteWindow = ({
   // const { allNotes, setAllNotes } = notesObject;
   // const { initialAllNotes, setInitialAllNotes } = initialNotesObject;
   const { noteSelected, setNoteSelected } = noteSelectedObject;
-  const { setOpenDropDown } = dropDownToogle;
+  const { setOpenDropDown, openDropDown } = dropDownToogle;
   const { setDropDownPositions } = dropDownPositionsObject;
 
   const [tags, setTags] = useState(["study", "projects"]);
@@ -209,7 +209,7 @@ const NoteWindow = ({
     const xPosition = event.clientX;
     const yPosition = event.clientY;
     setDropDownPositions({ x: xPosition, y: yPosition });
-    setOpenDropDown(true);
+    setOpenDropDown(!openDropDown);
     setNoteSelected(noteClicked);
   }
 
@@ -245,6 +245,11 @@ const NoteWindow = ({
       className={`poppins py-[19px] md:w-[700px] sm:w-[95vw] w-[100vw] h-[700px] bg-white absolute left-0 top-0 z-50  rounded-md transition-all overflow-x-hidden ${
         openWindowNote ? "visible opacity-100" : "invisible opacity-0 "
       }`}
+      onClick={() => {
+        if (openDropDown) {
+          setOpenDropDown(false);
+        }
+      }}
     >
       {/* {params.id} */}
       {/* Modal Header */}

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Title from './Components/Title'
 // import Categories from './Components/Categories'
 import NotesArea from './Components/NotesArea'
@@ -14,6 +14,7 @@ import { useLocale } from 'next-intl';
 import { useParams } from 'next/navigation';
 import axios from 'axios';
 import { Session } from '@/types/user';
+import { AppContext, AppContextType } from '@/context/AppContext';
 // import GoToNormalPage from '@/components/GoToNormalPage';
 
 
@@ -26,6 +27,16 @@ const App = ({ email, /* user */ session }: {
   const [folderById, setFolderById] = useState<any>(null)
 
       const [sessionUser, setSessionUser] = useState<Session | null | undefined>(null);
+
+      const {
+          dropDownToogle,
+          // dropDownPositionsObject,
+          // noteSelectedObject,
+          // // notesObject,
+          // setOpenWindowNote,
+        } = useContext(AppContext) as AppContextType;
+
+        const { openDropDown, setOpenDropDown } = dropDownToogle;
   
 
   const locale = useLocale();
@@ -69,7 +80,13 @@ const App = ({ email, /* user */ session }: {
 
 
   return (
-    <div className="app-app-style">
+    <div className="app-app-style"
+    onClick={() => {
+      if (openDropDown) {
+        setOpenDropDown(!openDropDown)
+      }
+    }}
+    >
       
       
 

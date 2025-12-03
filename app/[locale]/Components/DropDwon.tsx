@@ -429,9 +429,12 @@ const DropDwon = ({
 poppins poppins-light text-[10px] ${!openWindowNote && "fixed z-40"}
 ${
   // openDropDown ? 'visible opacity-100' : 'invisible'
-  openWindowNote && "fixed right-8 top-12 z-50"
+  openWindowNote && "absolute right-8 top-12 z-50"
 }
  `}
+ onClick={(e: any) => {
+  e.stopPropagation()
+ }}
         >
           {/* <pre className="">{JSON.stringify(noteSelected, null, 2)}</pre> */}
           {/* {folderId} */}

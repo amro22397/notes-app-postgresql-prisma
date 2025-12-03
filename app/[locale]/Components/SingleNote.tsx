@@ -77,7 +77,7 @@ const SingleNote = ({
     const xPosition = event.clientX;
     const yPosition = event.clientY;
     setDropDownPositions({ x: xPosition, y: yPosition });
-    setOpenDropDown(true);
+    setOpenDropDown(!openDropDown);
     setNoteSelected(noteClicked);
   }
 

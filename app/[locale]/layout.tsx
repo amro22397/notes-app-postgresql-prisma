@@ -82,8 +82,9 @@ export default async function RootLayout({
       <body
         className={`${poppins.variable}
        antialiased relative overflow-x-hidden
-        ${locale === "ar" ? styles.arabic : styles.english}`}
-      /// 
+        ${locale === "ar" ? styles.arabic : styles.english}
+        `}
+      /// flex flex-col items-start
       >
         {/* {params.id} */}
         <Suspense fallback={<Loader2 className="animate-spin" />}>
@@ -91,7 +92,7 @@ export default async function RootLayout({
             <AppProvider session>
               <Providers>
                 <NextIntlClientProvider messages={messages}>
-                   <EmailIsNotVerified />
+                  <EmailIsNotVerified />
                   <GoToNormalPage />
                   {/* <EmailIsNotVerified session={sessionUser} /> */}
                   {children}
