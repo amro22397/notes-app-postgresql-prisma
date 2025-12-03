@@ -103,12 +103,12 @@ const [loading, setLoading] = useState(false);
         // if change height change for loading and page
 
   return (
-    <div className="flex justify-center items-center h-[90vh]
+    <div className="flex justify-center items-center h-[90vh] w-full
     ">
       <div className="w-full max-w-md">
         {verified && (
           <Alert variant="default" className="mb-5 bg-zinc-200/55 shadow-md dark:bg-zinc-100 dark:shadow-md
-          dark:border-none">
+          dark:border-none w-full">
             <div className="flex flex-row gap-[15px] items-center">
             <SquareCheckBig color="green" size={40} />
             <div className="flex flex-col justify-center">
@@ -123,12 +123,12 @@ const [loading, setLoading] = useState(false);
 
         {error && (
           <Alert variant="destructive" className="mb-5 bg-zinc-200/55 shadow-md dark:bg-zinc-100 dark:shadow-md
-          dark:border-none">
-            <div className="flex flex-row gap-[14px] items-center">
+          dark:border-none w-full">
+            <div className="flex flex-row gap-[14px] items-center w-full">
             <CircleX color="red" size={40}/>
-            <div className="flex flex-col justify-center">
-            <AlertTitle className="text-2xl font-semibold">{verifyPage('Email verification failed!')}</AlertTitle>
-            <AlertDescription className="text-lg">
+            <div className="flex flex-col justify-center w-full">
+            <AlertTitle className="text-2xl font-semibold w-full">{verifyPage('Email verification failed!')}</AlertTitle>
+            <AlertDescription className="text-lg w-full">
               {error}
             </AlertDescription>
             </div>

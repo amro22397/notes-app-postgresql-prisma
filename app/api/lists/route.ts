@@ -6,6 +6,17 @@ export async function POST(req: NextRequest) {
 
     const { name, emailRef } = await req.json();
 
+    const isNameExist = await prisma.folder.findUnique({
+        where: { name: name },
+    })
+
+    if (isNameExist) {
+        return NextResponse.json({
+            success: false,
+            message: "Folder Name already exists",
+        })
+    }
+
 
     try {
         

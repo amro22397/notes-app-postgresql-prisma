@@ -30,22 +30,28 @@ const EnterOtpDialog = ({
   openOTPDialog,
   setOpenOTPDialog,
   user,
-  noteSelected,
+  // noteSelected,
   singleNote,
 }: {
   openOTPDialog: boolean | undefined;
   setOpenOTPDialog: ((value: boolean) => void) | undefined | null | any;
   user: User;
-  noteSelected: SingleNoteType;
+  // noteSelected: SingleNoteType;
   singleNote: SingleNoteType;
 }) => {
   const [lockPasswordOTPvalue, setLockPasswordOTPvalue] = useState("");
 
   const [unLockingNoteLoading, setUnLockingNoteLoading] = useState(false);
 
-  const { getNotesFromMongoDB, getPinnedNotesFromMongoDB } = useContext(
-    AppContext
-  ) as AppContextType;
+  console.log(singleNote);
+
+  const { getNotesFromMongoDB, getPinnedNotesFromMongoDB, noteSelectedObject } =
+    useContext(AppContext) as AppContextType;
+
+  const {
+    // setNoteSelected,
+    noteSelected,
+  } = noteSelectedObject;
 
   const handleOpenLockedNote = async () => {
     setUnLockingNoteLoading(true);
@@ -85,6 +91,15 @@ const EnterOtpDialog = ({
           }
         );
 
+        localStorage.setItem(
+          "unlockSession",
+          JSON.stringify({
+            noteId: noteSelected?.id,
+            unlockTime: Date.now(),
+            duration: 1 * 60 * 1000, // 1 hour
+          })
+        );
+
         getNotesFromMongoDB();
         getPinnedNotesFromMongoDB();
 
@@ -114,9 +129,11 @@ const EnterOtpDialog = ({
 
     localStorage.setItem("startTime", Date.now().toString());
 
+    localStorage.setItem("noteSelectedId", noteSelected.id);
+
     setTimeout(
       async () => {
-        // if (singleNote.isLocked === false) {
+        // if (noteSelected.isLocked === false) {
 
         try {
           const res = await axios.put(
@@ -145,52 +162,88 @@ const EnterOtpDialog = ({
 
         // }
       },
-      1 * 60 * 1000
+      60 * 60 * 1000
     );
   };
 
   const handleTimeOutToCloseOnEveryMount = async () => {
     // e.preventDefault();
 
-    if (singleNote.isLocked === false) {
-      try {
-        const res = await axios.put(
-          `/api/user/lock-note-timeout?id=${noteSelected.id}`,
-          {
-            lockedPassword: lockPasswordOTPvalue,
-            email: user?.email,
-          }
-        );
+    // const noteSelectedId = localStorage.getItem("noteSelectedId");
 
-        getNotesFromMongoDB();
-        getPinnedNotesFromMongoDB();
+    const noteSelectedId = localStorage.getItem("noteSelectedId");
 
-        // if (res.data.success) {
-        //     toast.success
-        // }
-
-        if (!res.data.success) {
-          toast.error(res.data.message);
+    // if (singleNote.isLocked === false) {
+    try {
+      const res = await axios.put(
+        `/api/user/lock-note-timeout?id=${noteSelectedId}`,
+        {
+          lockedPassword: lockPasswordOTPvalue,
+          email: user?.email,
         }
-      } catch (error) {
-        toast.error(`Client Error locking locked note: ${error}`);
+      );
 
-        console.log(`Client Error locking locked note: ${error}`);
+      getNotesFromMongoDB();
+      getPinnedNotesFromMongoDB();
+
+      // if (res.data.success) {
+      //     toast.success
+      // }
+
+      if (!res.data.success) {
+        toast.error(res.data.message);
       }
+    } catch (error) {
+      toast.error(`Client Error locking locked note: ${error}`);
+
+      console.log(`Client Error locking locked note: ${error}`);
     }
+    // }
   };
 
-//   const tamer = "ali";
+  console.log(handleTimeOutToCloseOnEveryMount)
 
-  useEffect(() => {
-    if (lockPasswordOTPvalue === "ahmed") {
-      const start = Number(localStorage.getItem("startTime"));
+  //   const tamer = "ali";
 
-      if (Date.now() - start >= 60 * 60 * 1000) {
-        handleTimeOutToCloseOnEveryMount();
-      }
-    }
-  }, []);
+  // useEffect(() => {
+  //   const session = localStorage.getItem("unlockSession");
+  //   if (!session) return;
+
+  //   const { noteId, unlockTime, duration } = JSON.parse(session);
+
+  //   if (Date.now() < unlockTime + duration) return;
+
+  //   (async () => {
+  //   try {
+  //     const res = await axios.put(
+  //       `/api/user/lock-note-timeout?id=${noteId}`,
+  //       {
+  //         lockedPassword: lockPasswordOTPvalue,
+  //         email: user?.email,
+  //       }
+  //     );
+
+  //     getNotesFromMongoDB();
+  //     getPinnedNotesFromMongoDB();
+
+  //     if (!res.data.success) toast.error(res.data.message);
+
+  //     // Cleanup
+  //     localStorage.removeItem("unlockSession");
+  //   } catch (error) {
+  //     toast.error(`Client Error locking note: ${error}`);
+  //   }
+  // })();
+
+  //   // const start = Number(localStorage.getItem("startTime"));
+
+  //   // if (Date.now() - start >= 1 * 60 * 1000) {
+  //   //   const noteSelectedId = localStorage.getItem("noteSelectedId");
+  //   //   if (!noteSelectedId || noteSelectedId === "") return;
+  //   //   handleTimeOutToCloseOnEveryMount();
+  //   //   localStorage.setItem("noteSelectedId", "");
+  //   // }
+  // }, []);
 
   return (
     <Dialog
@@ -204,6 +257,7 @@ const EnterOtpDialog = ({
       {/* <pre className="">{JSON.stringify(user, null, 2)}</pre> */}
       <DialogContent>
         {/* <pre className="">{JSON.stringify(noteSelected, null, 2)}</pre> */}
+        {/* {noteSelectedId} */}
         <DialogHeader className="flex flex-col gap-5">
           <DialogTitle>Enter Lock OTP</DialogTitle>
           <DialogDescription>
