@@ -81,7 +81,7 @@ export default async function RootLayout({
     <html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"}>
       <body
         className={`${poppins.variable}
-       antialiased relative overflow-x-hidden
+       antialiased relative overflow-x-hidden flex flex-col items-center
         ${locale === "ar" ? styles.arabic : styles.english}
         `}
       /// flex flex-col items-start
